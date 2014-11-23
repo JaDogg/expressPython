@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>760</width>
-    <height>680</height>
+    <height>734</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,16 +20,18 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Font</string>
-        </property>
-       </widget>
-      </item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
        <widget class="QFontComboBox" name="fntCombo">
+        <property name="minimumSize">
+         <size>
+          <width>151</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Change Font</string>
+        </property>
         <property name="editable">
          <bool>false</bool>
         </property>
@@ -43,6 +45,15 @@
       </item>
       <item>
        <widget class="QComboBox" name="cmbFontSize">
+        <property name="minimumSize">
+         <size>
+          <width>51</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Change Font Size</string>
+        </property>
         <property name="currentText">
          <string>5</string>
         </property>
@@ -134,13 +145,13 @@
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>418</width>
+          <width>40</width>
           <height>20</height>
          </size>
         </property>
@@ -150,253 +161,6 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout" rowstretch="40,60">
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <layout class="QVBoxLayout" name="vlOutputBtns">
-            <item>
-             <widget class="QPushButton" name="btnOutputOpen">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnOutputSave">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnOutputClear">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="CodeEditor" name="txtOutput">
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOn</enum>
-            </property>
-            <property name="plainText">
-             <string>(output)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <layout class="QVBoxLayout" name="vlInputBtns">
-            <item>
-             <widget class="QPushButton" name="btnInputOpen">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnInputSave">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="btnInputClear">
-              <property name="minimumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>36</width>
-                <height>34</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="PyRunResources.qrc">
-                <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>24</width>
-                <height>24</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="verticalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="CodeEditor" name="txtInput">
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarAlwaysOn</enum>
-            </property>
-            <property name="plainText">
-             <string>ELSEBA Python Runner
-Written by Bhathiya Perera
-
-This Project Depends on
-Qt5.3, Python
-Python Syntax Highlight Code from Frankie Simon
-
-(this is the input)</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
@@ -414,6 +178,9 @@ Python Syntax Highlight Code from Frankie Simon
               <width>36</width>
               <height>34</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Open Into Code</string>
             </property>
             <property name="text">
              <string/>
@@ -444,6 +211,9 @@ Python Syntax Highlight Code from Frankie Simon
               <height>34</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Save Code</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -473,41 +243,15 @@ Python Syntax Highlight Code from Frankie Simon
               <height>34</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Clear Code</string>
+            </property>
             <property name="text">
              <string/>
             </property>
             <property name="icon">
              <iconset resource="PyRunResources.qrc">
               <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnCodeDatabase">
-            <property name="minimumSize">
-             <size>
-              <width>36</width>
-              <height>34</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>36</width>
-              <height>34</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="PyRunResources.qrc">
-              <normaloff>:/data/Icons/Snippets.png</normaloff>:/data/Icons/Snippets.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -530,6 +274,9 @@ Python Syntax Highlight Code from Frankie Simon
               <width>36</width>
               <height>34</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Run Code</string>
             </property>
             <property name="text">
              <string/>
@@ -569,6 +316,9 @@ Python Syntax Highlight Code from Frankie Simon
             <pointsize>12</pointsize>
            </font>
           </property>
+          <property name="toolTip">
+           <string>Code Area</string>
+          </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAlwaysOn</enum>
           </property>
@@ -584,6 +334,498 @@ write_output(&quot;append&quot;)
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <layout class="QVBoxLayout" name="vlOutputBtns">
+            <item>
+             <widget class="QPushButton" name="btnOutputOpen">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Open Output</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnOutputSave">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Save Output</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnOutputClear">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Clear Output</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="CodeEditor" name="txtOutput">
+            <property name="toolTip">
+             <string>Output</string>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="plainText">
+             <string>output</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <layout class="QVBoxLayout" name="vlInputBtns">
+            <item>
+             <widget class="QPushButton" name="btnInputOpen">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Open Input</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnInputSave">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Save Input</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnInputClear">
+              <property name="minimumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>36</width>
+                <height>34</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string>Clear Input</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="PyRunResources.qrc">
+                <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>24</width>
+                <height>24</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="CodeEditor" name="txtInput">
+            <property name="toolTip">
+             <string>Input</string>
+            </property>
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="plainText">
+             <string>input</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="btnAbout">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>About</string>
+        </property>
+        <property name="text">
+         <string>SEBA</string>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/el.png</normaloff>:/data/el.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnCodeDatabase">
+        <property name="minimumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Save Database</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/Icons/Snippets.png</normaloff>:/data/Icons/Snippets.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAddSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Add New</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/Icons/Add.png</normaloff>:/data/Icons/Add.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRemoveSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Remove</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/Icons/Remove.png</normaloff>:/data/Icons/Remove.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLoadSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Load To Code Area</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/Icons/Load.png</normaloff>:/data/Icons/Load.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnRunSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>36</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Run Selected Snippet</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="PyRunResources.qrc">
+          <normaloff>:/data/Icons/Run.png</normaloff>:/data/Icons/Run.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cmbSnippets">
+        <property name="minimumSize">
+         <size>
+          <width>300</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>300</width>
+          <height>31</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Snippets</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

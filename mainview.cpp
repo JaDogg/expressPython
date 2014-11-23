@@ -1,6 +1,3 @@
-#include "Python.h"
-#include <QMessageBox>
-#include <QTextStream>
 #include "mainview.h"
 #include "ui_mainview.h"
 
@@ -9,7 +6,20 @@ MainView::MainView(QWidget* parent)
     , ui(new Ui::MainView)
 {
     ui->setupUi(this);
-    highlighter = new PythonSyntaxHighlighter(ui->txtCode->document());
+    SetupHighlighter();
+    LoadStartupScript();
+}
+
+void MainView::SetSnippets(Snippets* snip)
+{
+    m_snip = snip;
+    LoadSnippetsToCombo();
+}
+
+void MainView::SetupHighlighter()
+{
+    m_highlighter = new PythonSyntaxHighlighter(ui->txtCode->document());
+
     int pos = ui->fntCombo->findText("Courier New");
     if (pos != -1) {
         ui->fntCombo->setCurrentIndex(pos);
@@ -18,19 +28,82 @@ MainView::MainView(QWidget* parent)
 
     ChangeFontSize(ui->fntCombo->currentFont(), ui->cmbFontSize->currentText().toInt());
 
-    // Load the startup script
-    QFile inputFile(":/data/startme.py");
-    inputFile.open(QIODevice::ReadOnly);
-    QTextStream in(&inputFile);
-    m_startme = in.readAll();
-    inputFile.close();
-
     ui->txtCode->setFocus();
 }
 
+void MainView::LoadStartupScript()
+{
+    bool success;
+    m_startme = LoadFile(":/data/startme.py", success);
+
+    if (!success) {
+        QMessageBox::warning(this, tr(APP_NAME), tr("Loading startup script failed"));
+    }
+}
 MainView::~MainView()
 {
     delete ui;
+}
+
+QString MainView::LoadFile(const QString& fileName, bool& success)
+{
+    success = false;
+
+    QFile file(fileName);
+
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr(APP_NAME),
+                             tr("Cannot read file %1:\n%2.")
+                                 .arg(fileName)
+                                 .arg(file.errorString()));
+        return QString();
+    }
+
+    QTextStream in(&file);
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QString text = in.readAll();
+    QApplication::restoreOverrideCursor();
+    in.flush();
+    file.close();
+
+    success = true;
+    return text;
+}
+
+void MainView::BrowseAndLoadFile(CodeEditor* codeEditor)
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+    if (fileName.isEmpty()) {
+        return;
+    }
+    bool success;
+    QString text = LoadFile(fileName, success);
+    if (success) {
+        codeEditor->setPlainText(text);
+    }
+}
+
+void MainView::SaveFile(CodeEditor* codeEditor)
+{
+    QString fileName = QFileDialog::getSaveFileName(this);
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    QFile file(fileName);
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this, tr(APP_NAME),
+                             tr("Cannot write file %1:\n%2.")
+                                 .arg(fileName)
+                                 .arg(file.errorString()));
+        return;
+    }
+
+    QTextStream out(&file);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    out << codeEditor->toPlainText();
+    QApplication::restoreOverrideCursor();
 }
 
 QString MainView::GetInput()
@@ -48,22 +121,26 @@ void MainView::WriteOutput(QString output)
     ui->txtOutput->setPlainText(txt + output);
 }
 
-void MainView::on_btnRun_clicked()
+void MainView::RunPythonCode(const QString& code)
 {
     QString pycode(m_startme);
-    pycode.append(ui->txtCode->toPlainText());
+    pycode.append(code);
     PyRun_SimpleString(pycode.toStdString().c_str());
 }
 
+void MainView::on_btnRun_clicked()
+{
+    RunPythonCode(ui->txtCode->toPlainText());
+}
 
 void MainView::ChangeFontSize(QFont font, int fontSize)
 {
-    QFont* sized = new QFont(font);
-    sized->setPointSize(fontSize);
-    sized->setFixedPitch(true);
-    ui->txtCode->setFont(*sized);
-    ui->txtInput->setFont(*sized);
-    ui->txtOutput->setFont(*sized);
+    QFont sized(font);
+    sized.setPointSize(fontSize);
+    sized.setFixedPitch(true);
+    ui->txtCode->setFont(sized);
+    ui->txtInput->setFont(sized);
+    ui->txtOutput->setFont(sized);
 }
 
 void MainView::on_fntCombo_currentFontChanged(const QFont& font)
@@ -89,4 +166,120 @@ void MainView::on_btnInputClear_clicked()
 void MainView::on_btnOutputClear_clicked()
 {
     ui->txtOutput->clear();
+}
+
+void MainView::on_btnOutputOpen_clicked()
+{
+    BrowseAndLoadFile(ui->txtOutput);
+}
+
+void MainView::on_btnInputOpen_clicked()
+{
+    BrowseAndLoadFile(ui->txtInput);
+}
+
+void MainView::on_btnCodeOpen_clicked()
+{
+    BrowseAndLoadFile(ui->txtCode);
+}
+
+void MainView::on_btnOutputSave_clicked()
+{
+    SaveFile(ui->txtOutput);
+}
+
+void MainView::on_btnInputSave_clicked()
+{
+    SaveFile(ui->txtInput);
+}
+
+void MainView::on_btnCodeSave_clicked()
+{
+    SaveFile(ui->txtCode);
+}
+
+void MainView::on_btnCodeDatabase_clicked()
+{
+    bool success;
+    m_snip->SaveSnippets(success);
+    if (success) {
+        QMessageBox::information(this, tr(APP_NAME), tr("Snippets database saved."));
+    } else {
+        QMessageBox::critical(this, tr(APP_NAME), tr("Snippets database saving failed."));
+    }
+}
+
+void MainView::on_btnRunSnippet_clicked()
+{
+    bool success;
+    QString code = m_snip->GetSnippet(ui->cmbSnippets->currentText(), success);
+    if (success) {
+        RunPythonCode(code);
+    }
+}
+
+void MainView::on_btnLoadSnippet_clicked()
+{
+    bool success;
+    QString code = m_snip->GetSnippet(ui->cmbSnippets->currentText(), success);
+    if (success) {
+        ui->txtCode->setPlainText(code);
+    }
+}
+
+void MainView::on_btnRemoveSnippet_clicked()
+{
+    bool success;
+    m_snip->RemoveSnippet(ui->cmbSnippets->currentText(), success);
+    if (success) {
+        QMessageBox::information(this, tr(APP_NAME), tr("Snippet removed."));
+    } else {
+        QMessageBox::critical(this, tr(APP_NAME), tr("Snippet removal failed."));
+    }
+    LoadSnippetsToCombo();
+}
+
+void MainView::on_btnAddSnippet_clicked()
+{
+    if (ui->txtCode->toPlainText().isEmpty()) {
+        return;
+    }
+
+    bool ok;
+    QString text = QInputDialog::getText(this, tr(APP_NAME),
+                                         tr("Snippet name:"),
+                                         QLineEdit::Normal, tr(""), &ok);
+    if (!ok || text.isEmpty()) {
+        return;
+    }
+
+    m_snip->AddSnippet(text, ui->txtCode->toPlainText(), ok);
+
+    if (ok) {
+        QMessageBox::information(this, tr(APP_NAME), tr("Snippet added."));
+    } else {
+        QMessageBox::critical(this, tr(APP_NAME), tr("Snippet adding failed."));
+    }
+    LoadSnippetsToCombo();
+}
+
+void MainView::on_btnAbout_clicked()
+{
+    QMessageBox::about(this, tr(APP_NAME), tr("<b>ELSEBA Python Runner</b><br />"
+                                              "Written by Bhathiya Perera<br />"
+                                              "<br />"
+                                              "This Project Depends on<br />"
+                                              "Qt5.3, Python<br />"
+                                              "Python Syntax Highlight Code from Frankie Simon<br />"
+                                              "<br />"));
+}
+
+void MainView::LoadSnippetsToCombo()
+{
+    ui->cmbSnippets->clear();
+    bool success;
+    QList<QString> keys = m_snip->GetKeys(success);
+    if (success) {
+        ui->cmbSnippets->addItems(QStringList(keys));
+    }
 }

@@ -16,14 +16,17 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainview.cpp \
     pythonsyntaxhighlighter.cpp \
-    codeeditor.cpp
+    codeeditor.cpp \
+    snippets.cpp
 
 HEADERS  += mainview.h \
     pythonsyntaxhighlighter.h \
-    codeeditor.h
+    codeeditor.h \
+    snippets.h
 
 FORMS    += mainview.ui
 
+QMAKE_CXXFLAGS += -std=c++11
 
 win32: LIBS += -L$$PWD/../../TermPack/data/python/libs/ -lpython27
 

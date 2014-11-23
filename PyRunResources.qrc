@@ -7,5 +7,9 @@
         <file>Icons/Save.png</file>
         <file>Icons/Snippets.png</file>
         <file>Icons/Run.png</file>
+        <file>Icons/Add.png</file>
+        <file>Icons/Load.png</file>
+        <file>Icons/Remove.png</file>
+        <file>el.png</file>
     </qresource>
 </RCC>
