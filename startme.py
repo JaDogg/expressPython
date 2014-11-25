@@ -4,26 +4,14 @@
 #       Written by Bhathiya Perera
 #
 #
+import sys
+import io
+import re
+from lseba import get_input,set_input,get_output,set_output,get_code,set_code,write_output,get_apppath
 
-# API access
-from emb import get_input,set_output,write_output,get_apppath
-
-try:
-    from cStringIO import StringIO
-except:
-    from StringIO import StringIO
-
-def dump(*something):
-    """Append something to output"""
-    output = StringIO()
-    for onething in something:
-        print >>output, onething
-    converted_str = output.getvalue()
-    output.close()
-    write_output(converted_str)
-
-def clear_output():
-    """Clear output textbox"""
-    write_output("")
-# -------------------------------
+# stdin/stderr/stdout is redirected to textboxes
+___fake_stdin = io.StringIO(get_input())
+___real_stdin = sys.stdin
+sys.stdin = ___fake_stdin
+sys.argv = ["PyRun"]
 

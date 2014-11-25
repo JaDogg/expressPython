@@ -22,18 +22,22 @@ SOURCES += main.cpp\
 HEADERS  += mainview.h \
     pythonsyntaxhighlighter.h \
     codeeditor.h \
-    snippets.h
+    snippets.h \
+    emb.h
 
 FORMS    += mainview.ui
 
 QMAKE_CXXFLAGS += -std=c++11
 
-win32: LIBS += -L$$PWD/../../TermPack/data/python/libs/ -lpython27
-
-INCLUDEPATH += $$PWD/../../TermPack/data/python/include
-DEPENDPATH += $$PWD/../../TermPack/data/python/include
 
 RESOURCES += \
     PyRunResources.qrc
 
-RC_FILE = windows_res.rc
+RC_FILE = PyRun.rc
+
+
+
+win32: LIBS += -L$$PWD/../Python34/libs/ -lpython34
+
+INCLUDEPATH += $$PWD/../Python34/include
+DEPENDPATH += $$PWD/../Python34/include

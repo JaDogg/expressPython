@@ -1,3 +1,4 @@
+#include "emb.h"
 #include "mainview.h"
 #include "ui_mainview.h"
 
@@ -5,9 +6,11 @@ MainView::MainView(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainView)
 {
+    emb::mainView = this;
     ui->setupUi(this);
     SetupHighlighter();
     LoadStartupScript();
+
 }
 
 void MainView::SetSnippets(Snippets* snip)
@@ -106,26 +109,58 @@ void MainView::SaveFile(CodeEditor* codeEditor)
     QApplication::restoreOverrideCursor();
 }
 
+
 QString MainView::GetInput()
 {
     return ui->txtInput->toPlainText();
 }
-
-void MainView::SetOutput(QString output)
+void MainView::SetInput(QString txt)
 {
-    ui->txtOutput->setPlainText(output);
+    ui->txtInput->setPlainText(txt);
+}
+QString MainView::GetOutput()
+{
+    return ui->txtOutput->toPlainText();
+}
+void MainView::SetOutput(QString txt)
+{
+    ui->txtOutput->setPlainText(txt);
+}
+QString MainView::GetCode()
+{
+    return ui->txtCode->toPlainText();
+}
+void MainView::SetCode(QString txt)
+{
+    ui->txtCode->setPlainText(txt);
 }
 void MainView::WriteOutput(QString output)
 {
     QString txt = ui->txtOutput->toPlainText();
-    ui->txtOutput->setPlainText(txt + output);
+    txt.append(output);
+    ui->txtOutput->setPlainText(txt);
 }
 
 void MainView::RunPythonCode(const QString& code)
 {
-    QString pycode(m_startme);
-    pycode.append(code);
-    PyRun_SimpleString(pycode.toStdString().c_str());
+    PyImport_AppendInittab("emb", emb::PyInit_emb);
+    PyImport_AppendInittab("lseba", emb::PyInit_Lseba);
+    Py_Initialize();
+    PyImport_ImportModule("emb");
+    //no need to import lseba, it is imported in startme.py
+    std::string buffer;
+    {
+        // switch sys.stdout to custom handler
+        emb::stdout_write_type write = [&buffer](std::string s) {
+            buffer += s;
+            emb::mainView->WriteOutput(QString::fromStdString(s));
+        };
+        emb::set_stdout(write);
+        PyRun_SimpleString(m_startme.toStdString().c_str());
+        PyRun_SimpleString(code.toStdString().c_str());
+        emb::reset_stdout();
+    }
+    Py_Finalize();
 }
 
 void MainView::on_btnRun_clicked()
@@ -265,12 +300,13 @@ void MainView::on_btnAddSnippet_clicked()
 
 void MainView::on_btnAbout_clicked()
 {
-    QMessageBox::about(this, tr(APP_NAME), tr("<b>ELSEBA Python Runner</b><br />"
+    QMessageBox::about(this, tr(APP_NAME), tr("<b>" APP_NAME "</b><br />"
                                               "Written by Bhathiya Perera<br />"
                                               "<br />"
                                               "This Project Depends on<br />"
                                               "Qt5.3, Python<br />"
-                                              "Python Syntax Highlight Code from Frankie Simon<br />"
+                                              "Frankie Simon's Python Syntax Highlight Code<br />"
+                                              "Mateusz Loskot's Embedding Code<br />"
                                               "<br />"));
 }
 

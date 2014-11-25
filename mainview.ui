@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ELSEBA Python Runner</string>
+   <string>PyRun Tester</string>
   </property>
   <property name="windowIcon">
    <iconset resource="PyRunResources.qrc">
-    <normaloff>:/data/e.png</normaloff>:/data/e.png</iconset>
+    <normaloff>:/data/Icons/PyRunImg.png</normaloff>:/data/Icons/PyRunImg.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -326,9 +326,7 @@
            <enum>Qt::ScrollBarAlwaysOn</enum>
           </property>
           <property name="plainText">
-           <string>set_output(&quot;&quot;) # clear
-dump(get_input())
-write_output(&quot;append&quot;)
+           <string>print (&quot;hello&quot;)
 </string>
           </property>
          </widget>
@@ -621,11 +619,11 @@ write_output(&quot;append&quot;)
          <string>About</string>
         </property>
         <property name="text">
-         <string>SEBA</string>
+         <string>About</string>
         </property>
         <property name="icon">
          <iconset resource="PyRunResources.qrc">
-          <normaloff>:/data/el.png</normaloff>:/data/el.png</iconset>
+          <normaloff>:/data/Icons/PyRunImg.png</normaloff>:/data/Icons/PyRunImg.png</iconset>
         </property>
         <property name="iconSize">
          <size>

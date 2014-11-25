@@ -1,6 +1,9 @@
 #ifndef MAINVIEW_H
 #define MAINVIEW_H
-#define APP_NAME "LSEBA Python Runner"
+#define APP_NAME "PyRun Tester"
+
+#include <cmath>
+#include "Python.h"
 
 // fremework
 #include <QMessageBox>
@@ -8,9 +11,6 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QInputDialog>
-
-// third party
-#include "Python.h"
 
 // internal
 #include "pythonsyntaxhighlighter.h"
@@ -29,10 +29,13 @@ public:
     explicit MainView(QWidget* parent = 0);
     ~MainView();
     QString GetInput();
-    void SetOutput(QString output);
+    void SetInput(QString txt);
+    QString GetOutput();
+    void SetOutput(QString txt);
+    QString GetCode();
+    void SetCode(QString txt);
     void WriteOutput(QString output);
     void SetSnippets(Snippets* snip);
-
 private slots:
     void on_btnRun_clicked();
     void on_fntCombo_currentFontChanged(const QFont& font);
@@ -65,7 +68,7 @@ private:
     QString LoadFile(const QString& fileName, bool& success);
     void LoadStartupScript();
     void LoadSnippetsToCombo();
-    void RunPythonCode(const QString &code);
+    void RunPythonCode(const QString& code);
 };
 
 #endif // MAINVIEW_H
