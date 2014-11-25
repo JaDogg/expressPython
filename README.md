@@ -1,5 +1,5 @@
-elseba
-======
+expressPython
+=============
 
-ELSEBA Python Runner
--Bhathiya Perera
+expressPython : Express Python, A Small IDE
+
