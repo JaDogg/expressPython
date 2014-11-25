@@ -7,12 +7,19 @@
 // Blog article: http://mateusz.loskot.net/?p=2819
 // --------------------------------------------------------------------------
 
+#ifndef EMB_H
+#define EMB_H
+
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 #include <functional>
 #include <iostream>
 #include <string>
 #include <cmath>
 #include "Python.h"
-#include "mainview.h"
+#include "UI/mainview.h"
+
 namespace emb {
 
 MainView* mainView;
@@ -239,3 +246,7 @@ PyObject* PyInit_Lseba(void)
     return PyModule_Create(&LsebaModule);
 }
 }
+
+#pragma GCC diagnostic warning "-Wunused-parameter"
+#pragma GCC diagnostic warning "-Wmissing-field-initializers"
+#endif

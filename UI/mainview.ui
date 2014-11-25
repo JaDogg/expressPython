@@ -14,7 +14,7 @@
    <string>PyRun Tester</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="PyRunResources.qrc">
+   <iconset resource="../PyRunResources.qrc">
     <normaloff>:/data/Icons/PyRunImg.png</normaloff>:/data/Icons/PyRunImg.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -186,7 +186,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="PyRunResources.qrc">
+             <iconset resource="../PyRunResources.qrc">
               <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
             </property>
             <property name="iconSize">
@@ -218,7 +218,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="PyRunResources.qrc">
+             <iconset resource="../PyRunResources.qrc">
               <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
             </property>
             <property name="iconSize">
@@ -250,7 +250,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="PyRunResources.qrc">
+             <iconset resource="../PyRunResources.qrc">
               <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
             </property>
             <property name="iconSize">
@@ -282,7 +282,7 @@
              <string/>
             </property>
             <property name="icon">
-             <iconset resource="PyRunResources.qrc">
+             <iconset resource="../PyRunResources.qrc">
               <normaloff>:/data/Icons/Run.png</normaloff>:/data/Icons/Run.png</iconset>
             </property>
             <property name="iconSize">
@@ -360,7 +360,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
               </property>
               <property name="iconSize">
@@ -392,7 +392,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
               </property>
               <property name="iconSize">
@@ -424,7 +424,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
               </property>
               <property name="iconSize">
@@ -490,7 +490,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Open.png</normaloff>:/data/Icons/Open.png</iconset>
               </property>
               <property name="iconSize">
@@ -522,7 +522,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Save.png</normaloff>:/data/Icons/Save.png</iconset>
               </property>
               <property name="iconSize">
@@ -554,7 +554,7 @@
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="PyRunResources.qrc">
+               <iconset resource="../PyRunResources.qrc">
                 <normaloff>:/data/Icons/Clear.png</normaloff>:/data/Icons/Clear.png</iconset>
               </property>
               <property name="iconSize">
@@ -622,7 +622,7 @@
          <string>About</string>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/PyRunImg.png</normaloff>:/data/Icons/PyRunImg.png</iconset>
         </property>
         <property name="iconSize">
@@ -667,7 +667,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/Snippets.png</normaloff>:/data/Icons/Snippets.png</iconset>
         </property>
         <property name="iconSize">
@@ -699,7 +699,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/Add.png</normaloff>:/data/Icons/Add.png</iconset>
         </property>
         <property name="iconSize">
@@ -731,7 +731,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/Remove.png</normaloff>:/data/Icons/Remove.png</iconset>
         </property>
         <property name="iconSize">
@@ -763,7 +763,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/Load.png</normaloff>:/data/Icons/Load.png</iconset>
         </property>
         <property name="iconSize">
@@ -795,7 +795,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="PyRunResources.qrc">
+         <iconset resource="../PyRunResources.qrc">
           <normaloff>:/data/Icons/Run.png</normaloff>:/data/Icons/Run.png</iconset>
         </property>
         <property name="iconSize">
@@ -835,11 +835,11 @@
   <customwidget>
    <class>CodeEditor</class>
    <extends>QPlainTextEdit</extends>
-   <header location="global">codeeditor.h</header>
+   <header location="global">CodeEditor/codeeditor.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="PyRunResources.qrc"/>
+  <include location="../PyRunResources.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -1,5 +1,5 @@
-#include "emb.h"
-#include "mainview.h"
+#include "PythonAccess/emb.h"
+#include "UI/mainview.h"
 #include "ui_mainview.h"
 
 MainView::MainView(QWidget* parent)

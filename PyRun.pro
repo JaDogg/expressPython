@@ -9,32 +9,29 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 
-
 TARGET = PyRun
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        mainview.cpp \
-    pythonsyntaxhighlighter.cpp \
-    codeeditor.cpp \
-    snippets.cpp
+        UI/mainview.cpp \
+    CodeEditor/pythonsyntaxhighlighter.cpp \
+    CodeEditor/codeeditor.cpp \
+    Features/snippets.cpp
 
-HEADERS  += mainview.h \
-    pythonsyntaxhighlighter.h \
-    codeeditor.h \
-    snippets.h \
-    emb.h
+HEADERS  += UI/mainview.h \
+    CodeEditor/pythonsyntaxhighlighter.h \
+    CodeEditor/codeeditor.h \
+    Features/snippets.h \
+    PythonAccess/emb.h
 
-FORMS    += mainview.ui
+FORMS    += UI/mainview.ui
 
 QMAKE_CXXFLAGS += -std=c++11
-
 
 RESOURCES += \
     PyRunResources.qrc
 
-RC_FILE = PyRun.rc
-
+RC_FILE = WindowsResources/PyRun.rc
 
 
 win32: LIBS += -L$$PWD/../Python34/libs/ -lpython34

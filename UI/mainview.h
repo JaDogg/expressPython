@@ -13,9 +13,9 @@
 #include <QInputDialog>
 
 // internal
-#include "pythonsyntaxhighlighter.h"
-#include "codeeditor.h"
-#include "snippets.h"
+#include "CodeEditor/pythonsyntaxhighlighter.h"
+#include "CodeEditor/codeeditor.h"
+#include "Features/snippets.h"
 
 namespace Ui {
 class MainView;

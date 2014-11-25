@@ -1,4 +1,4 @@
-#include "snippets.h"
+#include "Features/snippets.h"
 #include <iostream>
 
 Snippets::Snippets(QObject* parent)
