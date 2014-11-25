@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/data">
-        <file>startme.py</file>
         <file>Icons/Clear.png</file>
         <file>Icons/Open.png</file>
         <file>Icons/Save.png</file>
@@ -10,5 +9,6 @@
         <file>Icons/Load.png</file>
         <file>Icons/Remove.png</file>
         <file>Icons/PyRunImg.png</file>
+        <file>startme.py</file>
     </qresource>
 </RCC>

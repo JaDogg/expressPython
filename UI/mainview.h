@@ -1,6 +1,6 @@
 #ifndef MAINVIEW_H
 #define MAINVIEW_H
-#define APP_NAME "PyRun Tester"
+#define APP_NAME "Express Python"
 
 #include <cmath>
 #include "Python.h"

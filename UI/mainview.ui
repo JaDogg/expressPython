@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>PyRun Tester</string>
+   <string>Express Python</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../PyRunResources.qrc">

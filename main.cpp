@@ -9,7 +9,7 @@ static MainView* mainView;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    wchar_t c_s[] = L"PyRun";
+    wchar_t c_s[] = L"expressPython";
     Py_SetProgramName(c_s);
     snip = new Snippets();
     mainView = new MainView();
