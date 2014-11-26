@@ -63,7 +63,8 @@ private:
     void initializeRules();
     //! Highlighst multi-line strings, returns true if after processing we are still within the multi-line section.
     bool matchMultiline(const QString& text, const QRegExp& delimiter, const int inState, const QTextCharFormat& style);
-    const QTextCharFormat getTextCharFormat(const QString& colorName, const QString& style = QString());
+    const QTextCharFormat getTextCharFormat(const QString& colorName, const QString& style = QString(),
+                                            const QString& backColorName = QString());
     QList<HighlightingRule> rules;
     QRegExp triSingleQuote;
     QRegExp triDoubleQuote;

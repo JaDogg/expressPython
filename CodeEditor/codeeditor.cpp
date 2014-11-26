@@ -1,5 +1,6 @@
 /****************************************************************************
 **
+**
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
 **
@@ -36,6 +37,7 @@
 **
 ** $QT_END_LICENSE$
 **
+** -----------Modified By Bhathiya Perera-------------
 ****************************************************************************/
 
 #include <QtWidgets>
@@ -48,10 +50,13 @@ CodeEditor::CodeEditor(QWidget* parent)
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect, int)), this, SLOT(updateLineNumberArea(QRect, int)));
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
     updateLineNumberAreaWidth(0);
-    highlightCurrentLine();
+
+    QPalette p = this->palette();
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::white);
+    this->setPalette(p);
 }
 
 int CodeEditor::lineNumberAreaWidth()
@@ -94,42 +99,22 @@ void CodeEditor::resizeEvent(QResizeEvent* e)
 
 void CodeEditor::keyPressEvent(QKeyEvent* e)
 {
+    //TODO handle automatical indentation
+    //TODO backspace auto unindent
+    //TODO indent selected text
     switch (e->key()) {
     case Qt::Key_Tab:
         QPlainTextEdit::insertPlainText("    ");
         break;
-    //      TODO Indentation
-    //    case Qt::Key_Enter:
-    //    case Qt::Key_Return:
-    //        break;
     default:
         QPlainTextEdit::keyPressEvent(e);
     }
 }
 
-void CodeEditor::highlightCurrentLine()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-
-        QColor lineColor = QColor(Qt::yellow).lighter(160);
-
-        selection.format.setBackground(lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
-
-    setExtraSelections(extraSelections);
-}
-
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent* event)
 {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), Qt::lightGray);
+    painter.fillRect(event->rect(), Qt::darkGray);
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();

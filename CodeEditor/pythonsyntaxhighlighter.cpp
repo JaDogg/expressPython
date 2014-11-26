@@ -1,25 +1,27 @@
-/*
-$Id: PythonSyntaxHighlighter.cpp 167 2013-11-03 17:01:22Z oliver $
-This is a C++ port of the following PyQt example
-http://diotavelli.net/PyQtWiki/Python%20syntax%20highlighting
-C++ port by Frankie Simon (www.kickdrive.de, www.fuh-edv.de)
-
-The following free software license applies for this file ("X11 license"):
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software
-and associated documentation files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial
-portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
-LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-USE OR OTHER DEALINGS IN THE SOFTWARE.
+/*  $Id: PythonSyntaxHighlighter.cpp 167 2013-11-03 17:01:22Z oliver $
+ *
+ *  This is a C++ port of the following PyQt example
+ *  http://diotavelli.net/PyQtWiki/Python%20syntax%20highlighting
+ *  C++ port by Frankie Simon (www.kickdrive.de, www.fuh-edv.de)
+ *
+ *  The following free software license applies for this file ("X11 license"):
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ *  and associated documentation files (the "Software"), to deal in the Software without restriction,
+ *  including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ *  subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all copies or substantial
+ *  portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ *  LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE X CONSORTIUM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ *  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+ *  USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  -----------Modified By Bhathiya Perera-------------
 */
 
 #include "CodeEditor/PythonSyntaxHighlighter.h"
@@ -60,30 +62,26 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                              << "True"
                              << "False";
 
-    operators = QStringList() << "=" <<
-                // Comparison
-                "=="
+    operators = QStringList() << "="
+                              << "=="
                               << "!="
                               << "<"
                               << "<="
                               << ">"
-                              << ">=" <<
-                // Arithmetic
-                "\\+"
+                              << ">="
+                              << "\\+"
                               << "-"
                               << "\\*"
                               << "/"
                               << "//"
                               << "%"
-                              << "\\*\\*" <<
-                // In-place
-                "\\+="
+                              << "\\*\\*"
+                              << "\\+="
                               << "-="
                               << "\\*="
                               << "/="
-                              << "%=" <<
-                // Bitwise
-                "\\^"
+                              << "%="
+                              << "\\^"
                               << "\\|"
                               << "&"
                               << "~"
@@ -97,11 +95,6 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                            << "\\["
                            << "]";
 
-    QFont* font = new QFont();
-    font->setFamily("Courier New");
-    font->setFixedPitch(true);
-    font->setPointSize(10);
-
     setStyles();
 
     triSingleQuote.setPattern("'''");
@@ -112,16 +105,16 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
 
 void PythonSyntaxHighlighter::setStyles()
 {
-    basicStyles.insert("keyword", getTextCharFormat("blue"));
+    basicStyles.insert("keyword", getTextCharFormat("orange", "bold"));
     basicStyles.insert("operator", getTextCharFormat("red"));
-    basicStyles.insert("brace", getTextCharFormat("darkGray"));
-    basicStyles.insert("defclass", getTextCharFormat("black", "bold"));
-    basicStyles.insert("brace", getTextCharFormat("darkGray"));
+    basicStyles.insert("brace", getTextCharFormat("red", "bold"));
+    basicStyles.insert("defclass", getTextCharFormat("white", "bold"));
     basicStyles.insert("string", getTextCharFormat("magenta"));
     basicStyles.insert("string2", getTextCharFormat("darkMagenta"));
-    basicStyles.insert("comment", getTextCharFormat("darkGreen", "italic"));
-    basicStyles.insert("self", getTextCharFormat("black", "italic"));
-    basicStyles.insert("numbers", getTextCharFormat("brown"));
+    basicStyles.insert("comment", getTextCharFormat("darkGreen", "bold"));
+    basicStyles.insert("self", getTextCharFormat("white", "bold"));
+    basicStyles.insert("numbers", getTextCharFormat("cyan"));
+    basicStyles.insert("bugs", getTextCharFormat("yellow", "bold", "red"));
 }
 
 void PythonSyntaxHighlighter::initializeRules()
@@ -139,27 +132,25 @@ void PythonSyntaxHighlighter::initializeRules()
     rules.append(HighlightingRule("\\bself\\b", 0, basicStyles.value("self")));
 
     // Double-quoted string, possibly containing escape sequences
-    // FF: originally in python : r'"[^"\\]*(\\.[^"\\]*)*"'
     rules.append(HighlightingRule("\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("string")));
     // Single-quoted string, possibly containing escape sequences
-    // FF: originally in python : r"'[^'\\]*(\\.[^'\\]*)*'"
     rules.append(HighlightingRule("'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("string")));
 
     // 'def' followed by an identifier
-    // FF: originally: r'\bdef\b\s*(\w+)'
     rules.append(HighlightingRule("\\bdef\\b\\s*(\\w+)", 1, basicStyles.value("defclass")));
     //  'class' followed by an identifier
-    // FF: originally: r'\bclass\b\s*(\w+)'
     rules.append(HighlightingRule("\\bclass\\b\\s*(\\w+)", 1, basicStyles.value("defclass")));
 
     // From '#' until a newline
-    // FF: originally: r'#[^\\n]*'
     rules.append(HighlightingRule("#[^\\n]*", 0, basicStyles.value("comment")));
 
     // Numeric literals
-    rules.append(HighlightingRule("\\b[+-]?[0-9]+[lL]?\\b", 0, basicStyles.value("numbers"))); // r'\b[+-]?[0-9]+[lL]?\b'
-    rules.append(HighlightingRule("\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", 0, basicStyles.value("numbers"))); // r'\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\b'
-    rules.append(HighlightingRule("\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b", 0, basicStyles.value("numbers"))); // r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b'
+    rules.append(HighlightingRule("\\b[+-]?[0-9]+[lL]?\\b", 0, basicStyles.value("numbers")));
+    rules.append(HighlightingRule("\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", 0, basicStyles.value("numbers")));
+    rules.append(HighlightingRule("\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b", 0, basicStyles.value("numbers")));
+
+    // tab and space mixed
+    rules.append(HighlightingRule("[^\\n]*(?:\\t | \\t)[^\\n]*", 0, basicStyles.value("bugs")));
 }
 
 void PythonSyntaxHighlighter::highlightBlock(const QString& text)
@@ -227,11 +218,17 @@ bool PythonSyntaxHighlighter::matchMultiline(const QString& text, const QRegExp&
         return false;
 }
 
-const QTextCharFormat PythonSyntaxHighlighter::getTextCharFormat(const QString& colorName, const QString& style)
+const QTextCharFormat PythonSyntaxHighlighter::getTextCharFormat(
+    const QString& colorName, const QString& style, const QString& backColorName)
 {
     QTextCharFormat charFormat;
     QColor color(colorName);
     charFormat.setForeground(color);
+
+    if (!backColorName.isEmpty()) {
+        QColor backColor(backColorName);
+        charFormat.setBackground(backColor);
+    }
     if (style.contains("bold", Qt::CaseInsensitive))
         charFormat.setFontWeight(QFont::Bold);
     if (style.contains("italic", Qt::CaseInsensitive))
