@@ -54,7 +54,7 @@ void Snippets::LoadSnippets(bool& success)
                                         "write_output(\"Hi You,\\n\")\n"
                                         "\n"
                                         "# get_apppath() -> get exe path\n"
-                                        "print (\"PyRun.exe is at :\", get_apppath())\n\n"));
+                                        "print (\"expressPython.exe is at :\", get_apppath())\n\n"));
     }
 
     m_Snippets = new QMap<QString, QString>(data);

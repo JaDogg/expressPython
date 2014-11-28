@@ -1,3 +1,4 @@
+#include <functional>
 #include "PythonAccess/emb.h"
 #include "UI/mainview.h"
 #include "ui_mainview.h"
@@ -6,11 +7,10 @@ MainView::MainView(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainView)
 {
-    emb::mainView = this;
+    emb::setMainView(this);
     ui->setupUi(this);
     SetupHighlighter();
     LoadStartupScript();
-
 }
 
 void MainView::SetSnippets(Snippets* snip)
@@ -109,7 +109,6 @@ void MainView::SaveFile(CodeEditor* codeEditor)
     QApplication::restoreOverrideCursor();
 }
 
-
 QString MainView::GetInput()
 {
     return ui->txtInput->toPlainText();
@@ -143,23 +142,21 @@ void MainView::WriteOutput(QString output)
 
 void MainView::RunPythonCode(const QString& code)
 {
-    PyImport_AppendInittab("emb", emb::PyInit_emb);
-    PyImport_AppendInittab("lseba", emb::PyInit_Lseba);
+    PyImport_AppendInittab("emb", emb::PyInitEmbConnect);
+    PyImport_AppendInittab("expressApi", emb::PyInitApiConnection);
     Py_Initialize();
     PyImport_ImportModule("emb");
-    //no need to import lseba, it is imported in startme.py
-    std::string buffer;
+
+    emb::StdOutWriteType write = [](std::string s)
     {
-        // switch sys.stdout to custom handler
-        emb::stdout_write_type write = [&buffer](std::string s) {
-            buffer += s;
-            emb::mainView->WriteOutput(QString::fromStdString(s));
-        };
-        emb::set_stdout(write);
-        PyRun_SimpleString(m_startme.toStdString().c_str());
-        PyRun_SimpleString(code.toStdString().c_str());
-        emb::reset_stdout();
-    }
+        emb::getMainView()->WriteOutput(QString::fromStdString(s));
+    };
+
+    emb::SetStdout(write);
+    PyRun_SimpleString(m_startme.toStdString().c_str());
+    PyRun_SimpleString(code.toStdString().c_str());
+    emb::ResetStdOut();
+    //}
     Py_Finalize();
 }
 
