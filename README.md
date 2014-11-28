@@ -36,5 +36,5 @@ set_output("")
 write_output("Hi You,\n")
 
 # get_apppath() -> get exe path
-print ("PyRun.exe is at :", get_apppath())
+print ("expressPython.exe is at :", get_apppath())
 ```
