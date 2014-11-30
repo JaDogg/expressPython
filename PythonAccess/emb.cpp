@@ -13,17 +13,24 @@
 #include <functional>
 #include <iostream>
 #include <string>
+
 #include "PythonAccess/emb.h"
 
 namespace emb {
 MainView* mainView;
+PythonWorker* worker;
 void setMainView(MainView* _mainView)
 {
     mainView = _mainView;
 }
+void setWorker(PythonWorker* _worker)
+{
+    worker = _worker;
+}
 MainView* getMainView()
 {
     return mainView;
+
 }
 struct StdOut {
     PyObject_HEAD
@@ -153,7 +160,7 @@ PyObject* ApiSetInput(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "s", &data))
         return NULL;
 
-    mainView->SetInput(QString(data));
+    emit worker->SetInput(QString(data));
 
     return Py_BuildValue("i", 0);
 }
@@ -178,7 +185,7 @@ PyObject* ApiSetOutput(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "s", &data))
         return NULL;
 
-    mainView->SetOutput(QString(data));
+    emit worker->SetOutput(QString(data));
 
     return Py_BuildValue("i", 0);
 }
@@ -196,7 +203,7 @@ PyObject* ApiSetCode(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "s", &data))
         return NULL;
 
-    mainView->SetCode(QString(data));
+    emit worker->SetCode(QString(data));
 
     return Py_BuildValue("i", 0);
 }
@@ -206,7 +213,7 @@ PyObject* ApiWriteOutput(PyObject* self, PyObject* args)
     if (!PyArg_ParseTuple(args, "s", &data))
         return NULL;
 
-    mainView->WriteOutput(QString(data));
+    emit worker->WriteOutput(QString(data));
 
     return Py_BuildValue("i", 0);
 }

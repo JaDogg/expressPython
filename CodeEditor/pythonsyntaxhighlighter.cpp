@@ -93,7 +93,7 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                            << "\\("
                            << "\\)"
                            << "\\["
-                           << "]";
+                           << "\\]";
 
     setStyles();
 
@@ -141,9 +141,6 @@ void PythonSyntaxHighlighter::initializeRules()
     //  'class' followed by an identifier
     rules.append(HighlightingRule("\\bclass\\b\\s*(\\w+)", 1, basicStyles.value("defclass")));
 
-    // From '#' until a newline
-    rules.append(HighlightingRule("#[^\\n]*", 0, basicStyles.value("comment")));
-
     // Numeric literals
     rules.append(HighlightingRule("\\b[+-]?[0-9]+[lL]?\\b", 0, basicStyles.value("numbers")));
     rules.append(HighlightingRule("\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", 0, basicStyles.value("numbers")));
@@ -151,6 +148,9 @@ void PythonSyntaxHighlighter::initializeRules()
 
     // tab and space mixed
     rules.append(HighlightingRule("[^\\n]*(?:\\t | \\t)[^\\n]*", 0, basicStyles.value("bugs")));
+
+    // From '#' until a newline
+    rules.append(HighlightingRule("#[^\\n]*", 0, basicStyles.value("comment")));
 }
 
 void PythonSyntaxHighlighter::highlightBlock(const QString& text)

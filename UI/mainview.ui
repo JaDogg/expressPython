@@ -366,13 +366,13 @@
        <widget class="QPushButton" name="btnAbout">
         <property name="minimumSize">
          <size>
-          <width>80</width>
+          <width>24</width>
           <height>24</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>80</width>
+          <width>24</width>
           <height>24</height>
          </size>
         </property>
@@ -380,7 +380,7 @@
          <string>About</string>
         </property>
         <property name="text">
-         <string>About</string>
+         <string/>
         </property>
         <property name="icon">
          <iconset resource="../PyRunResources.qrc">

@@ -3,6 +3,7 @@
 #include <cmath>
 #include "Python.h"
 #include "UI/mainview.h"
+#include "PythonAccess/pythonworker.h"
 namespace emb {
 
 
@@ -19,6 +20,7 @@ PyObject* ApiSetInput(PyObject* self, PyObject* args);
 PyObject* ApiGetInput(PyObject* self, PyObject* args);
 void ResetStdOut();
 void setMainView(MainView* _mainView);
+void setWorker(PythonWorker* _worker);
 MainView* getMainView();
 void SetStdout(StdOutWriteType write);
 PyMODINIT_FUNC PyInitEmbConnect(void);

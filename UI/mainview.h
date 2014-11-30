@@ -11,7 +11,7 @@
 #include <QFileDialog>
 #include <QMainWindow>
 #include <QInputDialog>
-
+#include <QThread>
 // internal
 #include "CodeEditor/pythonsyntaxhighlighter.h"
 #include "CodeEditor/codeeditor.h"
@@ -29,12 +29,8 @@ public:
     explicit MainView(QWidget* parent = 0);
     ~MainView();
     QString GetInput();
-    void SetInput(QString txt);
     QString GetOutput();
-    void SetOutput(QString txt);
     QString GetCode();
-    void SetCode(QString txt);
-    void WriteOutput(QString output);
     void SetSnippets(Snippets* snip);
 private slots:
     void on_btnRun_clicked();
@@ -55,21 +51,32 @@ private slots:
     void on_btnRemoveSnippet_clicked();
     void on_btnAddSnippet_clicked();
     void on_btnAbout_clicked();
+    void SetInput(QString txt);
+    void SetOutput(QString txt);
+    void SetCode(QString txt);
+    void WriteOutput(QString output);
+    void StartPythonRun();
+    void EndPythonRun();
 
 private:
+    QThread workerThread;
     Ui::MainView* ui;
     PythonSyntaxHighlighter* mHighlighter;
     QString mStartMe;
+    QString mAbout;
     Snippets* mSnippets;
     void ChangeFontSize(QFont font, int size);
     void SetupHighlighter();
     void SaveFile(CodeEditor* codeEditor);
     void BrowseAndLoadFile(CodeEditor* codeEditor);
     QString LoadFile(const QString& fileName, bool& success);
-    void LoadStartupScript();
+    void LoadResources();
     void LoadSnippetsToCombo();
     void RunPythonCode(const QString& code);
     void LoadSettings();
+    void SetupPython();
+signals:
+    void operate(const QString&, const QString&);
 };
 
 #endif // MAINVIEW_H

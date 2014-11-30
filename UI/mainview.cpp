@@ -1,5 +1,6 @@
 #include <functional>
 #include "PythonAccess/emb.h"
+#include "PythonAccess/pythonworker.h"
 #include "UI/mainview.h"
 #include "ui_mainview.h"
 #include <QSettings>
@@ -16,15 +17,40 @@ MainView::MainView(QWidget* parent)
     : QMainWindow(parent)
     , ui(new Ui::MainView)
 {
-    emb::setMainView(this);
     ui->setupUi(this);
     SetupHighlighter();
-    LoadStartupScript();
+    LoadResources();
     LoadSettings();
+    SetupPython();
+}
+void MainView::SetupPython()
+{
+    emb::setMainView(this);
+    PythonWorker* worker = new PythonWorker();
+    emb::setWorker(worker);
+    worker->moveToThread(&workerThread);
+    connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
+    connect(this, &MainView::operate, worker, &PythonWorker::RunPython);
+    connect(worker, &PythonWorker::WriteOutput, this, &MainView::WriteOutput);
+    connect(worker, &PythonWorker::SetCode, this, &MainView::SetCode);
+    connect(worker, &PythonWorker::SetInput, this, &MainView::SetInput);
+    connect(worker, &PythonWorker::SetOutput, this, &MainView::SetOutput);
+    connect(worker, &PythonWorker::StartPythonRun, this, &MainView::StartPythonRun);
+    connect(worker, &PythonWorker::EndPythonRun, this, &MainView::EndPythonRun);
+    workerThread.start();
+}
+void MainView::StartPythonRun()
+{
+    ui->btnRun->setEnabled(false);
+    ui->btnRunSnippet->setEnabled(false);
+}
+void MainView::EndPythonRun()
+{
+    ui->btnRun->setEnabled(true);
+    ui->btnRunSnippet->setEnabled(true);
 }
 void MainView::LoadSettings()
 {
-
     QSettings settings;
     this->restoreState(settings.value(KEY_DOCK_LOCATIONS).toByteArray(), SAVE_STATE_VERSION);
     this->restoreGeometry(settings.value(KEY_GEOMETRY).toByteArray());
@@ -39,7 +65,7 @@ void MainView::LoadSettings()
     if (pos != -1) {
         ui->fntCombo->setCurrentIndex(pos);
     }
-    if (sizeIndex >= 0){
+    if (sizeIndex >= 0) {
         ui->cmbFontSize->setCurrentIndex(sizeIndex);
     }
 
@@ -57,7 +83,7 @@ void MainView::SetupHighlighter()
     ui->txtCode->setFocus();
 }
 
-void MainView::LoadStartupScript()
+void MainView::LoadResources()
 {
     bool success;
     mStartMe = LoadFile(":/data/startme.py", success);
@@ -65,6 +91,11 @@ void MainView::LoadStartupScript()
     if (!success) {
         QMessageBox::warning(this, tr(APP_NAME), tr("Loading startup script failed"));
     }
+    mAbout = LoadFile(":/data/About.htm", success);
+    if (!success) {
+        mAbout = tr(APP_NAME " Written by Bhathiya Perera");
+    }
+
 }
 MainView::~MainView()
 {
@@ -76,6 +107,8 @@ MainView::~MainView()
     settings.setValue(KEY_OUTPUTBOX, this->GetOutput());
     settings.setValue(KEY_FONT, ui->fntCombo->currentText());
     settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
+    workerThread.quit();
+    workerThread.wait();
     delete ui;
 }
 
@@ -173,20 +206,7 @@ void MainView::WriteOutput(QString output)
 
 void MainView::RunPythonCode(const QString& code)
 {
-    PyImport_AppendInittab("emb", emb::PyInitEmbConnect);
-    PyImport_AppendInittab("expressApi", emb::PyInitApiConnection);
-    Py_Initialize();
-    PyImport_ImportModule("emb");
-
-    emb::StdOutWriteType write = [](std::string s) {
-        emb::getMainView()->WriteOutput(QString::fromStdString(s));
-    };
-
-    emb::SetStdout(write);
-    PyRun_SimpleString(mStartMe.toStdString().c_str());
-    PyRun_SimpleString(code.toStdString().c_str());
-    emb::ResetStdOut();
-    Py_Finalize();
+    emit operate(mStartMe, code);
 }
 
 void MainView::on_btnRun_clicked()
@@ -326,14 +346,7 @@ void MainView::on_btnAddSnippet_clicked()
 
 void MainView::on_btnAbout_clicked()
 {
-    QMessageBox::about(this, tr(APP_NAME), tr("<b>" APP_NAME "</b><br />"
-                                              "Written by Bhathiya Perera<br />"
-                                              "<br />"
-                                              "This Project Depends on<br />"
-                                              "Qt5.3, Python<br />"
-                                              "Frankie Simon's Python Syntax Highlight Code<br />"
-                                              "Mateusz Loskot's Embedding Code<br />"
-                                              "<br />"));
+    QMessageBox::about(this, tr(APP_NAME), mAbout);
 }
 
 void MainView::LoadSnippetsToCombo()

@@ -41,3 +41,5 @@ win32: LIBS += -L$$PWD/../Python34/libs/ -lpython34
 
 INCLUDEPATH += $$PWD/../Python34/include
 DEPENDPATH += $$PWD/../Python34/include
+
+OTHER_FILES +=

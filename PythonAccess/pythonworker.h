@@ -9,10 +9,18 @@ class PythonWorker : public QObject
 public:
     explicit PythonWorker(QObject *parent = 0);
 
+private:
+
 signals:
+    void WriteOutput(QString result);
+    void SetInput(QString txt);
+    void SetOutput(QString txt);
+    void SetCode(QString txt);
+    void StartPythonRun();
+    void EndPythonRun();
 
 public slots:
-
+    void RunPython(const QString &startme,const QString &code);
 };
 
 #endif // PYTHONWORKER_H
