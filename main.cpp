@@ -8,6 +8,10 @@ static Snippets* snip;
 static MainView* mainView;
 int main(int argc, char* argv[])
 {
+    QCoreApplication::setOrganizationName("Bhathiya");
+    QCoreApplication::setOrganizationDomain("simpll.info");
+    QCoreApplication::setApplicationName("expressPython");
+
     QApplication app(argc, argv);
 
     wchar_t name[] = L"expressPython";

@@ -3,10 +3,10 @@
   <assemblyIdentity
       version="1.0.0.0"
       processorArchitecture="X86"
-      name="Bhathiya.PyRun.Tester"
+      name="Bhathiya.express.Python"
       type="win32"
   />
-  <description>PyRun Tester</description>
+  <description>Express Python</description>
 
   <!-- Enable Windows XP and higher themes with common controls -->
   <dependency>

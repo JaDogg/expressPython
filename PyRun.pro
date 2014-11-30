@@ -34,7 +34,7 @@ QMAKE_CXXFLAGS += -std=c++11 -Wpedantic
 RESOURCES += \
     PyRunResources.qrc
 
-RC_FILE = WindowsResources/PyRun.rc
+RC_FILE = WindowsResources/win_rsrc.rc
 
 
 win32: LIBS += -L$$PWD/../Python34/libs/ -lpython34

@@ -15,12 +15,12 @@ BEGIN
       VALUE "FileVersion", "1.0.0.0\0"
       VALUE "ProductVersion", "1.0.0.0\0"
       VALUE "CompanyName", "Bhathiya\0"
-      VALUE "FileDescription", "PyRun Tester\0"
-      VALUE "InternalName", "PyRun Tester\0"
-      VALUE "LegalCopyright", "PyRun Tester\0"
-      VALUE "LegalTrademarks", "PyRun Tester\0"
-      VALUE "OriginalFilename", "PyRun.exe\0"
-      VALUE "ProductName", "PyRun Tester\0"
+      VALUE "FileDescription", "Express Python\0"
+      VALUE "InternalName", "expressPython\0"
+      VALUE "LegalCopyright", "expressPython\0"
+      VALUE "LegalTrademarks", "expressPython\0"
+      VALUE "OriginalFilename", "expressPython.exe\0"
+      VALUE "ProductName", "Express Python\0"
     END
   END
   BLOCK "VarFileInfo"
@@ -31,5 +31,5 @@ END
 
 IDR_XPMANIFEST1 MANIFEST "xpmanifest.xml"
 
-100 ICON DISCARDABLE "PyRun.ico"
+100 ICON DISCARDABLE "Icon.ico"
 

@@ -58,9 +58,9 @@ private slots:
 
 private:
     Ui::MainView* ui;
-    PythonSyntaxHighlighter* m_highlighter;
-    QString m_startme;
-    Snippets* m_snip;
+    PythonSyntaxHighlighter* mHighlighter;
+    QString mStartMe;
+    Snippets* mSnippets;
     void ChangeFontSize(QFont font, int size);
     void SetupHighlighter();
     void SaveFile(CodeEditor* codeEditor);
@@ -69,6 +69,7 @@ private:
     void LoadStartupScript();
     void LoadSnippetsToCombo();
     void RunPythonCode(const QString& code);
+    void LoadSettings();
 };
 
 #endif // MAINVIEW_H
