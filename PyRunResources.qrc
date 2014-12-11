@@ -11,5 +11,6 @@
         <file>Icons/PyRunImg.png</file>
         <file>startme.py</file>
         <file>About.htm</file>
+        <file>Icons/Update.png</file>
     </qresource>
 </RCC>

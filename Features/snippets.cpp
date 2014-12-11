@@ -23,7 +23,6 @@ void Snippets::LoadSnippets(bool& success)
     }
 
     if (data.isEmpty()) {
-        //TODO Add More Snippets : RegEx, PyLint
         data.insert(tr("API Help"), tr(
                                         "# Full API\n"
                                         "# ---------------------------\n"

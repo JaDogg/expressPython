@@ -58,7 +58,11 @@ private slots:
     void StartPythonRun();
     void EndPythonRun();
 
+    void on_btnUpdateSnippet_clicked();
+
 private:
+    const QString FILETYPES_PYTHON = tr("Python Code (*.py);;All files (*.*)");
+    const QString FILETYPES_OTHER = tr("Text files (*.txt);;All files (*.*)");
     QThread workerThread;
     Ui::MainView* ui;
     PythonSyntaxHighlighter* mHighlighter;
@@ -67,14 +71,15 @@ private:
     Snippets* mSnippets;
     void ChangeFontSize(QFont font, int size);
     void SetupHighlighter();
-    void SaveFile(CodeEditor* codeEditor);
-    void BrowseAndLoadFile(CodeEditor* codeEditor);
+    void SaveFile(CodeEditor* codeEditor, const bool isPython = false);
+    void BrowseAndLoadFile(CodeEditor* codeEditor, const bool isPython = false);
     QString LoadFile(const QString& fileName, bool& success);
     void LoadResources();
     void LoadSnippetsToCombo();
     void RunPythonCode(const QString& code);
     void LoadSettings();
     void SetupPython();
+    bool Confirm(const QString& what);
 signals:
     void operate(const QString&, const QString&);
 };

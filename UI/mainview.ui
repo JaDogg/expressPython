@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>753</width>
+    <width>803</width>
     <height>620</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="hlFont">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="lblFonts">
         <property name="text">
@@ -164,6 +164,19 @@
        </widget>
       </item>
       <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="lblSnippets">
         <property name="text">
          <string>Snippets</string>
@@ -267,38 +280,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnRunSnippet">
-        <property name="minimumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Run Selected Snippet</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../PyRunResources.qrc">
-          <normaloff>:/data/Icons/Run.png</normaloff>:/data/Icons/Run.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnLoadSnippet">
         <property name="minimumSize">
          <size>
@@ -331,6 +312,38 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnUpdateSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Update Current Snippet</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../PyRunResources.qrc">
+          <normaloff>:/data/Icons/Update.png</normaloff>:/data/Icons/Update.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QComboBox" name="cmbSnippets">
         <property name="minimumSize">
          <size>
@@ -350,9 +363,44 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnRunSnippet">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Run Selected Snippet</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../PyRunResources.qrc">
+          <normaloff>:/data/Icons/Run.png</normaloff>:/data/Icons/Run.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="hpFont">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>

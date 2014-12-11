@@ -49,6 +49,18 @@ void MainView::EndPythonRun()
     ui->btnRun->setEnabled(true);
     ui->btnRunSnippet->setEnabled(true);
 }
+bool MainView::Confirm(const QString& what)
+{
+    QMessageBox msgBox(this);
+    msgBox.setWindowTitle(tr(APP_NAME));
+    msgBox.setText(what);
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    if (msgBox.exec() == QMessageBox::Yes) {
+        return true;
+    }
+    return false;
+}
 void MainView::LoadSettings()
 {
     QSettings settings;
@@ -95,7 +107,6 @@ void MainView::LoadResources()
     if (!success) {
         mAbout = tr(APP_NAME " Written by Bhathiya Perera");
     }
-
 }
 MainView::~MainView()
 {
@@ -138,9 +149,12 @@ QString MainView::LoadFile(const QString& fileName, bool& success)
     return text;
 }
 
-void MainView::BrowseAndLoadFile(CodeEditor* codeEditor)
+void MainView::BrowseAndLoadFile(CodeEditor* codeEditor, const bool isPython)
 {
-    QString fileName = QFileDialog::getOpenFileName(this);
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open"),
+                                                    QApplication::applicationDirPath(),
+                                                    ((isPython) ? FILETYPES_PYTHON : FILETYPES_OTHER));
     if (fileName.isEmpty()) {
         return;
     }
@@ -151,9 +165,11 @@ void MainView::BrowseAndLoadFile(CodeEditor* codeEditor)
     }
 }
 
-void MainView::SaveFile(CodeEditor* codeEditor)
+void MainView::SaveFile(CodeEditor* codeEditor, const bool isPython)
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save"),
+                                                    QApplication::applicationDirPath(),
+                                                    ((isPython) ? FILETYPES_PYTHON : FILETYPES_OTHER));
     if (fileName.isEmpty()) {
         return;
     }
@@ -236,21 +252,28 @@ void MainView::on_cmbFontSize_currentIndexChanged(const QString& fontSize)
 
 void MainView::on_btnCodeClear_clicked()
 {
-    ui->txtCode->clear();
+    if (Confirm(tr("Are you sure you want to clear code ?"))) {
+        ui->txtCode->clear();
+    }
 }
 
 void MainView::on_btnInputClear_clicked()
 {
-    ui->txtInput->clear();
+    if (Confirm(tr("Are you sure you want to clear input ?"))) {
+        ui->txtInput->clear();
+    }
 }
 
 void MainView::on_btnOutputClear_clicked()
 {
-    ui->txtOutput->clear();
+    if (Confirm(tr("Are you sure you want to clear output ?"))) {
+        ui->txtOutput->clear();
+    }
 }
 
 void MainView::on_btnOutputOpen_clicked()
 {
+
     BrowseAndLoadFile(ui->txtOutput);
 }
 
@@ -261,7 +284,10 @@ void MainView::on_btnInputOpen_clicked()
 
 void MainView::on_btnCodeOpen_clicked()
 {
-    BrowseAndLoadFile(ui->txtCode);
+    if (!ui->txtCode->toPlainText().isEmpty() && Confirm(tr("Would you like to save code ?"))) {
+        on_btnCodeSave_clicked();
+    }
+    BrowseAndLoadFile(ui->txtCode, true);
 }
 
 void MainView::on_btnOutputSave_clicked()
@@ -276,7 +302,7 @@ void MainView::on_btnInputSave_clicked()
 
 void MainView::on_btnCodeSave_clicked()
 {
-    SaveFile(ui->txtCode);
+    SaveFile(ui->txtCode, true);
 }
 
 void MainView::on_btnCodeDatabase_clicked()
@@ -357,4 +383,27 @@ void MainView::LoadSnippetsToCombo()
     if (success) {
         ui->cmbSnippets->addItems(QStringList(keys));
     }
+}
+
+void MainView::on_btnUpdateSnippet_clicked()
+{
+    if (ui->txtCode->toPlainText().isEmpty()) {
+        return;
+    }
+
+    if (!Confirm("Are you sure you want to overwrite selected snippet ?")){
+        return;
+    }
+
+    bool ok;
+
+
+    mSnippets->AddSnippet(ui->cmbSnippets->currentText(), ui->txtCode->toPlainText(), ok);
+
+    if (ok) {
+        QMessageBox::information(this, tr(APP_NAME), tr("Snippet updated."));
+    } else {
+        QMessageBox::critical(this, tr(APP_NAME), tr("Snippet updating failed."));
+    }
+    LoadSnippetsToCombo();
 }
