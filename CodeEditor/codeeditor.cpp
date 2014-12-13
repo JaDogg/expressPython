@@ -41,6 +41,8 @@
 ****************************************************************************/
 
 #include <QtWidgets>
+#include <QDebug>
+#include <QTextStream>
 #include "CodeEditor/codeeditor.h"
 
 CodeEditor::CodeEditor(QWidget* parent)
@@ -97,14 +99,98 @@ void CodeEditor::resizeEvent(QResizeEvent* e)
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
+void CodeEditor::SelectLineMarginBlock()
+{
+    int start, end;
+
+    // get current positions
+    start = this->textCursor().selectionStart();
+    end = this->textCursor().selectionEnd();
+
+    QTextCursor cursor(this->document());
+
+    // move cursor to begin of the line, of the line
+    // start position is located.
+    cursor.clearSelection();
+    cursor.setPosition(start);
+    cursor.movePosition(QTextCursor::StartOfLine);
+    this->setTextCursor(cursor);
+    start = this->textCursor().selectionStart();
+
+    // move cursor to end of the line, of the line
+    // end position is located.
+    cursor.setPosition(end);
+    cursor.movePosition(QTextCursor::EndOfLine);
+    this->setTextCursor(cursor);
+    end = this->textCursor().selectionEnd();
+
+    // select line margin block
+    cursor.setPosition(start, QTextCursor::KeepAnchor);
+    this->setTextCursor(cursor);
+}
+QString CodeEditor::GetLine()
+{
+    int start = this->textCursor().position();
+    QTextCursor cursor(this->document());
+    cursor.setPosition(start);
+    cursor.movePosition(QTextCursor::StartOfLine);
+    this->setTextCursor(cursor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    this->setTextCursor(cursor);
+    QString text = this->textCursor().selection().toPlainText();
+    cursor.movePosition(QTextCursor::EndOfLine);
+    this->setTextCursor(cursor);
+    return text;
+}
+bool CodeEditor::KeepIndent()
+{
+    if (this->textCursor().hasSelection() || !this->textCursor().atBlockEnd()) {
+        return false;
+    }
+    QRegExp spaces("(\\s*).*");
+
+    spaces.indexIn(GetLine());
+    this->insertPlainText(tr("\n"));
+    this->insertPlainText(spaces.cap(1));
+
+    return true;
+}
 void CodeEditor::keyPressEvent(QKeyEvent* e)
 {
-    //TODO handle automatical indentation
-    //TODO backspace auto unindent
-    //TODO indent selected text
     switch (e->key()) {
+    case Qt::Key_Backtab:
+        SelectLineMarginBlock();
+        {
+            QString text("");
+            QStringList lines = this->textCursor().selection().toPlainText().split(QRegExp("\n|\r\n|\r"));
+            foreach (QString line, lines) {
+                line.replace(QRegExp("(    |   |  | )(.*)"), "\\2");
+                text.append(line);
+                text.append("\n");
+            }
+            text.truncate(text.length() - 1);
+            this->textCursor().insertText(text);
+        }
+        break;
     case Qt::Key_Tab:
-        QPlainTextEdit::insertPlainText("    ");
+        SelectLineMarginBlock();
+        {
+            QString text("");
+            QStringList lines = this->textCursor().selection().toPlainText().split(QRegExp("\n|\r\n|\r"));
+            foreach (QString line, lines) {
+                text.append("    ");
+                text.append(line);
+                text.append("\n");
+            }
+            text.truncate(text.length() - 1);
+            this->textCursor().insertText(text);
+        }
+        break;
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        if (!KeepIndent()) {
+            QPlainTextEdit::keyPressEvent(e);
+        }
         break;
     default:
         QPlainTextEdit::keyPressEvent(e);

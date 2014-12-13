@@ -4,6 +4,7 @@
 #include "UI/mainview.h"
 #include <QApplication>
 
+
 static Snippets* snip;
 static MainView* mainView;
 int main(int argc, char* argv[])

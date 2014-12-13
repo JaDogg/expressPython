@@ -88,7 +88,11 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                               << ">>"
                               << "<<";
 
-    braces = QStringList() << "{"
+    braces = QStringList() << ":"
+                           << ";"
+                           << ","
+                           << "@"
+                           << "{"
                            << "}"
                            << "\\("
                            << "\\)"
@@ -106,15 +110,17 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
 void PythonSyntaxHighlighter::setStyles()
 {
     basicStyles.insert("keyword", getTextCharFormat("orange", "bold"));
-    basicStyles.insert("operator", getTextCharFormat("red"));
+    basicStyles.insert("operator", getTextCharFormat("yellow", "bold"));
     basicStyles.insert("brace", getTextCharFormat("red", "bold"));
-    basicStyles.insert("defclass", getTextCharFormat("white", "bold"));
     basicStyles.insert("string", getTextCharFormat("magenta"));
-    basicStyles.insert("string2", getTextCharFormat("darkMagenta"));
-    basicStyles.insert("comment", getTextCharFormat("darkGreen", "bold"));
-    basicStyles.insert("self", getTextCharFormat("white", "bold"));
+    basicStyles.insert("stringlong", getTextCharFormat("magenta", "bold"));
+    basicStyles.insert("comment", getTextCharFormat("darkgreen", "bold"));
+    basicStyles.insert("special", getTextCharFormat("teal", "bold"));
     basicStyles.insert("numbers", getTextCharFormat("cyan"));
     basicStyles.insert("bugs", getTextCharFormat("yellow", "bold", "red"));
+    basicStyles.insert("hackish", getTextCharFormat("royalblue", "bold"));
+    basicStyles.insert("private", getTextCharFormat("white", "italic"));
+    basicStyles.insert("bytes", getTextCharFormat("lightsteelblue"));
 }
 
 void PythonSyntaxHighlighter::initializeRules()
@@ -128,50 +134,52 @@ void PythonSyntaxHighlighter::initializeRules()
     foreach (QString currBrace, braces) {
         rules.append(HighlightingRule(QString("%1").arg(currBrace), 0, basicStyles.value("brace")));
     }
-    // 'self'
-    rules.append(HighlightingRule("\\bself\\b", 0, basicStyles.value("self")));
 
-    // Double-quoted string, possibly containing escape sequences
-    rules.append(HighlightingRule("\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("string")));
-    // Single-quoted string, possibly containing escape sequences
-    rules.append(HighlightingRule("'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("string")));
+    rules.append(HighlightingRule("\\b__[\\w_]+__\\b", 0, basicStyles.value("hackish")));
+    rules.append(HighlightingRule("\\b_[\\w_]+\\b", 0, basicStyles.value("private")));
 
-    // 'def' followed by an identifier
-    rules.append(HighlightingRule("\\bdef\\b\\s*(\\w+)", 1, basicStyles.value("defclass")));
-    //  'class' followed by an identifier
-    rules.append(HighlightingRule("\\bclass\\b\\s*(\\w+)", 1, basicStyles.value("defclass")));
+    rules.append(HighlightingRule("\\b_\\b", 0, basicStyles.value("special")));
+    rules.append(HighlightingRule("\\bself\\b", 0, basicStyles.value("special")));
 
-    // Numeric literals
+    rules.append(HighlightingRule("[uUrR]?\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("string")));
+    rules.append(HighlightingRule("[uUrR]?'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("string")));
+
+    rules.append(HighlightingRule("(b|B|br|Br|bR|BR|rb|rB|Rb|RB)\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("bytes")));
+    rules.append(HighlightingRule("(b|B|br|Br|bR|BR|rb|rB|Rb|RB)'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("bytes")));
+
     rules.append(HighlightingRule("\\b[+-]?[0-9]+[lL]?\\b", 0, basicStyles.value("numbers")));
     rules.append(HighlightingRule("\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", 0, basicStyles.value("numbers")));
     rules.append(HighlightingRule("\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b", 0, basicStyles.value("numbers")));
 
-    // tab and space mixed
-    rules.append(HighlightingRule("[^\\n]*(?:\\t | \\t)[^\\n]*", 0, basicStyles.value("bugs")));
+    rules.append(HighlightingRule("\\t+", 0, basicStyles.value("bugs")));
+    rules.append(HighlightingRule("\\?", 0, basicStyles.value("bugs")));
+    rules.append(HighlightingRule("\\$", 0, basicStyles.value("bugs")));
 
-    // From '#' until a newline
     rules.append(HighlightingRule("#[^\\n]*", 0, basicStyles.value("comment")));
 }
 
 void PythonSyntaxHighlighter::highlightBlock(const QString& text)
 {
-    foreach (HighlightingRule currRule, rules) {
-        int idx = currRule.pattern.indexIn(text, 0);
-        while (idx >= 0) {
-            // Get index of Nth match
-            idx = currRule.pattern.pos(currRule.nth);
-            int length = currRule.pattern.cap(currRule.nth).length();
-            setFormat(idx, length, currRule.format);
-            idx = currRule.pattern.indexIn(text, idx + length);
+    int len = text.length();
+    for (int i = 0; i < len; i++) {
+        foreach (HighlightingRule currRule, rules) {
+            int idx = currRule.pattern.indexIn(text, i);
+            if (idx == i) {
+                idx = currRule.pattern.pos(currRule.nth);
+                int length = currRule.pattern.cap(currRule.nth).length();
+                setFormat(idx, length, currRule.format);
+                i = idx + length - 1;
+                break;
+            }
         }
     }
 
     setCurrentBlockState(0);
 
     // Do multi-line strings
-    bool isInMultilne = matchMultiline(text, triSingleQuote, 1, basicStyles.value("string2"));
+    bool isInMultilne = matchMultiline(text, triSingleQuote, 1, basicStyles.value("stringlong"));
     if (!isInMultilne)
-        isInMultilne = matchMultiline(text, triDoubleQuote, 2, basicStyles.value("string2"));
+        isInMultilne = matchMultiline(text, triDoubleQuote, 2, basicStyles.value("stringlong"));
 }
 
 bool PythonSyntaxHighlighter::matchMultiline(const QString& text, const QRegExp& delimiter, const int inState, const QTextCharFormat& style)
@@ -233,5 +241,7 @@ const QTextCharFormat PythonSyntaxHighlighter::getTextCharFormat(
         charFormat.setFontWeight(QFont::Bold);
     if (style.contains("italic", Qt::CaseInsensitive))
         charFormat.setFontItalic(true);
+    if (style.contains("underline", Qt::CaseInsensitive))
+        charFormat.setFontUnderline(true);
     return charFormat;
 }

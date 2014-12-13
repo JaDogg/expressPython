@@ -37,9 +37,6 @@ RESOURCES += \
 RC_FILE = WindowsResources/win_rsrc.rc
 
 
-win32: LIBS += -L$$PWD/../Python34/libs/ -lpython34
-
-INCLUDEPATH += $$PWD/../Python34/include
-DEPENDPATH += $$PWD/../Python34/include
-
-OTHER_FILES +=
+win32: LIBS += -LC:\Python34\libs\ -lpython34
+win32: INCLUDEPATH += C:\Python34\include
+win32: DEPENDPATH += C:\Python34\include

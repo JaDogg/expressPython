@@ -71,6 +71,9 @@ private slots:
 private:
     QWidget* lineNumberArea;
     void keyPressEvent(QKeyEvent* e);
+    void SelectLineMarginBlock();
+    QString GetLine();
+    bool KeepIndent();
 };
 
 class LineNumberArea : public QWidget {
