@@ -13,6 +13,10 @@ from express_api import get_output,set_output
 from express_api import get_code,set_code
 from express_api import write_output,get_apppath
 
+def cls():
+    """Clear Output"""
+    set_output("")
+
 TXT = get_input()
 ___FAKE_STDIN = io.StringIO(TXT)
 ___REAL_STDIN = sys.stdin
