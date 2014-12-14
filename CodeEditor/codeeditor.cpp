@@ -164,7 +164,7 @@ void CodeEditor::keyPressEvent(QKeyEvent* e)
             QString text("");
             QStringList lines = this->textCursor().selection().toPlainText().split(QRegExp("\n|\r\n|\r"));
             foreach (QString line, lines) {
-                line.replace(QRegExp("(    |   |  | )(.*)"), "\\2");
+                line.replace(QRegExp("^(    |   |  | )(.*)"), "\\2");
                 text.append(line);
                 text.append("\n");
             }
