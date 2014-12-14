@@ -173,17 +173,21 @@ void CodeEditor::keyPressEvent(QKeyEvent* e)
         }
         break;
     case Qt::Key_Tab:
-        SelectLineMarginBlock();
-        {
-            QString text("");
-            QStringList lines = this->textCursor().selection().toPlainText().split(QRegExp("\n|\r\n|\r"));
-            foreach (QString line, lines) {
-                text.append("    ");
-                text.append(line);
-                text.append("\n");
+        if (this->textCursor().hasSelection()) {
+            SelectLineMarginBlock();
+            {
+                QString text("");
+                QStringList lines = this->textCursor().selection().toPlainText().split(QRegExp("\n|\r\n|\r"));
+                foreach (QString line, lines) {
+                    text.append("    ");
+                    text.append(line);
+                    text.append("\n");
+                }
+                text.truncate(text.length() - 1);
+                this->textCursor().insertText(text);
             }
-            text.truncate(text.length() - 1);
-            this->textCursor().insertText(text);
+        } else {
+            this->insertPlainText("    ");
         }
         break;
     case Qt::Key_Enter:
