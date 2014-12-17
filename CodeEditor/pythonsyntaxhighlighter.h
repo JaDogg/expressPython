@@ -54,6 +54,7 @@ class PythonSyntaxHighlighter : public QSyntaxHighlighter {
 public:
     PythonSyntaxHighlighter(QTextDocument* parent = 0);
 
+    void SetSearchRegEx(const QString &text);
 protected:
     void highlightBlock(const QString& text);
 
@@ -61,6 +62,9 @@ private:
     QStringList keywords;
     QStringList operators;
     QStringList braces;
+    QStringList builtins;
+    QString mSearchRegex;
+    QTextCharFormat mSearchHighlight;
     QHash<QString, QTextCharFormat> basicStyles;
     void initializeRules();
     //! Highlighst multi-line strings, returns true if after processing we are still within the multi-line section.

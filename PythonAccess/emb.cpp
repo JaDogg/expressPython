@@ -207,6 +207,18 @@ PyObject* ApiSetCode(PyObject* self, PyObject* args)
 
     return Py_BuildValue("i", 0);
 }
+
+PyObject* ApiSetSearchRegex(PyObject* self, PyObject* args)
+{
+    char* data;
+    if (!PyArg_ParseTuple(args, "s", &data))
+        return NULL;
+
+    emit worker->SetSearchRegex(QString(data));
+
+    return Py_BuildValue("i", 0);
+}
+
 PyObject* ApiWriteOutput(PyObject* self, PyObject* args)
 {
     char* data;
@@ -236,6 +248,8 @@ PyMethodDef apiMethods[] = {
       "Get code textbox's content" },
     { "set_code", ApiSetCode, METH_VARARGS,
       "Get code textbox's content" },
+    { "set_search_regex", ApiSetSearchRegex, METH_VARARGS,
+      "Set highlight RegEx" },
 
     { "write_output", ApiWriteOutput, METH_VARARGS,
       "Append to output, It does not automatically add a newline" },

@@ -16,6 +16,7 @@ signals:
     void SetInput(QString txt);
     void SetOutput(QString txt);
     void SetCode(QString txt);
+    void SetSearchRegex(QString txt);
     void StartPythonRun();
     void EndPythonRun();
 

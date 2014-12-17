@@ -52,7 +52,6 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                              << "not"
                              << "or"
                              << "pass"
-                             << "print"
                              << "raise"
                              << "return"
                              << "try"
@@ -99,8 +98,90 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument* parent)
                            << "\\["
                            << "\\]";
 
-    setStyles();
+    builtins = QStringList() << "abs"
+                             << "divmod"
+                             << "input"
+                             << "open"
+                             << "staticmethod"
+                             << "all"
+                             << "enumerate"
+                             << "int"
+                             << "ord"
+                             << "str"
+                             << "any"
+                             << "eval"
+                             << "isinstance"
+                             << "pow"
+                             << "sum"
+                             << "basestring"
+                             << "execfile"
+                             << "issubclass"
+                             << "print"
+                             << "super"
+                             << "bin"
+                             << "file"
+                             << "iter"
+                             << "property"
+                             << "tuple"
+                             << "bool"
+                             << "filter"
+                             << "len"
+                             << "range"
+                             << "type"
+                             << "bytearray"
+                             << "float"
+                             << "list"
+                             << "raw_input"
+                             << "unichr"
+                             << "callable"
+                             << "format"
+                             << "locals"
+                             << "reduce"
+                             << "unicode"
+                             << "chr"
+                             << "frozenset"
+                             << "long"
+                             << "reload"
+                             << "vars"
+                             << "classmethod"
+                             << "getattr"
+                             << "map"
+                             << "repr"
+                             << "xrange"
+                             << "cmp"
+                             << "globals"
+                             << "max"
+                             << "reversed"
+                             << "zip"
+                             << "compile"
+                             << "hasattr"
+                             << "memoryview"
+                             << "round"
+                             << "__import__"
+                             << "complex"
+                             << "hash"
+                             << "min"
+                             << "set"
+                             << "apply"
+                             << "delattr"
+                             << "help"
+                             << "next"
+                             << "setattr"
+                             << "buffer"
+                             << "dict"
+                             << "hex"
+                             << "object"
+                             << "slice"
+                             << "coerce"
+                             << "dir"
+                             << "id"
+                             << "oct"
+                             << "sorted"
+                             << "intern";
 
+    setStyles();
+    mSearchRegex = tr("");
+    mSearchHighlight = getTextCharFormat("black", "bold", "yellow");
     triSingleQuote.setPattern("'''");
     triDoubleQuote.setPattern("\"\"\"");
 
@@ -111,6 +192,7 @@ void PythonSyntaxHighlighter::setStyles()
 {
     basicStyles.insert("keyword", getTextCharFormat("orange", "bold"));
     basicStyles.insert("operator", getTextCharFormat("yellow", "bold"));
+    basicStyles.insert("builtins", getTextCharFormat("lightblue", "underline"));
     basicStyles.insert("brace", getTextCharFormat("red", "bold"));
     basicStyles.insert("string", getTextCharFormat("magenta"));
     basicStyles.insert("stringlong", getTextCharFormat("magenta", "bold"));
@@ -138,14 +220,19 @@ void PythonSyntaxHighlighter::initializeRules()
     rules.append(HighlightingRule("\\b__[\\w_]+__\\b", 0, basicStyles.value("hackish")));
     rules.append(HighlightingRule("\\b_[\\w_]+\\b", 0, basicStyles.value("private")));
 
+    foreach (QString currBuiltin, builtins) {
+        rules.append(HighlightingRule(QString("\\b%1\\b").arg(currBuiltin), 0, basicStyles.value("builtins")));
+    }
+
+
     rules.append(HighlightingRule("\\b_\\b", 0, basicStyles.value("special")));
     rules.append(HighlightingRule("\\bself\\b", 0, basicStyles.value("special")));
 
-    rules.append(HighlightingRule("[uUrR]?\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("string")));
-    rules.append(HighlightingRule("[uUrR]?'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("string")));
-
     rules.append(HighlightingRule("(b|B|br|Br|bR|BR|rb|rB|Rb|RB)\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("bytes")));
     rules.append(HighlightingRule("(b|B|br|Br|bR|BR|rb|rB|Rb|RB)'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("bytes")));
+
+    rules.append(HighlightingRule("[uUrR]?\"[^\"\\\\]*(\\\\.[^\"\\\\]*)*\"", 0, basicStyles.value("string")));
+    rules.append(HighlightingRule("[uUrR]?'[^'\\\\]*(\\\\.[^'\\\\]*)*'", 0, basicStyles.value("string")));
 
     rules.append(HighlightingRule("\\b[+-]?[0-9]+[lL]?\\b", 0, basicStyles.value("numbers")));
     rules.append(HighlightingRule("\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", 0, basicStyles.value("numbers")));
@@ -178,8 +265,26 @@ void PythonSyntaxHighlighter::highlightBlock(const QString& text)
 
     // Do multi-line strings
     bool isInMultilne = matchMultiline(text, triSingleQuote, 1, basicStyles.value("stringlong"));
-    if (!isInMultilne)
+    if (!isInMultilne) {
         isInMultilne = matchMultiline(text, triDoubleQuote, 2, basicStyles.value("stringlong"));
+    }
+
+    // Highlight found stuff
+    if (!mSearchRegex.isNull() && !mSearchRegex.isEmpty())
+    {
+        QRegExp reg(mSearchRegex);
+        int idx = reg.indexIn(text, 0);
+        while (idx >= 0) {
+            int length = reg.cap(0).length();
+            setFormat(idx, length, mSearchHighlight);
+            idx = reg.indexIn(text, idx + length);
+        }
+    }
+}
+
+void PythonSyntaxHighlighter::SetSearchRegEx(const QString& text)
+{
+    mSearchRegex = text;
 }
 
 bool PythonSyntaxHighlighter::matchMultiline(const QString& text, const QRegExp& delimiter, const int inState, const QTextCharFormat& style)

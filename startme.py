@@ -12,6 +12,7 @@ from express_api import get_input,set_input
 from express_api import get_output,set_output
 from express_api import get_code,set_code
 from express_api import write_output,get_apppath
+from express_api import set_search_regex
 
 def cls():
     """Clear Output"""

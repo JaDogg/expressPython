@@ -18,6 +18,7 @@ PyObject* ApiGetOutput(PyObject* self, PyObject* args);
 PyObject* ApiGetAppPath(PyObject* self, PyObject* args);
 PyObject* ApiSetInput(PyObject* self, PyObject* args);
 PyObject* ApiGetInput(PyObject* self, PyObject* args);
+PyObject* ApiSetSearchRegex(PyObject* self, PyObject* args);
 void ResetStdOut();
 void setMainView(MainView* _mainView);
 void setWorker(PythonWorker* _worker);

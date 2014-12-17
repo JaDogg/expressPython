@@ -37,6 +37,7 @@ void MainView::SetupPython()
     connect(worker, &PythonWorker::SetOutput, this, &MainView::SetOutput);
     connect(worker, &PythonWorker::StartPythonRun, this, &MainView::StartPythonRun);
     connect(worker, &PythonWorker::EndPythonRun, this, &MainView::EndPythonRun);
+    connect(worker, &PythonWorker::SetSearchRegex, this, &MainView::SetSearchRegex);
     workerThread.start();
 }
 void MainView::StartPythonRun()
@@ -93,6 +94,7 @@ void MainView::SetupHighlighter()
 {
     mHighlighter = new PythonSyntaxHighlighter(ui->txtCode->document());
     ui->txtCode->setFocus();
+    mHighlighterOneLiner = new PythonSyntaxHighlighter (ui->txtOneLiner->document());
 }
 
 void MainView::LoadResources()
@@ -213,6 +215,13 @@ void MainView::SetCode(QString txt)
 {
     ui->txtCode->setPlainText(txt);
 }
+
+void MainView::SetSearchRegex(QString txt)
+{
+    mHighlighter->SetSearchRegEx(txt);
+    mHighlighter->rehighlight();
+}
+
 void MainView::WriteOutput(QString output)
 {
     QString txt = ui->txtOutput->toPlainText();
@@ -318,6 +327,10 @@ void MainView::on_btnCodeDatabase_clicked()
 
 void MainView::on_btnRunSnippet_clicked()
 {
+    if (!Confirm("Are you sure you want to run this snippet ?")){
+        return;
+    }
+
     bool success;
     QString code = mSnippets->GetSnippet(ui->cmbSnippets->currentText(), success);
     if (success) {
@@ -327,6 +340,10 @@ void MainView::on_btnRunSnippet_clicked()
 
 void MainView::on_btnLoadSnippet_clicked()
 {
+    if (!Confirm("Are you sure you want to load snippet to code area ?")){
+        return;
+    }
+
     bool success;
     QString code = mSnippets->GetSnippet(ui->cmbSnippets->currentText(), success);
     if (success) {
@@ -406,4 +423,12 @@ void MainView::on_btnUpdateSnippet_clicked()
         QMessageBox::critical(this, tr(APP_NAME), tr("Snippet updating failed."));
     }
     LoadSnippetsToCombo();
+}
+
+void MainView::on_btnRunOneLiner_clicked()
+{
+    if (!Confirm("Are you sure you want to run this one liner ?")){
+        return;
+    }
+    RunPythonCode(ui->txtOneLiner->toPlainText());
 }

@@ -54,11 +54,12 @@ private slots:
     void SetInput(QString txt);
     void SetOutput(QString txt);
     void SetCode(QString txt);
+    void SetSearchRegex(QString txt);
     void WriteOutput(QString output);
     void StartPythonRun();
     void EndPythonRun();
-
     void on_btnUpdateSnippet_clicked();
+    void on_btnRunOneLiner_clicked();
 
 private:
     const QString FILETYPES_PYTHON = tr("Python Code (*.py);;All files (*.*)");
@@ -66,6 +67,7 @@ private:
     QThread workerThread;
     Ui::MainView* ui;
     PythonSyntaxHighlighter* mHighlighter;
+    PythonSyntaxHighlighter* mHighlighterOneLiner;
     QString mStartMe;
     QString mAbout;
     Snippets* mSnippets;
@@ -80,6 +82,7 @@ private:
     void LoadSettings();
     void SetupPython();
     bool Confirm(const QString& what);
+
 signals:
     void operate(const QString&, const QString&);
 };
