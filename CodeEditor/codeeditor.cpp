@@ -60,7 +60,10 @@ CodeEditor::CodeEditor(QWidget* parent)
     p.setColor(QPalette::Text, Qt::white);
     this->setPalette(p);
 }
-
+void CodeEditor::setSingleLine(bool isSingleLine)
+{
+    mSingleLine = isSingleLine;
+}
 int CodeEditor::lineNumberAreaWidth()
 {
     int digits = 1;
@@ -192,6 +195,9 @@ void CodeEditor::keyPressEvent(QKeyEvent* e)
         break;
     case Qt::Key_Enter:
     case Qt::Key_Return:
+        if (mSingleLine){
+            break;
+        }
         if (!KeepIndent()) {
             QPlainTextEdit::keyPressEvent(e);
         }

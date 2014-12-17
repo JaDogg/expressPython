@@ -579,6 +579,9 @@
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::MinimumExpanding</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>40</width>
@@ -588,7 +591,20 @@
        </spacer>
       </item>
       <item>
+       <widget class="QLabel" name="lblOneLiner">
+        <property name="text">
+         <string>One Liner</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="CodeEditor" name="txtOneLiner">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -598,7 +614,7 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>44</height>
+          <height>24</height>
          </size>
         </property>
         <property name="font">
@@ -608,13 +624,16 @@
          </font>
         </property>
         <property name="toolTip">
-         <string>Code Area</string>
+         <string>One Liner Code</string>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
         </property>
         <property name="inputMethodHints">
-         <set>Qt::ImhMultiLine</set>
+         <set>Qt::ImhNone</set>
         </property>
         <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOn</enum>
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarAlwaysOff</enum>

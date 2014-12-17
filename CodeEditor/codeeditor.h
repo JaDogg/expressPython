@@ -60,6 +60,7 @@ public:
     CodeEditor(QWidget* parent = 0);
     void lineNumberAreaPaintEvent(QPaintEvent* event);
     int lineNumberAreaWidth();
+    void setSingleLine(bool isSingleLine);
 
 protected:
     void resizeEvent(QResizeEvent* event);
@@ -74,6 +75,7 @@ private:
     void SelectLineMarginBlock();
     QString GetLine();
     bool KeepIndent();
+    bool mSingleLine = false;
 };
 
 class LineNumberArea : public QWidget {

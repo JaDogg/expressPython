@@ -18,6 +18,7 @@ MainView::MainView(QWidget* parent)
     , ui(new Ui::MainView)
 {
     ui->setupUi(this);
+    ui->txtOneLiner->setSingleLine(true);
     SetupHighlighter();
     LoadResources();
     LoadSettings();
