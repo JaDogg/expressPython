@@ -4,29 +4,27 @@
 #include "UI/mainview.h"
 #include <QApplication>
 
+static Snippets *snip;
+static MainView *mainView;
+int main(int argc, char *argv[]) {
+  QCoreApplication::setOrganizationName("Bhathiya");
+  QCoreApplication::setOrganizationDomain("simpll.info");
+  QCoreApplication::setApplicationName("expressPython");
 
-static Snippets* snip;
-static MainView* mainView;
-int main(int argc, char* argv[])
-{
-    QCoreApplication::setOrganizationName("Bhathiya");
-    QCoreApplication::setOrganizationDomain("simpll.info");
-    QCoreApplication::setApplicationName("expressPython");
+  QApplication app(argc, argv);
 
-    QApplication app(argc, argv);
+  wchar_t name[] = L"expressPython";
+  Py_SetProgramName(name);
 
-    wchar_t name[] = L"expressPython";
-    Py_SetProgramName(name);
+  snip = new Snippets();
+  mainView = new MainView();
+  mainView->SetSnippets(snip);
+  mainView->show();
 
-    snip = new Snippets();
-    mainView = new MainView();
-    mainView->SetSnippets(snip);
-    mainView->show();
+  int result = app.exec();
 
-    int result = app.exec();
+  delete snip;
+  delete mainView;
 
-    delete snip;
-    delete mainView;
-
-    return result;
+  return result;
 }

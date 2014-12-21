@@ -54,50 +54,40 @@ QT_END_NAMESPACE
 class LineNumberArea;
 
 class CodeEditor : public QPlainTextEdit {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    CodeEditor(QWidget* parent = 0);
-    void lineNumberAreaPaintEvent(QPaintEvent* event);
-    int lineNumberAreaWidth();
-    void setSingleLine(bool isSingleLine);
+  CodeEditor(QWidget *parent = 0);
+  void lineNumberAreaPaintEvent(QPaintEvent *event);
+  int lineNumberAreaWidth();
 
 protected:
-    void resizeEvent(QResizeEvent* event);
+  void resizeEvent(QResizeEvent *event);
 
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void updateLineNumberArea(const QRect&, int);
+  void updateLineNumberAreaWidth(int newBlockCount);
+  void updateLineNumberArea(const QRect &, int);
 
 private:
-    QWidget* lineNumberArea;
-    void keyPressEvent(QKeyEvent* e);
-    void SelectLineMarginBlock();
-    QString GetLine();
-    bool KeepIndent();
-    bool mSingleLine = false;
+  QWidget *lineNumberArea;
+  void keyPressEvent(QKeyEvent *e);
+  void SelectLineMarginBlock();
+  QString GetLine();
+  bool KeepIndent();
 };
 
 class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(CodeEditor* editor)
-        : QWidget(editor)
-    {
-        codeEditor = editor;
-    }
-    QSize sizeHint() const
-    {
-        return QSize(codeEditor->lineNumberAreaWidth(), 0);
-    }
+  LineNumberArea(CodeEditor *editor) : QWidget(editor) { codeEditor = editor; }
+  QSize sizeHint() const { return QSize(codeEditor->lineNumberAreaWidth(), 0); }
 
 protected:
-    void paintEvent(QPaintEvent* event)
-    {
-        codeEditor->lineNumberAreaPaintEvent(event);
-    }
+  void paintEvent(QPaintEvent *event) {
+    codeEditor->lineNumberAreaPaintEvent(event);
+  }
 
 private:
-    CodeEditor* codeEditor;
+  CodeEditor *codeEditor;
 };
 
 #endif

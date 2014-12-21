@@ -18,14 +18,16 @@ SOURCES += main.cpp\
     CodeEditor/codeeditor.cpp \
     Features/snippets.cpp \
     PythonAccess/emb.cpp \
-    PythonAccess/pythonworker.cpp
+    PythonAccess/pythonworker.cpp \
+    CodeEditor/codelineedit.cpp
 
 HEADERS  += UI/mainview.h \
     CodeEditor/pythonsyntaxhighlighter.h \
     CodeEditor/codeeditor.h \
     Features/snippets.h \
     PythonAccess/emb.h \
-    PythonAccess/pythonworker.h
+    PythonAccess/pythonworker.h \
+    CodeEditor/codelineedit.h
 
 FORMS    += UI/mainview.ui
 
