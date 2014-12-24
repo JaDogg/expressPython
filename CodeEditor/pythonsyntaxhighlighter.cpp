@@ -187,6 +187,68 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument *parent)
                            << "sorted"
                            << "intern";
 
+  exceptions = QStringList() << "BaseException"
+                             << "SystemExit"
+                             << "KeyboardInterrupt"
+                             << "GeneratorExit"
+                             << "Exception"
+                             << "StopIteration"
+                             << "ArithmeticError"
+                             << "FloatingPointError"
+                             << "OverflowError"
+                             << "ZeroDivisionError"
+                             << "AssertionError"
+                             << "AttributeError"
+                             << "BufferError"
+                             << "EOFError"
+                             << "ImportError"
+                             << "LookupError"
+                             << "IndexError"
+                             << "KeyError"
+                             << "MemoryError"
+                             << "NameError"
+                             << "UnboundLocalError"
+                             << "OSError"
+                             << "BlockingIOError"
+                             << "ChildProcessError"
+                             << "ConnectionError"
+                             << "BrokenPipeError"
+                             << "ConnectionAbortedError"
+                             << "ConnectionRefusedError"
+                             << "ConnectionResetError"
+                             << "FileExistsError"
+                             << "FileNotFoundError"
+                             << "InterruptedError"
+                             << "IsADirectoryError"
+                             << "NotADirectoryError"
+                             << "PermissionError"
+                             << "ProcessLookupError"
+                             << "TimeoutError"
+                             << "ReferenceError"
+                             << "RuntimeError"
+                             << "NotImplementedError"
+                             << "SyntaxError"
+                             << "IndentationError"
+                             << "TabError"
+                             << "SystemError"
+                             << "TypeError"
+                             << "ValueError"
+                             << "UnicodeError"
+                             << "UnicodeDecodeError"
+                             << "UnicodeEncodeError"
+                             << "UnicodeTranslateError"
+                             << "Warning"
+                             << "DeprecationWarning"
+                             << "PendingDeprecationWarning"
+                             << "RuntimeWarning"
+                             << "SyntaxWarning"
+                             << "UserWarning"
+                             << "FutureWarning"
+                             << "ImportWarning"
+                             << "UnicodeWarning"
+                             << "BytesWarning"
+                             << "ResourceWarning";
+
   setStyles();
   mSearchRegex = tr("");
   mSearchHighlight = getTextCharFormat("black", "bold", "yellow");
@@ -208,6 +270,7 @@ void PythonSyntaxHighlighter::setStyles() {
   basicStyles.insert("numbers", getTextCharFormat("cyan"));
   basicStyles.insert("bugs", getTextCharFormat("yellow", "bold", "red"));
   basicStyles.insert("hackish", getTextCharFormat("royalblue", "bold"));
+  basicStyles.insert("except", getTextCharFormat("royalblue", "underline"));
   basicStyles.insert("private", getTextCharFormat("white", "italic"));
   basicStyles.insert("bytes", getTextCharFormat("lightsteelblue"));
 }
@@ -224,6 +287,11 @@ void PythonSyntaxHighlighter::initializeRules() {
   foreach (QString currBrace, braces) {
     rules.append(HighlightingRule(QString("%1").arg(currBrace), 0,
                                   basicStyles.value("brace")));
+  }
+
+  foreach (QString currExcept, exceptions) {
+    rules.append(HighlightingRule(QString("\\b%1\\b").arg(currExcept), 0,
+                                  basicStyles.value("except")));
   }
 
   rules.append(

@@ -14,20 +14,21 @@ class Snippets : public QObject {
   Q_OBJECT
 public:
   explicit Snippets(QObject *parent = 0);
-
+  ~Snippets();
   QString GetSnippet(const QString &name, bool &success);
   void RemoveSnippet(const QString &name, bool &success);
   void AddSnippet(const QString &name, const QString &code, bool &success);
   void SaveSnippets(bool &success);
   void LoadSnippets(bool &success);
-  ~Snippets();
+  bool OkToInsert(const QString &name);
   QList<QString> GetKeys(bool &success);
+
 signals:
 
 public slots:
 
 private:
-  QMap<QString, QString> *m_Snippets;
+  QMap<QString, QString> *m_snippets;
 };
 
 #endif // SNIPPETS_H

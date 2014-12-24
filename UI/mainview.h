@@ -2,8 +2,8 @@
 #define MAINVIEW_H
 #define APP_NAME "Express Python"
 
-#include <cmath>
-#include "Python.h"
+//#include <cmath>
+//#include "Python.h"
 
 // fremework
 #include <QMessageBox>
@@ -12,10 +12,24 @@
 #include <QMainWindow>
 #include <QInputDialog>
 #include <QThread>
+#include <QApplication>
 // internal
 #include "CodeEditor/pythonsyntaxhighlighter.h"
 #include "CodeEditor/codeeditor.h"
 #include "Features/snippets.h"
+
+#define SAVE_STATE_VERSION 1
+#define KEY_DOCK_LOCATIONS "DOCK_LOCATIONS"
+#define KEY_GEOMETRY "GEOMETRY"
+#define KEY_INPUTBOX "INPUTBOX"
+#define KEY_CODEBOX "CODEBOX"
+#define KEY_OUTPUTBOX "OUTPUTBOX"
+#define KEY_SNIPPETBOX "SNIPPETBOX"
+#define KEY_FONT "FONT"
+#define KEY_FONTSIZE "FONTSIZE"
+
+#define STARTUP_SCRIPT_FILE                                                    \
+  QApplication::applicationDirPath() + "/_express_startup_.py"
 
 namespace Ui {
 class MainView;
@@ -67,24 +81,27 @@ private slots:
 private:
   const QString FILETYPES_PYTHON = tr("Python Code (*.py);;All files (*.*)");
   const QString FILETYPES_OTHER = tr("Text files (*.txt);;All files (*.*)");
-  QThread workerThread;
+  QThread m_workerThread;
   Ui::MainView *ui;
-  PythonSyntaxHighlighter *mHighlighter;
-  PythonSyntaxHighlighter *mHighlighterOneLiner;
-  QString mStartMe;
-  QString mAbout;
-  Snippets *mSnippets;
+  PythonSyntaxHighlighter *m_highlighterCodeArea;
+  PythonSyntaxHighlighter *m_highlighterSnippetArea;
+  QString m_startMe;
+  QString m_about;
+  Snippets *m_snippets;
+  QCompleter *completer;
   void ChangeFontSize(QFont font, int size);
   void SetupHighlighter();
   void SaveFile(CodeEditor *codeEditor, const bool isPython = false);
   void BrowseAndLoadFile(CodeEditor *codeEditor, const bool isPython = false);
-  QString LoadFile(const QString &fileName, bool &success);
+  QString LoadFile(const QString &fileName, bool &success,
+                   const bool showMessage = true);
   void LoadResources();
   void LoadSnippetsToCombo();
   void RunPythonCode(const QString &code);
   void LoadSettings();
   void SetupPython();
   bool Confirm(const QString &what);
+  void SetCompleter(CodeEditor *editor);
 
 signals:
   void operate(const QString &, const QString &);

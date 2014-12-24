@@ -4,15 +4,7 @@
 #include "UI/mainview.h"
 #include "ui_mainview.h"
 #include <QSettings>
-#define SAVE_STATE_VERSION 1
-#define KEY_DOCK_LOCATIONS "DOCK_LOCATIONS"
-#define KEY_GEOMETRY "GEOMETRY"
-#define KEY_INPUTBOX "INPUTBOX"
-#define KEY_CODEBOX "CODEBOX"
-#define KEY_OUTPUTBOX "OUTPUTBOX"
-#define KEY_SNIPPETBOX "SNIPPETBOX"
-#define KEY_FONT "FONT"
-#define KEY_FONTSIZE "FONTSIZE"
+#include <QStringListModel>
 
 MainView::MainView(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainView) {
@@ -22,12 +14,13 @@ MainView::MainView(QWidget *parent)
   LoadSettings();
   SetupPython();
 }
+
 void MainView::SetupPython() {
   emb::setMainView(this);
   PythonWorker *worker = new PythonWorker();
   emb::setWorker(worker);
-  worker->moveToThread(&workerThread);
-  connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
+  worker->moveToThread(&m_workerThread);
+  connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
   connect(this, &MainView::operate, worker, &PythonWorker::RunPython);
   connect(worker, &PythonWorker::WriteOutput, this, &MainView::WriteOutput);
   connect(worker, &PythonWorker::SetCode, this, &MainView::SetCode);
@@ -38,7 +31,7 @@ void MainView::SetupPython() {
   connect(worker, &PythonWorker::EndPythonRun, this, &MainView::EndPythonRun);
   connect(worker, &PythonWorker::SetSearchRegex, this,
           &MainView::SetSearchRegex);
-  workerThread.start();
+  m_workerThread.start();
 }
 void MainView::StartPythonRun() {
   ui->btnRun->setEnabled(false);
@@ -69,7 +62,8 @@ void MainView::LoadSettings() {
   this->SetCode(settings.value(KEY_CODEBOX, QString()).toString());
   this->SetInput(settings.value(KEY_INPUTBOX, QString()).toString());
   this->SetOutput(settings.value(KEY_OUTPUTBOX, QString()).toString());
-  ui->txtSnippet->setPlainText(settings.value(KEY_SNIPPETBOX, QString()).toString());
+  ui->txtSnippet->setPlainText(
+      settings.value(KEY_SNIPPETBOX, QString()).toString());
 
   QString font = settings.value(KEY_FONT, tr("Courier New")).toString();
   int sizeIndex = settings.value(KEY_FONTSIZE, 6).toInt(); // select 12pt
@@ -86,28 +80,61 @@ void MainView::LoadSettings() {
                  ui->cmbFontSize->currentText().toInt());
 }
 void MainView::SetSnippets(Snippets *snip) {
-  mSnippets = snip;
+  m_snippets = snip;
   LoadSnippetsToCombo();
 }
 
 void MainView::SetupHighlighter() {
-  mHighlighter = new PythonSyntaxHighlighter(ui->txtCode->document());
+  m_highlighterCodeArea = new PythonSyntaxHighlighter(ui->txtCode->document());
   ui->txtCode->setFocus();
-  mHighlighterOneLiner =
+  m_highlighterSnippetArea =
       new PythonSyntaxHighlighter(ui->txtSnippet->document());
+  SetCompleter(ui->txtCode);
 }
+void MainView::SetCompleter(CodeEditor *editor) {
+  completer = new QCompleter(this);
 
-void MainView::LoadResources() {
-  bool success;
-  mStartMe = LoadFile(":/data/startme.py", success);
+  QFile file(":/data/Features/autocomplete.txt");
+  if (!file.open(QFile::ReadOnly))
+    return;
 
-  if (!success) {
-    QMessageBox::warning(this, tr(APP_NAME),
-                         tr("Loading startup script failed"));
+  // QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  QStringList words;
+
+  while (!file.atEnd()) {
+    QByteArray line = file.readLine();
+    if (!line.isEmpty())
+      words << line.trimmed();
   }
-  mAbout = LoadFile(":/data/About.htm", success);
+
+  // QApplication::restoreOverrideCursor();
+  QStringListModel *model = new QStringListModel(words, completer);
+
+  completer->setModel(model);
+  completer->setModelSorting(QCompleter::CaseSensitivelySortedModel);
+  completer->setCaseSensitivity(Qt::CaseInsensitive);
+  completer->setCompletionMode(QCompleter::PopupCompletion);
+  completer->setWrapAround(false);
+  completer->popup()->setStyleSheet("background-color: black; color: white");
+
+  editor->setCompleter(completer);
+}
+void MainView::LoadResources() {
+  bool success = false;
+
+  m_startMe = LoadFile(STARTUP_SCRIPT_FILE, success, false);
+
   if (!success) {
-    mAbout = tr(APP_NAME " Written by Bhathiya Perera");
+    m_startMe = LoadFile(":/data/startme.py", success);
+  }
+  if (!success) {
+    QMessageBox::critical(this, tr(APP_NAME),
+                          tr("Loading startup script failed"));
+    qApp->quit();
+  }
+  m_about = LoadFile(":/data/About.htm", success);
+  if (!success) {
+    m_about = tr(APP_NAME " Written by Bhathiya Perera");
   }
 }
 MainView::~MainView() {
@@ -120,20 +147,23 @@ MainView::~MainView() {
   settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
   settings.setValue(KEY_FONT, ui->fntCombo->currentText());
   settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
-  workerThread.quit();
-  workerThread.wait();
+  m_workerThread.quit();
+  m_workerThread.wait();
   delete ui;
 }
 
-QString MainView::LoadFile(const QString &fileName, bool &success) {
+QString MainView::LoadFile(const QString &fileName, bool &success,
+                           const bool showMessage) {
   success = false;
 
   QFile file(fileName);
 
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(
-        this, tr(APP_NAME),
-        tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
+    if (showMessage) {
+      QMessageBox::warning(this, tr(APP_NAME), tr("Cannot read file %1:\n%2.")
+                                                   .arg(fileName)
+                                                   .arg(file.errorString()));
+    }
     return QString();
   }
 
@@ -194,8 +224,8 @@ QString MainView::GetCode() { return ui->txtCode->toPlainText(); }
 void MainView::SetCode(QString txt) { ui->txtCode->setPlainText(txt); }
 
 void MainView::SetSearchRegex(QString txt) {
-  mHighlighter->SetSearchRegEx(txt);
-  mHighlighter->rehighlight();
+  m_highlighterCodeArea->SetSearchRegEx(txt);
+  m_highlighterCodeArea->rehighlight();
 }
 
 void MainView::WriteOutput(QString output) {
@@ -205,7 +235,7 @@ void MainView::WriteOutput(QString output) {
 }
 
 void MainView::RunPythonCode(const QString &code) {
-  emit operate(mStartMe, code);
+  emit operate(m_startMe, code);
 }
 
 void MainView::on_btnRun_clicked() {
@@ -268,7 +298,7 @@ void MainView::on_btnCodeSave_clicked() { SaveFile(ui->txtCode, true); }
 
 void MainView::on_btnCodeDatabase_clicked() {
   bool success;
-  mSnippets->SaveSnippets(success);
+  m_snippets->SaveSnippets(success);
   if (success) {
     QMessageBox::information(this, tr(APP_NAME),
                              tr("Snippets database saved."));
@@ -279,7 +309,8 @@ void MainView::on_btnCodeDatabase_clicked() {
 }
 
 void MainView::on_btnRunSnippet_clicked() {
-  if (!Confirm("Are you sure you want to run this snippet (from snippet area) ?")) {
+  if (!Confirm(
+          "Are you sure you want to run this snippet (from snippet area) ?")) {
     return;
   }
 
@@ -292,7 +323,8 @@ void MainView::on_btnLoadSnippet_clicked() {
   }
 
   bool success;
-  QString code = mSnippets->GetSnippet(ui->cmbSnippets->currentText(), success);
+  QString code =
+      m_snippets->GetSnippet(ui->cmbSnippets->currentText(), success);
   if (success) {
     ui->txtSnippet->setPlainText(code);
   }
@@ -304,7 +336,7 @@ void MainView::on_btnRemoveSnippet_clicked() {
   }
 
   bool success;
-  mSnippets->RemoveSnippet(ui->cmbSnippets->currentText(), success);
+  m_snippets->RemoveSnippet(ui->cmbSnippets->currentText(), success);
   if (success) {
     QMessageBox::information(this, tr(APP_NAME), tr("Snippet removed."));
   } else {
@@ -318,14 +350,22 @@ void MainView::on_btnAddSnippet_clicked() {
     return;
   }
 
-  bool ok;
+  bool ok = false;
   QString text = QInputDialog::getText(this, tr(APP_NAME), tr("Snippet name:"),
                                        QLineEdit::Normal, tr(""), &ok);
   if (!ok || text.isEmpty()) {
     return;
   }
 
-  mSnippets->AddSnippet(text, ui->txtSnippet->toPlainText(), ok);
+  if (!m_snippets->OkToInsert(text)) {
+    ok = Confirm(tr("This snippet already exists, do you want to overwrite ?"));
+  }
+
+  if (!ok) {
+    return;
+  }
+
+  m_snippets->AddSnippet(text, ui->txtSnippet->toPlainText(), ok);
 
   if (ok) {
     QMessageBox::information(this, tr(APP_NAME), tr("Snippet added."));
@@ -336,13 +376,13 @@ void MainView::on_btnAddSnippet_clicked() {
 }
 
 void MainView::on_btnAbout_clicked() {
-  QMessageBox::about(this, tr(APP_NAME), mAbout);
+  QMessageBox::about(this, tr(APP_NAME), m_about);
 }
 
 void MainView::LoadSnippetsToCombo() {
   ui->cmbSnippets->clear();
   bool success;
-  QList<QString> keys = mSnippets->GetKeys(success);
+  QList<QString> keys = m_snippets->GetKeys(success);
   if (success) {
     ui->cmbSnippets->addItems(QStringList(keys));
   }
@@ -359,8 +399,8 @@ void MainView::on_btnUpdateSnippet_clicked() {
 
   bool ok;
 
-  mSnippets->AddSnippet(ui->cmbSnippets->currentText(),
-                        ui->txtSnippet->toPlainText(), ok);
+  m_snippets->AddSnippet(ui->cmbSnippets->currentText(),
+                         ui->txtSnippet->toPlainText(), ok);
 
   if (ok) {
     QMessageBox::information(this, tr(APP_NAME), tr("Snippet updated."));
@@ -387,11 +427,13 @@ void MainView::on_btnSnippetOpen_clicked() {
 }
 
 void MainView::on_btnRunSnippetFromCombo_clicked() {
-  if (!Confirm("Are you sure you want to run this snippet (from combo-box) ?")) {
+  if (!Confirm(
+          "Are you sure you want to run this snippet (from combo-box) ?")) {
     return;
   }
   bool success;
-  QString code = mSnippets->GetSnippet(ui->cmbSnippets->currentText(), success);
+  QString code =
+      m_snippets->GetSnippet(ui->cmbSnippets->currentText(), success);
   if (success) {
     RunPythonCode(code);
   }

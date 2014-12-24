@@ -74,6 +74,7 @@ private:
   QStringList operators;
   QStringList braces;
   QStringList builtins;
+  QStringList exceptions;
   QString mSearchRegex;
   QTextCharFormat mSearchHighlight;
   QHash<QString, QTextCharFormat> basicStyles;
