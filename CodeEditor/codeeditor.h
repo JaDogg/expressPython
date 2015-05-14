@@ -43,6 +43,7 @@
 
 #include <QPlainTextEdit>
 #include <QObject>
+#include <QCompleter>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -60,20 +61,26 @@ public:
   CodeEditor(QWidget *parent = 0);
   void lineNumberAreaPaintEvent(QPaintEvent *event);
   int lineNumberAreaWidth();
+  void setCompleter(QCompleter *c);
+  QCompleter *completer() const;
 
 protected:
   void resizeEvent(QResizeEvent *event);
+  void keyPressEvent(QKeyEvent *e);
+  void focusInEvent(QFocusEvent *e);
 
 private slots:
   void updateLineNumberAreaWidth(int newBlockCount);
   void updateLineNumberArea(const QRect &, int);
+  void insertCompletion(const QString &completion);
 
 private:
   QWidget *lineNumberArea;
-  void keyPressEvent(QKeyEvent *e);
-  void SelectLineMarginBlock();
+  QCompleter *c;
   QString GetLine();
+  QString textUnderCursor() const;
   bool KeepIndent();
+  void SelectLineMarginBlock();
 };
 
 class LineNumberArea : public QWidget {
