@@ -17,6 +17,7 @@
 #include "CodeEditor/pythonsyntaxhighlighter.h"
 #include "CodeEditor/codeeditor.h"
 #include "Features/snippets.h"
+#include "Features/xtute.h"
 
 #define SAVE_STATE_VERSION 1
 #define KEY_DOCK_LOCATIONS "DOCK_LOCATIONS"
@@ -24,6 +25,7 @@
 #define KEY_INPUTBOX "INPUTBOX"
 #define KEY_CODEBOX "CODEBOX"
 #define KEY_OUTPUTBOX "OUTPUTBOX"
+#define KEY_NOTESBOX "NOTESBOX"
 #define KEY_SNIPPETBOX "SNIPPETBOX"
 #define KEY_FONT "FONT"
 #define KEY_FONTSIZE "FONTSIZE"
@@ -77,10 +79,18 @@ private slots:
   void WriteOutput(QString output);
   void StartPythonRun();
   void EndPythonRun();
+  void on_btnNotesOpen_clicked();
+  void on_btnNotesSave_clicked();
+  void on_btnNotesClear_clicked();
+  void on_btnTuteOpen_clicked();
+  void on_btnTuteLoad_clicked();
+  void on_btnTuteMark_clicked();
 
 private:
   const QString FILETYPES_PYTHON = tr("Python Code (*.py);;All files (*.*)");
   const QString FILETYPES_OTHER = tr("Text files (*.txt);;All files (*.*)");
+  const QString FILETYPES_TUTE = tr("Tutorial files (*.tute);;All files (*.*)");
+
   QThread m_workerThread;
   Ui::MainView *ui;
   PythonSyntaxHighlighter *m_highlighterCodeArea;
@@ -88,7 +98,10 @@ private:
   QString m_startMe;
   QString m_about;
   Snippets *m_snippets;
+  XTute *m_tute;
   QCompleter *completer;
+  bool m_markTute = false;
+  int m_markIndex = -1;
   void ChangeFontSize(QFont font, int size);
   void SetupHighlighter();
   void SaveFile(CodeEditor *codeEditor, const bool isPython = false);

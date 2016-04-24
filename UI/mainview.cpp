@@ -13,8 +13,12 @@ MainView::MainView(QWidget *parent)
   LoadResources();
   LoadSettings();
   SetupPython();
+  m_tute = new XTute(this);
 }
 
+/**
+ * @brief Setup python embedding
+ */
 void MainView::SetupPython() {
   emb::setMainView(this);
   PythonWorker *worker = new PythonWorker();
@@ -33,16 +37,27 @@ void MainView::SetupPython() {
           &MainView::SetSearchRegex);
   m_workerThread.start();
 }
+// Buttons to enable when you execute a python script
 void MainView::StartPythonRun() {
   ui->btnRun->setEnabled(false);
   ui->btnRunSnippet->setEnabled(false);
   ui->btnRunSnippetFromCombo->setEnabled(false);
+  ui->dwTutorial->setEnabled(false);
 }
+// End python script
 void MainView::EndPythonRun() {
+  if (m_markTute) {
+    m_tute->Mark(m_markIndex, ui->txtOutput->toPlainText(), ui->lwTute, ui->pbTute);
+    m_markTute = false;
+    m_markIndex = -1;
+  }
+
   ui->btnRun->setEnabled(true);
   ui->btnRunSnippet->setEnabled(true);
   ui->btnRunSnippetFromCombo->setEnabled(true);
+  ui->dwTutorial->setEnabled(true);
 }
+// Util function: Confirm message box
 bool MainView::Confirm(const QString &what) {
   QMessageBox msgBox(this);
   msgBox.setWindowTitle(tr(APP_NAME));
@@ -54,6 +69,9 @@ bool MainView::Confirm(const QString &what) {
   }
   return false;
 }
+/**
+ * @brief Load text box content and docking locations
+ */
 void MainView::LoadSettings() {
   QSettings settings;
   this->restoreState(settings.value(KEY_DOCK_LOCATIONS).toByteArray(),
@@ -64,7 +82,8 @@ void MainView::LoadSettings() {
   this->SetOutput(settings.value(KEY_OUTPUTBOX, QString()).toString());
   ui->txtSnippet->setPlainText(
       settings.value(KEY_SNIPPETBOX, QString()).toString());
-
+  ui->txtNotes->setPlainText(
+      settings.value(KEY_NOTESBOX, QString()).toString());
   QString font = settings.value(KEY_FONT, tr("Courier New")).toString();
   int sizeIndex = settings.value(KEY_FONTSIZE, 6).toInt(); // select 12pt
 
@@ -79,6 +98,7 @@ void MainView::LoadSettings() {
   ChangeFontSize(ui->fntCombo->currentFont(),
                  ui->cmbFontSize->currentText().toInt());
 }
+
 void MainView::SetSnippets(Snippets *snip) {
   m_snippets = snip;
   LoadSnippetsToCombo();
@@ -91,6 +111,7 @@ void MainView::SetupHighlighter() {
       new PythonSyntaxHighlighter(ui->txtSnippet->document());
   SetCompleter(ui->txtCode);
 }
+
 void MainView::SetCompleter(CodeEditor *editor) {
   completer = new QCompleter(this);
 
@@ -119,6 +140,7 @@ void MainView::SetCompleter(CodeEditor *editor) {
 
   editor->setCompleter(completer);
 }
+
 void MainView::LoadResources() {
   bool success = false;
 
@@ -128,8 +150,7 @@ void MainView::LoadResources() {
     m_startMe = LoadFile(":/data/startme.py", success);
   }
   if (!success) {
-    QMessageBox::critical(this, tr(APP_NAME),
-                          tr("Loading startup script failed"));
+    QMessageBox::critical(this, tr(APP_NAME), tr("Loading startup script failed"));
     qApp->quit();
   }
   m_about = LoadFile(":/data/About.htm", success);
@@ -145,11 +166,13 @@ MainView::~MainView() {
   settings.setValue(KEY_INPUTBOX, this->GetInput());
   settings.setValue(KEY_OUTPUTBOX, this->GetOutput());
   settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
+  settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
   settings.setValue(KEY_FONT, ui->fntCombo->currentText());
   settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
   m_workerThread.quit();
   m_workerThread.wait();
   delete ui;
+  delete m_tute;
 }
 
 QString MainView::LoadFile(const QString &fileName, bool &success,
@@ -235,10 +258,15 @@ void MainView::WriteOutput(QString output) {
 }
 
 void MainView::RunPythonCode(const QString &code) {
+  m_markTute = false;
+  m_markIndex = -1;
   emit operate(m_startMe, code);
 }
 
 void MainView::on_btnRun_clicked() {
+  if (ui->chkClearOut->isChecked()) {
+      ui->txtOutput->clear();
+  }
   RunPythonCode(ui->txtCode->toPlainText());
 }
 
@@ -250,6 +278,7 @@ void MainView::ChangeFontSize(QFont font, int fontSize) {
   ui->txtInput->setFont(sized);
   ui->txtOutput->setFont(sized);
   ui->txtSnippet->setFont(sized);
+  ui->txtNotes->setFont(sized);
 }
 
 void MainView::on_fntCombo_currentFontChanged(const QFont &font) {
@@ -437,4 +466,77 @@ void MainView::on_btnRunSnippetFromCombo_clicked() {
   if (success) {
     RunPythonCode(code);
   }
+}
+
+// =========================================================================
+// NOTES
+// =========================================================================
+void MainView::on_btnNotesOpen_clicked()
+{
+    if (!ui->txtNotes->toPlainText().isEmpty() &&
+        Confirm(tr("Would you like to save notes ?"))) {
+      on_btnNotesSave_clicked();
+    }
+
+    BrowseAndLoadFile(ui->txtNotes, true);
+}
+
+void MainView::on_btnNotesSave_clicked()
+{
+    SaveFile(ui->txtNotes);
+}
+
+void MainView::on_btnNotesClear_clicked()
+{
+    if (Confirm(tr("Are you sure you want to clear notes ?"))) {
+      ui->txtNotes->clear();
+    }
+}
+
+void MainView::on_btnTuteOpen_clicked()
+{
+    if (!Confirm(tr("Are you sure you want to load a tute, this will reset current progress (if any) ?"))) {
+        return;
+    }
+
+    QString fileName = QFileDialog::getOpenFileName(
+        this, tr("Open"), QApplication::applicationDirPath(), FILETYPES_TUTE);
+    if (fileName.isEmpty()) {
+      return;
+    }
+    m_tute->Load(fileName);
+
+    if (!m_tute->IsLoaded()) {
+        QMessageBox::warning(this, tr(APP_NAME), tr("Cannot read file %1").arg(fileName));
+        return;
+    }
+
+    m_tute->InitList(ui->lwTute, ui->pbTute);
+}
+
+void MainView::on_btnTuteLoad_clicked()
+{
+    if (!Confirm(tr("Are you sure you want to load a question, this will reset current progress (if any) ?"))) {
+        return;
+    }
+
+    int index = ui->lwTute->currentRow();
+    if (index < 0 || index >= ui->lwTute->count()) {
+        return;
+    }
+    m_tute->LoadQuestion(index, ui->txtInput, ui->txtNotes, ui->txtCode);
+}
+
+void MainView::on_btnTuteMark_clicked()
+{
+    int index = ui->lwTute->currentRow();
+    if (index < 0 || index >= ui->lwTute->count()) {
+        return;
+    }
+
+    ui->txtOutput->clear();
+    m_markTute = true;
+    m_markIndex = index;
+
+    emit operate(m_startMe, ui->txtCode->toPlainText());
 }

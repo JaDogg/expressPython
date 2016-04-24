@@ -19,7 +19,9 @@ SOURCES += main.cpp\
     Features/snippets.cpp \
     PythonAccess/emb.cpp \
     PythonAccess/pythonworker.cpp \
-    CodeEditor/codelineedit.cpp
+    CodeEditor/codelineedit.cpp \
+    Features/xquestion.cpp \
+    Features/xtute.cpp
 
 HEADERS  += UI/mainview.h \
     CodeEditor/pythonsyntaxhighlighter.h \
@@ -27,7 +29,9 @@ HEADERS  += UI/mainview.h \
     Features/snippets.h \
     PythonAccess/emb.h \
     PythonAccess/pythonworker.h \
-    CodeEditor/codelineedit.h
+    CodeEditor/codelineedit.h \
+    Features/xquestion.h \
+    Features/xtute.h
 
 FORMS    += UI/mainview.ui
 

@@ -13,5 +13,11 @@
         <file>About.htm</file>
         <file>Icons/Update.png</file>
         <file>Features/autocomplete.txt</file>
+        <file>Icons/Test.png</file>
+        <file>Icons/Tute.png</file>
+        <file>Icons/TuteLoad.png</file>
+        <file>Icons/TuteFail.png</file>
+        <file>Icons/TutePass.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>
