@@ -22,7 +22,7 @@ void XTute::extractTo(QString& note, QTextStream& in)
 
 void XTute::Load(QString fileName)
 {
-    delete_questions();
+    DeleteQuestions();
     m_questions = new QList<XQuestion*>();
 
     QFile inputFile(fileName);
@@ -105,7 +105,7 @@ void XTute::Mark(int index, QString answer, QListWidget *w, QProgressBar* p)
     InitList(w, p);
 }
 
-void XTute::delete_questions()
+void XTute::DeleteQuestions()
 {
     if(m_questions != nullptr) {
         QListIterator<XQuestion*> i(*m_questions);
@@ -118,7 +118,14 @@ void XTute::delete_questions()
     }
 }
 
+void XTute::SetInput(int index, CodeEditor *inp)
+{
+    if (index < 0) return;
+    XQuestion* x = m_questions->value(index);
+    inp->setPlainText(x->m_input);
+}
+
 XTute::~XTute()
 {
-    delete_questions();
+    DeleteQuestions();
 }

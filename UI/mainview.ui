@@ -1116,6 +1116,9 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="dwNote">
+   <property name="floating">
+    <bool>true</bool>
+   </property>
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
@@ -1265,10 +1268,10 @@
   </widget>
   <widget class="QDockWidget" name="dwTutorial">
    <property name="floating">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
     <string>Tutorial</string>

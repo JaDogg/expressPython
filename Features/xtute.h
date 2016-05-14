@@ -27,8 +27,9 @@ public:
     void InitList(QListWidget *w, QProgressBar *p);
     void LoadQuestion(int index, CodeEditor *inp, CodeEditor *note, CodeEditor *code);
     void Mark(int index, QString answer, QListWidget *w, QProgressBar *p);
+    void DeleteQuestions();
+    void SetInput(int index, CodeEditor* inp);
     ~XTute();
-    void delete_questions();
 private:
     const QIcon m_i_tute = QIcon(QPixmap(":/data/Icons/Tute.png"));
     const QIcon m_i_tutepass = QIcon(QPixmap(":/data/Icons/TutePass.png"));

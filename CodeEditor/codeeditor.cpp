@@ -193,11 +193,14 @@ bool CodeEditor::KeepIndent() {
   return true;
 }
 void CodeEditor::keyPressEvent(QKeyEvent *e) {
+
+  bool no_process = false;
+
   if (c && c->popup()->isVisible()) {
     // The following keys are forwarded by the completer to the widget
     switch (e->key()) {
-    case Qt::Key_Enter:
-    case Qt::Key_Return:
+    // case Qt::Key_Enter:
+    // case Qt::Key_Return:
     case Qt::Key_Escape:
     case Qt::Key_Tab:
     case Qt::Key_Backtab:
@@ -206,11 +209,58 @@ void CodeEditor::keyPressEvent(QKeyEvent *e) {
     default:
       break;
     }
+  } else {
+      switch (e->key()) {
+      case Qt::Key_Backtab:
+        SelectLineMarginBlock();
+        {
+          QString text("");
+          QStringList lines = this->textCursor().selection().toPlainText().split(
+              QRegExp("\n|\r\n|\r"));
+          foreach (QString line, lines) {
+            line.replace(QRegExp("^(    |   |  | )(.*)"), "\\2");
+            text.append(line);
+            text.append("\n");
+          }
+          text.truncate(text.length() - 1);
+          this->textCursor().insertText(text);
+        }
+        no_process = true;
+        break;
+      case Qt::Key_Tab:
+        if (this->textCursor().hasSelection()) {
+          SelectLineMarginBlock();
+          {
+            QString text("");
+            QStringList lines = this->textCursor().selection().toPlainText().split(
+                QRegExp("\n|\r\n|\r"));
+            foreach (QString line, lines) {
+              text.append("    ");
+              text.append(line);
+              text.append("\n");
+            }
+            text.truncate(text.length() - 1);
+            this->textCursor().insertText(text);
+          }
+        } else {
+          this->insertPlainText("    ");
+        }
+        no_process = true;
+        break;
+      case Qt::Key_Enter:
+      case Qt::Key_Return:
+        if (!KeepIndent()) {
+          QPlainTextEdit::keyPressEvent(e);
+          return;
+        } else {
+            no_process = true;
+        }
+      }
   }
 
   bool isShortcut = ((e->modifiers() & Qt::ControlModifier) &&
                      e->key() == Qt::Key_Space); // CTRL+Space
-  if (!c || !isShortcut)
+  if ((!c || !isShortcut) && !no_process)
     QPlainTextEdit::keyPressEvent(e);
 
   const bool ctrlOrShift =

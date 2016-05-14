@@ -533,6 +533,8 @@ void MainView::on_btnTuteMark_clicked()
     if (index < 0 || index >= ui->lwTute->count()) {
         return;
     }
+    // Reset input before marking
+    m_tute->SetInput(index, ui->txtInput);
 
     ui->txtOutput->clear();
     m_markTute = true;
