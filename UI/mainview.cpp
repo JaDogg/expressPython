@@ -21,7 +21,7 @@ MainView::MainView(QWidget *parent)
  */
 void MainView::SetupPython() {
   emb::setMainView(this);
-  PythonWorker *worker = new PythonWorker();
+  PythonWorker* worker = new PythonWorker();
   emb::setWorker(worker);
   m_workerThread = new QThread();
   worker->moveToThread(m_workerThread);
@@ -549,9 +549,6 @@ void MainView::on_btnTuteMark_clicked()
 
 void MainView::on_btnStopPython_clicked()
 {
-    m_workerThread->terminate();
-    this->EndPythonRun();
-    m_workerThread->wait();
-    delete m_workerThread;
-    SetupPython();
+    PythonWorker p;
+    p.StopPython();
 }

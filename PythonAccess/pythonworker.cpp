@@ -22,3 +22,16 @@ void PythonWorker::RunPython(const QString &startme, const QString &code) {
   Py_Finalize();
   emit EndPythonRun();
 }
+
+// https://stackoverflow.com/questions/1420957/stopping-embedded-python
+int quit(void *) {
+  PyErr_SetInterrupt();
+  return -1;
+}
+
+void PythonWorker::StopPython()
+{
+  QThread::msleep(10);
+  Py_AddPendingCall(&quit, NULL);
+  QThread::msleep(10);
+}

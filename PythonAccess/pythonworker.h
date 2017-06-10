@@ -21,6 +21,8 @@ signals:
 
 public slots:
   void RunPython(const QString &startme, const QString &code);
+public:
+  void StopPython();
 };
 
 #endif // PYTHONWORKER_H
