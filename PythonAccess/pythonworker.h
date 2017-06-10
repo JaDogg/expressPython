@@ -2,6 +2,7 @@
 #define PYTHONWORKER_H
 
 #include <QObject>
+#include <QThread>
 
 class PythonWorker : public QObject {
   Q_OBJECT

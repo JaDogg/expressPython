@@ -23,8 +23,9 @@ void MainView::SetupPython() {
   emb::setMainView(this);
   PythonWorker *worker = new PythonWorker();
   emb::setWorker(worker);
-  worker->moveToThread(&m_workerThread);
-  connect(&m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
+  m_workerThread = new QThread();
+  worker->moveToThread(m_workerThread);
+  connect(m_workerThread, &QThread::finished, worker, &QObject::deleteLater);
   connect(this, &MainView::operate, worker, &PythonWorker::RunPython);
   connect(worker, &PythonWorker::WriteOutput, this, &MainView::WriteOutput);
   connect(worker, &PythonWorker::SetCode, this, &MainView::SetCode);
@@ -35,7 +36,7 @@ void MainView::SetupPython() {
   connect(worker, &PythonWorker::EndPythonRun, this, &MainView::EndPythonRun);
   connect(worker, &PythonWorker::SetSearchRegex, this,
           &MainView::SetSearchRegex);
-  m_workerThread.start();
+  m_workerThread->start();
 }
 // Buttons to enable when you execute a python script
 void MainView::StartPythonRun() {
@@ -43,6 +44,7 @@ void MainView::StartPythonRun() {
   ui->btnRunSnippet->setEnabled(false);
   ui->btnRunSnippetFromCombo->setEnabled(false);
   ui->dwTutorial->setEnabled(false);
+  ui->btnStopPython->setEnabled(true);
 }
 // End python script
 void MainView::EndPythonRun() {
@@ -56,6 +58,7 @@ void MainView::EndPythonRun() {
   ui->btnRunSnippet->setEnabled(true);
   ui->btnRunSnippetFromCombo->setEnabled(true);
   ui->dwTutorial->setEnabled(true);
+  ui->btnStopPython->setEnabled(false);
 }
 // Util function: Confirm message box
 bool MainView::Confirm(const QString &what) {
@@ -169,8 +172,9 @@ MainView::~MainView() {
   settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
   settings.setValue(KEY_FONT, ui->fntCombo->currentText());
   settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
-  m_workerThread.quit();
-  m_workerThread.wait();
+  m_workerThread->quit();
+  m_workerThread->wait();
+  delete m_workerThread;
   delete ui;
   delete m_tute;
 }
@@ -541,4 +545,13 @@ void MainView::on_btnTuteMark_clicked()
     m_markIndex = index;
 
     emit operate(m_startMe, ui->txtCode->toPlainText());
+}
+
+void MainView::on_btnStopPython_clicked()
+{
+    m_workerThread->terminate();
+    this->EndPythonRun();
+    m_workerThread->wait();
+    delete m_workerThread;
+    SetupPython();
 }

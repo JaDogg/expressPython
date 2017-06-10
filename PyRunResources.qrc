@@ -18,6 +18,7 @@
         <file>Icons/TuteLoad.png</file>
         <file>Icons/TuteFail.png</file>
         <file>Icons/TutePass.png</file>
+        <file>Icons/Stop.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

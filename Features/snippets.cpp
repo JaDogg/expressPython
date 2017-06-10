@@ -1,5 +1,6 @@
 #include "Features/snippets.h"
 #include <iostream>
+#include <QDataStream>
 
 Snippets::Snippets(QObject *parent) : QObject(parent), m_snippets(nullptr) {
   bool success;

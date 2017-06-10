@@ -18,9 +18,12 @@
     <normaloff>:/data/Icons/PyRunImg.png</normaloff>:/data/Icons/PyRunImg.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="hlOptions">
+     <layout class="QHBoxLayout" name="vlMainButtons">
       <item>
        <widget class="QPushButton" name="btnCodeOpen">
         <property name="minimumSize">
@@ -150,6 +153,41 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnStopPython">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Stop</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../PyRunResources.qrc">
+          <normaloff>:/data/Icons/Stop.png</normaloff>:/data/Icons/Stop.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="chkClearOut">
         <property name="toolTip">
          <string>Clear output before running</string>
@@ -206,7 +244,7 @@
          <bool>false</bool>
         </property>
         <property name="currentText">
-         <string>BatangChe</string>
+         <string>CodingFontTobi</string>
         </property>
         <property name="fontFilters">
          <set>QFontComboBox::MonospacedFonts</set>

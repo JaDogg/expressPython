@@ -86,12 +86,14 @@ private slots:
   void on_btnTuteLoad_clicked();
   void on_btnTuteMark_clicked();
 
+  void on_btnStopPython_clicked();
+
 private:
   const QString FILETYPES_PYTHON = tr("Python Code (*.py);;All files (*.*)");
   const QString FILETYPES_OTHER = tr("Text files (*.txt);;All files (*.*)");
   const QString FILETYPES_TUTE = tr("Tutorial files (*.tute);;All files (*.*)");
 
-  QThread m_workerThread;
+  QThread* m_workerThread;
   Ui::MainView *ui;
   PythonSyntaxHighlighter *m_highlighterCodeArea;
   PythonSyntaxHighlighter *m_highlighterSnippetArea;

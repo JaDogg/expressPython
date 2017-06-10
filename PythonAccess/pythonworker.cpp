@@ -12,6 +12,7 @@ void PythonWorker::RunPython(const QString &startme, const QString &code) {
 
   emb::StdOutWriteType write = [this](std::string s) {
     emit this->WriteOutput(QString::fromStdString(s));
+    QThread::msleep(10);
   };
 
   emb::SetStdout(write);

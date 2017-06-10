@@ -134,6 +134,7 @@ PyObject *ApiGetInput(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, ":numargs"))
     return NULL;
 
+  QThread::msleep(10);
   return Py_BuildValue("s", mainView->GetInput().toStdString().c_str());
 }
 PyObject *ApiSetInput(PyObject *self, PyObject *args) {
@@ -142,6 +143,7 @@ PyObject *ApiSetInput(PyObject *self, PyObject *args) {
     return NULL;
 
   emit worker->SetInput(QString(data));
+  QThread::msleep(10);
 
   return Py_BuildValue("i", 0);
 }
@@ -149,6 +151,7 @@ PyObject *ApiGetAppPath(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, ":numargs"))
     return NULL;
 
+  QThread::msleep(10);
   return Py_BuildValue(
       "s", QCoreApplication::applicationDirPath().toStdString().c_str());
 }
@@ -156,6 +159,7 @@ PyObject *ApiGetOutput(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, ":numargs"))
     return NULL;
 
+  QThread::msleep(10);
   return Py_BuildValue("s", mainView->GetOutput().toStdString().c_str());
 }
 
@@ -165,6 +169,7 @@ PyObject *ApiSetOutput(PyObject *self, PyObject *args) {
     return NULL;
 
   emit worker->SetOutput(QString(data));
+  QThread::msleep(10);
 
   return Py_BuildValue("i", 0);
 }
@@ -172,6 +177,7 @@ PyObject *ApiGetCode(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, ":numargs"))
     return NULL;
 
+  QThread::msleep(10);
   return Py_BuildValue("s", mainView->GetCode().toStdString().c_str());
 }
 
@@ -181,6 +187,7 @@ PyObject *ApiSetCode(PyObject *self, PyObject *args) {
     return NULL;
 
   emit worker->SetCode(QString(data));
+  QThread::msleep(10);
 
   return Py_BuildValue("i", 0);
 }
@@ -191,6 +198,7 @@ PyObject *ApiSetSearchRegex(PyObject *self, PyObject *args) {
     return NULL;
 
   emit worker->SetSearchRegex(QString(data));
+  QThread::msleep(10);
 
   return Py_BuildValue("i", 0);
 }
@@ -201,6 +209,7 @@ PyObject *ApiWriteOutput(PyObject *self, PyObject *args) {
     return NULL;
 
   emit worker->WriteOutput(QString(data));
+  QThread::msleep(10);
 
   return Py_BuildValue("i", 0);
 }

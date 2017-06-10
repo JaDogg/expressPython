@@ -35,14 +35,18 @@ HEADERS  += UI/mainview.h \
 
 FORMS    += UI/mainview.ui
 
-QMAKE_CXXFLAGS += -std=c++11 -Wpedantic
-
 RESOURCES += \
     PyRunResources.qrc
 
 RC_FILE = WindowsResources/win_rsrc.rc
 
 
-win32: LIBS += -LC:\Python34\libs\ -lpython34
-win32: INCLUDEPATH += C:\Python34\include
-win32: DEPENDPATH += C:\Python34\include
+win32: LIBS += -LC:\Users\Bhathiya\AppData\Local\Programs\Python\Python36-32\libs\ -lpython36
+win32: INCLUDEPATH += C:\Users\Bhathiya\AppData\Local\Programs\Python\Python36-32\include
+win32: DEPENDPATH += C:\Users\Bhathiya\AppData\Local\Programs\Python\Python36-32\include
+
+greaterThan(QT_MAJOR_VERSION, 4){
+    CONFIG += c++11
+} else {
+    QMAKE_CXXFLAGS += -std=c++11 -Wpedantic
+}
