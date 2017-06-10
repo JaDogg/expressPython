@@ -3,7 +3,12 @@ expressPython
 
 expressPython : Express Python, A Small IDE
 
-![Screenshot](http://lookpic.com/O/i2/737/rjxFPf0N.png) 
+One of the reasons for creating this was to teach python.
+You can checkout my Python 3 tutorial series at [http://pandabunnytech.com](http://pandabunnytech.com)
+
+Getting Started Guide : [here](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
+
+![Screenshot](http://lookpic.com/O/i2/1455/EVV1zAOV.gif) 
 
 ```
 # Full API
