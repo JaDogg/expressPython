@@ -8,7 +8,7 @@ You can checkout my Python 3 tutorial series at [http://pandabunnytech.com](http
 
 Getting Started Guide : [here](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
 
-![Screenshot](http://lookpic.com/O/i2/1455/EVV1zAOV.gif) 
+![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
 ```
 # Full API
