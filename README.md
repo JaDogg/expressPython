@@ -46,6 +46,9 @@ print ("expressPython.exe is at :", get_apppath())
 
 Learn Python
 ============
+![Image](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/10/PythonTute_09.png)
+
+
 * [Python 3 Tutorial for Beginners #01 – Getting Started](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
 * [Python 3 Tutorial for Beginners #02 – Arithmetic and Logical Operators](http://pandabunnytech.com/python-3-tutorial-for-beginners-02/)
 * [Python 3 Tutorial for Beginners #03 – If Statement and Python 3 Script Syntax](http://pandabunnytech.com/python-3-script-syntax-tutorial/)
