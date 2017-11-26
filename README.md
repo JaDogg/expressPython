@@ -1,7 +1,7 @@
 expressPython
 =============
 
-expressPython : Express Python, A Small IDE
+expressPython : Express Python, A Small IDE for learning and competitive programming.
 
 One of the reasons for creating this was to teach python.
 You can checkout my Python 3 tutorial series at [http://pandabunnytech.com](http://pandabunnytech.com)
