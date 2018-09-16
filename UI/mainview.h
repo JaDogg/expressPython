@@ -72,6 +72,7 @@ private slots:
   void on_btnSnippetSave_clicked();
   void on_btnSnippetOpen_clicked();
   void on_btnRunSnippetFromCombo_clicked();
+  void SaveContent();
   void SetInput(QString txt);
   void SetOutput(QString txt);
   void SetCode(QString txt);
@@ -85,7 +86,6 @@ private slots:
   void on_btnTuteOpen_clicked();
   void on_btnTuteLoad_clicked();
   void on_btnTuteMark_clicked();
-
   void on_btnStopPython_clicked();
 
 private:

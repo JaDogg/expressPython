@@ -40,6 +40,7 @@ void MainView::SetupPython() {
 }
 // Buttons to enable when you execute a python script
 void MainView::StartPythonRun() {
+  this->SaveContent(); // Backup the typed content and window positions
   ui->btnRun->setEnabled(false);
   ui->btnRunSnippet->setEnabled(false);
   ui->btnRunSnippetFromCombo->setEnabled(false);
@@ -161,22 +162,29 @@ void MainView::LoadResources() {
     m_about = tr(APP_NAME " Written by Bhathiya Perera");
   }
 }
+
 MainView::~MainView() {
-  QSettings settings;
-  settings.setValue(KEY_DOCK_LOCATIONS, this->saveState(SAVE_STATE_VERSION));
-  settings.setValue(KEY_GEOMETRY, this->saveGeometry());
-  settings.setValue(KEY_CODEBOX, this->GetCode());
-  settings.setValue(KEY_INPUTBOX, this->GetInput());
-  settings.setValue(KEY_OUTPUTBOX, this->GetOutput());
-  settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
-  settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
-  settings.setValue(KEY_FONT, ui->fntCombo->currentText());
-  settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
+  this->SaveContent();
   m_workerThread->quit();
   m_workerThread->wait();
   delete m_workerThread;
   delete ui;
   delete m_tute;
+}
+
+void MainView::SaveContent() {
+    // Save all the details of windows to QSettings
+    // This is called on exit and command execution
+    QSettings settings;
+    settings.setValue(KEY_DOCK_LOCATIONS, this->saveState(SAVE_STATE_VERSION));
+    settings.setValue(KEY_GEOMETRY, this->saveGeometry());
+    settings.setValue(KEY_CODEBOX, this->GetCode());
+    settings.setValue(KEY_INPUTBOX, this->GetInput());
+    settings.setValue(KEY_OUTPUTBOX, this->GetOutput());
+    settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
+    settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
+    settings.setValue(KEY_FONT, ui->fntCombo->currentText());
+    settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
 }
 
 QString MainView::LoadFile(const QString &fileName, bool &success,
