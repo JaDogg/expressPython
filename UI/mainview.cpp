@@ -123,7 +123,7 @@ void MainView::SetCompleter(CodeEditor *editor) {
   if (!file.open(QFile::ReadOnly))
     return;
 
-  // QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   QStringList words;
 
   while (!file.atEnd()) {
@@ -132,7 +132,7 @@ void MainView::SetCompleter(CodeEditor *editor) {
       words << line.trimmed();
   }
 
-  // QApplication::restoreOverrideCursor();
+  QApplication::restoreOverrideCursor();
   QStringListModel *model = new QStringListModel(words, completer);
 
   completer->setModel(model);
@@ -143,6 +143,19 @@ void MainView::SetCompleter(CodeEditor *editor) {
   completer->popup()->setStyleSheet("background-color: black; color: white");
 
   editor->setCompleter(completer);
+
+
+  QCompleter* jediCompleter = new QCompleter();
+  QStringListModel *initialJedi = new QStringListModel(words, jediCompleter);
+
+  jediCompleter->setModel(initialJedi);
+  jediCompleter->setModelSorting(QCompleter::CaseSensitivelySortedModel);
+  jediCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+  jediCompleter->setCompletionMode(QCompleter::PopupCompletion);
+  jediCompleter->setWrapAround(false);
+  jediCompleter->popup()->setStyleSheet("background-color: #9090FF; color: black");
+
+  editor->setJediCompleter(jediCompleter);
 }
 
 void MainView::LoadResources() {

@@ -62,7 +62,9 @@ public:
   void lineNumberAreaPaintEvent(QPaintEvent *event);
   int lineNumberAreaWidth();
   void setCompleter(QCompleter *c);
-  QCompleter *completer() const;
+  void setJediCompleter(QCompleter *c);
+  QCompleter* completer() const;
+  QCompleter* jediCompleter() const;
 
 protected:
   void resizeEvent(QResizeEvent *event);
@@ -77,6 +79,7 @@ private slots:
 private:
   QWidget *lineNumberArea;
   QCompleter *c;
+  QCompleter *jedi;
   QString GetLine();
   QString textUnderCursor() const;
   bool KeepIndent();
