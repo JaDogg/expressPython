@@ -19,6 +19,7 @@
         <file>Icons/TuteFail.png</file>
         <file>Icons/TutePass.png</file>
         <file>Icons/Stop.png</file>
+        <file>getjedi.py</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

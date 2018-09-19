@@ -98,6 +98,7 @@ private:
   PythonSyntaxHighlighter *m_highlighterCodeArea;
   PythonSyntaxHighlighter *m_highlighterSnippetArea;
   QString m_startMe;
+  QString m_getJedi;
   QString m_about;
   Snippets *m_snippets;
   XTute *m_tute;

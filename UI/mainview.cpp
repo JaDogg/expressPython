@@ -170,6 +170,13 @@ void MainView::LoadResources() {
     QMessageBox::critical(this, tr(APP_NAME), tr("Loading startup script failed"));
     qApp->quit();
   }
+  m_getJedi = LoadFile(":/data/getjedi.py", success);
+
+  if (!success) {
+    QMessageBox::critical(this, tr(APP_NAME), tr("Loading startup script failed"));
+    qApp->quit();
+  }
+
   m_about = LoadFile(":/data/About.htm", success);
   if (!success) {
     m_about = tr(APP_NAME " Written by Bhathiya Perera");

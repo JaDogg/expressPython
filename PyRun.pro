@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     PythonAccess/pythonworker.cpp \
     CodeEditor/codelineedit.cpp \
     Features/xquestion.cpp \
-    Features/xtute.cpp
+    Features/xtute.cpp \
+    PythonAccess/jedi.cpp
 
 HEADERS  += UI/mainview.h \
     CodeEditor/pythonsyntaxhighlighter.h \
@@ -31,7 +32,8 @@ HEADERS  += UI/mainview.h \
     PythonAccess/pythonworker.h \
     CodeEditor/codelineedit.h \
     Features/xquestion.h \
-    Features/xtute.h
+    Features/xtute.h \
+    PythonAccess/jedi.h
 
 FORMS    += UI/mainview.ui
 
