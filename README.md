@@ -3,6 +3,8 @@ expressPython
 
 expressPython : Express Python, A Small IDE/Editor for learning and competitive programming.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
+
 ![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
 # User Guide
