@@ -43,7 +43,8 @@ RESOURCES += \
     PyRunResources.qrc
 
 # Windows specific config
-win32: PYTHON37_LOCATION = $$(PYTHON_LOCATION)
+win32: PYTHON37_LOCATION = $$(PYTHON37_LOCATION)
+win32: message($$PYTHON37_LOCATION)
 win32: RC_FILE = WindowsResources/win_rsrc.rc
 win32: LIBS += -L$${PYTHON37_LOCATION}\libs\ -lpython37
 win32: INCLUDEPATH += $${PYTHON37_LOCATION}\include
