@@ -2,10 +2,7 @@
 #define MAINVIEW_H
 #define APP_NAME "Express Python"
 
-//#include <cmath>
-//#include "Python.h"
-
-// fremework
+// framework
 #include <QMessageBox>
 #include <QTextStream>
 #include <QFileDialog>

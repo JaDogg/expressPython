@@ -4,7 +4,7 @@ expressPython Runner Script
 """
 
 # ==========================================================================================
-#                                     BOOTSTRAP AREA
+#                               IMPORTS, SETUP express_api API
 # ==========================================================================================
 
 import os
@@ -32,9 +32,11 @@ DEFAULT_TIMEOUT = 1000
 DEFAULT_ENCODING = "utf-8"
 NASTY_CHARS = '()%!^"<>&|'
 DEBUG_PRINT = False
+
 CODE = get_code()
 CODE_LINES = CODE.splitlines()
 TXT = get_input()
+
 ___FAKE_STDIN = io.StringIO(TXT)
 ___REAL_STDIN = sys.stdin
 sys.stdin = ___FAKE_STDIN
@@ -71,7 +73,7 @@ HIDDEN_PROCESS_START = None
 if os.name == "nt":
     HIDDEN_PROCESS_START = subprocess.STARTUPINFO()
     HIDDEN_PROCESS_START.dwFlags = (
-        subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
+            subprocess.CREATE_NEW_CONSOLE | subprocess.STARTF_USESHOWWINDOW
     )
     HIDDEN_PROCESS_START.wShowWindow = subprocess.SW_HIDE
 
@@ -138,11 +140,11 @@ def double_escape_win(arg):
     )
     replace_map = dict((char, "^%s" % char) for char in NASTY_CHARS)
 
-    def escape_meta_chars(m):
+    def escape_nasty_chars(m):
         char = m.group(1)
         return replace_map[char]
 
-    return replace_regex.sub(escape_meta_chars, arg)
+    return replace_regex.sub(escape_nasty_chars, arg)
 
 
 def debug_print(*args, **kwargs):
@@ -166,6 +168,13 @@ class CodeExecutor:
     1) If `#!` is at the beginning of the first line then that that python version will be used
     2) Executes a pipe with INPUT and reads STDERR, STDOUT
     3) Support killing the process on interrupt
+
+    Methods needed for subclasses:
+        .name - property, static, name of the class
+        .run(*args) - execute python code
+        .kill() - kill python code being run
+        .clean() - clean anything that is not required
+        .done - execution successful ?
     """
 
     def __init__(self):
@@ -189,18 +198,15 @@ class CodeExecutor:
     def name():
         return "normal"
 
-    def run(self):
-        with open(self.data_path, "w+") as data:
-            data.write(TXT)
-            data.flush()
-
-        with open(self.code_path, "w+") as code:
-            code.write(get_code())
-            code.flush()
+    def run(self, *args):
+        """
+        Run code executor
+        """
+        self.write_files()
 
         command = python_cmd(self.code_path)
-        store = Queue()
         debug_print(command)
+
         self.python = subprocess.Popen(
             command,
             shell=False,
@@ -211,6 +217,18 @@ class CodeExecutor:
             bufsize=1,
         )
 
+        self.start_workers()
+
+    def write_files(self):
+        with open(self.data_path, "w+") as data:
+            data.write(TXT)
+            data.flush()
+        with open(self.code_path, "w+") as code:
+            code.write(get_code())
+            code.flush()
+
+    def start_workers(self):
+        store = Queue()
         writer_thread = Thread(
             target=self.writer, args=[self.python.stdin], daemon=True
         )
@@ -220,8 +238,8 @@ class CodeExecutor:
             target=self.reader, args=[self.python.stdout, store], daemon=True
         )
         reader_thread.start()
-
-        # Use this thread to look for writes
+        # WHY:
+        # Make the read work faster in a different thread
         while True:
             if self.interrupt:
                 break
@@ -235,6 +253,11 @@ class CodeExecutor:
         self.done = True
 
     def reader(self, pipe, store):
+        """
+        Thread method. reads stdin/stdout
+        :param pipe: PIPE
+        :param store: Queue
+        """
         debug_print("READER...")
         try:
             with pipe:
@@ -246,6 +269,11 @@ class CodeExecutor:
             store.put(None)
 
     def writer(self, pipe):
+        """
+        Thread method. writes to stdin
+        :param pipe:
+        :return:
+        """
         debug_print("WRITER")
         try:
             with pipe:

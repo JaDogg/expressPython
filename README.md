@@ -1,18 +1,58 @@
 expressPython
 =============
 
-expressPython : Express Python, A Small IDE for learning and competitive programming.
-
-One of the reasons for creating this was to teach python.
-You can checkout my Python 3 tutorial series at [http://pandabunnytech.com](http://pandabunnytech.com)
-
-Getting Started Guide : [here](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
+expressPython : Express Python, A Small IDE/Editor for learning and competitive programming.
 
 ![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
-```
-# Full API
+# User Guide
+
+## Installation
+This is fairly simple to use. 
+* Download a standalone version from the releases. (Currently only Windows binaries available)
+* If `launch.exe` is there run it. (If you run `expressPython` it may use system Python3.7)
+* Tested on Windows 10. Even runs on a GPDWin1 easily.
+
+## Editor
+* Tabs are replaced by 4 spaces.
+* Any `\t` (tab) character is highlighted in red.
+* There are basic auto-complete features. Use: <kbd>ctrl</kbd> + <kbd>space</kbd>
+* Content in the **input** can be read using `input()`
+* You can write to **output** using `print()`
+* This is not a full IDE and is not planning to be.
+
+## Known Limitations
+* Using `time.sleep()` in your code will make it impossible to retrieve output.
+* Lacks keyboard shortcuts.
+
+# Compiling
+This project uses `QMake` to build.
+
+####Dependencies
+* Python 3.7.x (32bit)
+* Qt 5.9.x (GPL Version, MinGW 32bit)
+>64Bit versions should also work. But it is not tested yet.
+
+Easiest way to compile is to use **QtCreator** and to build the binary.
+
+####Environment Variables
+* `PYTHON37_LOCATION` - On windows set this to parent of `python.exe` of a 32bit Python 3.7 installation.
+* `PYTHON37_LIB_LOCATION` and `PYTHON37_INC_LOCATION` should be set to lib and include paths.
+
+
+# Editor API
+You can safely ignore this section if you are not interested in customizing/developing.
+
+## Documentation
+```python
+# IDE's API
 # ---------------------------
+from express_api import get_input, set_input
+from express_api import get_output, set_output
+from express_api import get_code, set_code
+from express_api import write_output, get_apppath
+from express_api import set_search_regex, interrupt_requested
+#
 # get method's have no parameters and others have one
 #
 # get_input   - get input textbox's text
@@ -23,6 +63,7 @@ Getting Started Guide : [here](http://pandabunnytech.com/python-3-tutorial-begin
 # set_code    - set code textbox's text
 # write_output- append to output box
 # get_apppath - get exe path
+# interrupt_requested - returns 1 if we need to stop running
 
 # API Help/Code Sample
 # ---------------------------
@@ -41,13 +82,23 @@ set_output("")
 write_output("Hi You,\n")
 
 # get_apppath() -> get exe path
-print ("expressPython.exe is at :", get_apppath())
+print("expressPython.exe is at :", get_apppath())
 ```
 
-Learn Python
-============
-![Image](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/10/PythonTute_09.png)
+## Customising launch script
+If you want to customize how your code is executed.
+* Copy `ep_runner.py` to `_express_startup_.py` near expressPython binary.
+* Edit `_express_startup_.py` as you see fit.
 
+# Appendix
+
+## Learning Python
+One of the reasons for creating this was to teach python.
+You can checkout my Python 3 tutorial series at [http://pandabunnytech.com](http://pandabunnytech.com)
+
+Getting Started Guide : [here](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
+
+![Image](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/10/PythonTute_09.png)
 
 * [Python 3 Tutorial for Beginners #01 – Getting Started](http://pandabunnytech.com/python-3-tutorial-beginners-guide/)
 * [Python 3 Tutorial for Beginners #02 – Arithmetic and Logical Operators](http://pandabunnytech.com/python-3-tutorial-for-beginners-02/)

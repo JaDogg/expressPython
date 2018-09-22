@@ -1,7 +1,8 @@
 #-------------------------------------------------
-#
 # Project created by QtCreator 2014-11-22T18:40:41
 #
+# expressPython
+#   - Bhathiya Perera
 #-------------------------------------------------
 
 QT       += core gui
@@ -37,19 +38,25 @@ HEADERS  += UI/mainview.h \
 
 FORMS    += UI/mainview.ui
 
+# Include useful images, built-ins
 RESOURCES += \
     PyRunResources.qrc
 
 # Windows specific config
+win32: PYTHON37_LOCATION = $$(PYTHON_LOCATION)
 win32: RC_FILE = WindowsResources/win_rsrc.rc
-win32: LIBS += -LD:\Python\Python37-32\libs\ -lpython37
-win32: INCLUDEPATH += D:\Python\Python37-32\include
-win32: DEPENDPATH += D:\Python\Python37-32\include
+win32: LIBS += -L$${PYTHON37_LOCATION}\libs\ -lpython37
+win32: INCLUDEPATH += $${PYTHON37_LOCATION}\include
+win32: DEPENDPATH += $${PYTHON37_LOCATION}\include
 
 # MacOS specific config
-macx: LIBS += -L/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib -lpython3.7
-macx: INCLUDEPATH += /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
-macx: DEPENDPATH += /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+macx: PYTHON37_LIB_LOCATION = $$(PYTHON37_LIB_LOCATION)
+# If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib
+macx: PYTHON37_INC_LOCATION = $$(PYTHON37_INC_LOCATION)
+# If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+macx: LIBS += -L$${PYTHON37_LIB_LOCATION} -lpython3.7
+macx: INCLUDEPATH += $${PYTHON37_INC_LOCATION}
+macx: DEPENDPATH += $${PYTHON37_INC_LOCATION}
 macx: ICON = Icons/PyRunImg.icns
 
 greaterThan(QT_MAJOR_VERSION, 4){
