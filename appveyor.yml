@@ -12,5 +12,7 @@ build_script:
 
     mingw32-make
 
-    windeployqt
+    windeployqt C:/projects/expresspython/expressPython.exe
+
+    dir C:/projects/expresspython/
 test: off
