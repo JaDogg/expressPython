@@ -20,7 +20,7 @@
 
 class XTute : public QObject {
     Q_OBJECT
-public:
+  public:
     explicit XTute(QObject *parent = 0);
     void Load(QString fileName);
     bool IsLoaded();
@@ -30,7 +30,7 @@ public:
     void DeleteQuestions();
     void SetInput(int index, CodeEditor* inp);
     ~XTute();
-private:
+  private:
     const QIcon m_i_tute = QIcon(QPixmap(":/data/Icons/Tute.png"));
     const QIcon m_i_tutepass = QIcon(QPixmap(":/data/Icons/TutePass.png"));
     const QIcon m_i_tutefail = QIcon(QPixmap(":/data/Icons/TuteFail.png"));

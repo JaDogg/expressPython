@@ -9,7 +9,6 @@
         <file>Icons/Load.png</file>
         <file>Icons/Remove.png</file>
         <file>Icons/PyRunImg.png</file>
-        <file>startme.py</file>
         <file>About.htm</file>
         <file>Icons/Update.png</file>
         <file>Features/autocomplete.txt</file>
@@ -19,7 +18,8 @@
         <file>Icons/TuteFail.png</file>
         <file>Icons/TutePass.png</file>
         <file>Icons/Stop.png</file>
-        <file>getjedi.py</file>
+        <file>ep_runner.py</file>
+        <file>ep_jedi.py</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

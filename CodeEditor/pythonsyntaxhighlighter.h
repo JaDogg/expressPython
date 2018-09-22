@@ -42,54 +42,54 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 // relevant match # and the format.
 class HighlightingRule {
 
-public:
-  HighlightingRule(const QString &patternStr, int n,
-                   const QTextCharFormat &matchingFormat) {
-    originalRuleStr = patternStr;
-    pattern = QRegExp(patternStr);
-    nth = n;
-    format = matchingFormat;
-  }
+  public:
+    HighlightingRule(const QString &patternStr, int n,
+                     const QTextCharFormat &matchingFormat) {
+        originalRuleStr = patternStr;
+        pattern = QRegExp(patternStr);
+        nth = n;
+        format = matchingFormat;
+    }
 
-  QString originalRuleStr;
-  QRegExp pattern;
-  int nth;
-  QTextCharFormat format;
+    QString originalRuleStr;
+    QRegExp pattern;
+    int nth;
+    QTextCharFormat format;
 };
 
 //! Implementation of highlighting for Python code.
 class PythonSyntaxHighlighter : public QSyntaxHighlighter {
-  Q_OBJECT
+    Q_OBJECT
 
-public:
-  PythonSyntaxHighlighter(QTextDocument *parent = 0);
+  public:
+    PythonSyntaxHighlighter(QTextDocument *parent = 0);
 
-  void SetSearchRegEx(const QString &text);
+    void SetSearchRegEx(const QString &text);
 
-protected:
-  void highlightBlock(const QString &text);
+  protected:
+    void highlightBlock(const QString &text);
 
-private:
-  QStringList keywords;
-  QStringList operators;
-  QStringList braces;
-  QStringList builtins;
-  QStringList exceptions;
-  QString mSearchRegex;
-  QTextCharFormat mSearchHighlight;
-  QHash<QString, QTextCharFormat> basicStyles;
-  void initializeRules();
-  //! Highlighst multi-line strings, returns true if after processing we are
-  // still within the multi-line section.
-  bool matchMultiline(const QString &text, const QRegExp &delimiter,
-                      const int inState, const QTextCharFormat &style);
-  const QTextCharFormat
-  getTextCharFormat(const QString &colorName, const QString &style = QString(),
-                    const QString &backColorName = QString());
-  QList<HighlightingRule> rules;
-  QRegExp triSingleQuote;
-  QRegExp triDoubleQuote;
-  void setStyles();
+  private:
+    QStringList keywords;
+    QStringList operators;
+    QStringList braces;
+    QStringList builtins;
+    QStringList exceptions;
+    QString mSearchRegex;
+    QTextCharFormat mSearchHighlight;
+    QHash<QString, QTextCharFormat> basicStyles;
+    void initializeRules();
+    //! Highlighst multi-line strings, returns true if after processing we are
+    // still within the multi-line section.
+    bool matchMultiline(const QString &text, const QRegExp &delimiter,
+                        const int inState, const QTextCharFormat &style);
+    const QTextCharFormat
+    getTextCharFormat(const QString &colorName, const QString &style = QString(),
+                      const QString &backColorName = QString());
+    QList<HighlightingRule> rules;
+    QRegExp triSingleQuote;
+    QRegExp triDoubleQuote;
+    void setStyles();
 };
 
 #endif

@@ -3,37 +3,49 @@
 
 #include "UI/mainview.h"
 #include <QApplication>
+#include <QDebug>
 
 //snippet storage is static cause
 //it it should be only created once
 static Snippets *snip;
 
-//main view is static so it can be shared 
+//main view is static so it can be shared
 //and only created once
 static MainView *mainView;
 
 int main(int argc, char *argv[]) {
-  
-  //need to set program details 
-  QCoreApplication::setOrganizationName("Bhathiya");
-  QCoreApplication::setOrganizationDomain("simpll.info");
-  QCoreApplication::setApplicationName("expressPython");
 
-  //non modified arguments must be passed
-  QApplication app(argc, argv);
+    //need to set program details
+    QCoreApplication::setOrganizationName("Bhathiya Perera");
+    QCoreApplication::setOrganizationDomain("simpll.info");
+    QCoreApplication::setApplicationName("expressPython");
 
-  wchar_t name[] = L"expressPython";
-  Py_SetProgramName(name);
+    //non modified arguments must be passed
+    QApplication app(argc, argv);
 
-  snip = new Snippets();
-  mainView = new MainView();
-  mainView->SetSnippets(snip);
-  mainView->show();
+    if (argc > 1) {
+        QMessageBox msgBox;
+        QString text = "";
+        for(int i = 0; i < argc; i++) {
+            text.append(argv[i]);
+            text.append(" ");
+        }
+        msgBox.setText(text);
+        msgBox.exec();
+    }
 
-  int result = app.exec();
+    wchar_t name[] = L"expressPython";
+    Py_SetProgramName(name);
 
-  delete snip;
-  delete mainView;
+    snip = new Snippets();
+    mainView = new MainView();
+    mainView->SetSnippets(snip);
+    mainView->show();
 
-  return result;
+    int result = app.exec();
+
+    delete snip;
+    delete mainView;
+
+    return result;
 }

@@ -17,10 +17,11 @@
 
 class Jedi : public QObject {
     Q_OBJECT
-public:
-    explicit Jedi(const QString& getJediCode, QObject* parent=0);
+  public:
+    explicit Jedi(QObject* parent=nullptr);
+    void SetJediGetCode(QString jediCode);
     QStringList AutoComplete(const QString& code, long row, long col);
-private:
+  private:
     QString jediCode;
 };
 

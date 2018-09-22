@@ -40,12 +40,17 @@ FORMS    += UI/mainview.ui
 RESOURCES += \
     PyRunResources.qrc
 
-RC_FILE = WindowsResources/win_rsrc.rc
+# Windows specific config
+win32: RC_FILE = WindowsResources/win_rsrc.rc
+win32: LIBS += -LD:\Python\Python37-32\libs\ -lpython37
+win32: INCLUDEPATH += D:\Python\Python37-32\include
+win32: DEPENDPATH += D:\Python\Python37-32\include
 
-
-win32: LIBS += -LD:\Python\Python36-32\libs\ -lpython36
-win32: INCLUDEPATH += D:\Python\Python36-32\include
-win32: DEPENDPATH += D:\Python\Python36-32\include
+# MacOS specific config
+macx: LIBS += -L/usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib -lpython3.7
+macx: INCLUDEPATH += /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+macx: DEPENDPATH += /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
+macx: ICON = Icons/PyRunImg.icns
 
 greaterThan(QT_MAJOR_VERSION, 4){
     CONFIG += c++11

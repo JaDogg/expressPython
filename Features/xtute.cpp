@@ -4,8 +4,7 @@
 XTute::XTute(QObject *parent) : QObject(parent), m_questions(nullptr) {
 }
 
-void XTute::extractTo(QString& note, QTextStream& in)
-{
+void XTute::extractTo(QString& note, QTextStream& in) {
     QString line;
     while (!in.atEnd()) {
         line = in.readLine();
@@ -13,60 +12,55 @@ void XTute::extractTo(QString& note, QTextStream& in)
             break;
         }
         if (note.length() == 0) {
-          note.append(line);
+            note.append(line);
         } else {
-          note.append("\n").append(line);
+            note.append("\n").append(line);
         }
     }
 }
 
-void XTute::Load(QString fileName)
-{
+void XTute::Load(QString fileName) {
     DeleteQuestions();
     m_questions = new QList<XQuestion*>();
 
     QFile inputFile(fileName);
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-       QTextStream in(&inputFile);
-       while (!in.atEnd())
-       {
-          QString title, inp, code, out, note, line;
-          inp = tr("");
-          code = tr("");
-          out = tr("");
-          note = tr("");
-          XQuestion* x = new XQuestion();
+    if (inputFile.open(QIODevice::ReadOnly)) {
+        QTextStream in(&inputFile);
+        while (!in.atEnd()) {
+            QString title, inp, code, out, note, line;
+            inp = tr("");
+            code = tr("");
+            out = tr("");
+            note = tr("");
+            XQuestion* x = new XQuestion();
 
-          // Title
-          line = in.readLine();
-          if (!line.startsWith(tr("#>|<")) || line.length() <= 4) {
-              break;
-          }
-          title = line.mid(4);
+            // Title
+            line = in.readLine();
+            if (!line.startsWith(tr("#>|<")) || line.length() <= 4) {
+                break;
+            }
+            title = line.mid(4);
 
-          // Others
-          extractTo(note, in);
-          extractTo(inp, in);
-          extractTo(out, in);
-          extractTo(code, in);
+            // Others
+            extractTo(note, in);
+            extractTo(inp, in);
+            extractTo(out, in);
+            extractTo(code, in);
 
-          x->SetData(title, note, inp, out, code);
-          m_questions->append(x);
+            x->SetData(title, note, inp, out, code);
+            m_questions->append(x);
 
-       }
-       inputFile.close();
-       m_loaded = (m_questions->size() > 0);
+        }
+        inputFile.close();
+        m_loaded = (m_questions->size() > 0);
     }
 }
 
-bool XTute::IsLoaded()
-{
+bool XTute::IsLoaded() {
     return m_loaded;
 }
 
-void XTute::InitList(QListWidget *w, QProgressBar* p)
-{
+void XTute::InitList(QListWidget *w, QProgressBar* p) {
     w->clear();
     QListIterator<XQuestion*> i(*m_questions);
     int pass = 0;
@@ -87,8 +81,7 @@ void XTute::InitList(QListWidget *w, QProgressBar* p)
     p->setValue((int)(pass * 100.0 / total));
 }
 
-void XTute::LoadQuestion(int index, CodeEditor *inp, CodeEditor *note, CodeEditor *code)
-{
+void XTute::LoadQuestion(int index, CodeEditor *inp, CodeEditor *note, CodeEditor *code) {
     if (index < 0) return;
     XQuestion* x = m_questions->at(index);
     inp->setPlainText(x->m_input);
@@ -97,16 +90,14 @@ void XTute::LoadQuestion(int index, CodeEditor *inp, CodeEditor *note, CodeEdito
     // Output is not loaded
 }
 
-void XTute::Mark(int index, QString answer, QListWidget *w, QProgressBar* p)
-{
+void XTute::Mark(int index, QString answer, QListWidget *w, QProgressBar* p) {
     if (index < 0) return;
     XQuestion* x = m_questions->value(index);
     x->SetPassed(x->m_output.compare(answer) == 0);
     InitList(w, p);
 }
 
-void XTute::DeleteQuestions()
-{
+void XTute::DeleteQuestions() {
     if(m_questions != nullptr) {
         QListIterator<XQuestion*> i(*m_questions);
         while (i.hasNext()) {
@@ -118,14 +109,12 @@ void XTute::DeleteQuestions()
     }
 }
 
-void XTute::SetInput(int index, CodeEditor *inp)
-{
+void XTute::SetInput(int index, CodeEditor *inp) {
     if (index < 0) return;
     XQuestion* x = m_questions->value(index);
     inp->setPlainText(x->m_input);
 }
 
-XTute::~XTute()
-{
+XTute::~XTute() {
     DeleteQuestions();
 }

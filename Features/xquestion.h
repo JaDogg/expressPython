@@ -5,9 +5,9 @@
 
 class XQuestion: public QObject {
     Q_OBJECT
-private:
+  private:
     int m_state = 0;
-public:
+  public:
     QString m_title;
     QString m_note;
     QString m_input;

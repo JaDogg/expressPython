@@ -1,11 +1,9 @@
 #include "Features/xquestion.h"
 
-XQuestion::XQuestion(QObject *parent) : QObject(parent)
-{
+XQuestion::XQuestion(QObject *parent) : QObject(parent) {
 }
 
-void XQuestion::SetData(QString title, QString note, QString input, QString output, QString code)
-{
+void XQuestion::SetData(QString title, QString note, QString input, QString output, QString code) {
     m_title = title;
     m_note = note;
     m_input = input;
@@ -13,8 +11,7 @@ void XQuestion::SetData(QString title, QString note, QString input, QString outp
     m_code = code;
 }
 
-void XQuestion::SetPassed(bool isPassed)
-{
+void XQuestion::SetPassed(bool isPassed) {
     if(isPassed) {
         m_state = 1;
     } else {
@@ -22,7 +19,6 @@ void XQuestion::SetPassed(bool isPassed)
     }
 }
 
-int XQuestion::GetState()
-{
+int XQuestion::GetState() {
     return m_state;
 }

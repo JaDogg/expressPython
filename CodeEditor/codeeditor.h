@@ -44,6 +44,7 @@
 #include <QPlainTextEdit>
 #include <QObject>
 #include <QCompleter>
+#include "PythonAccess/jedi.h"
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -55,49 +56,54 @@ QT_END_NAMESPACE
 class LineNumberArea;
 
 class CodeEditor : public QPlainTextEdit {
-  Q_OBJECT
+    Q_OBJECT
 
-public:
-  CodeEditor(QWidget *parent = 0);
-  void lineNumberAreaPaintEvent(QPaintEvent *event);
-  int lineNumberAreaWidth();
-  void setCompleter(QCompleter *c);
-  void setJediCompleter(QCompleter *c);
-  QCompleter* completer() const;
-  QCompleter* jediCompleter() const;
+  public:
+    CodeEditor(QWidget *parent = nullptr);
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    int lineNumberAreaWidth();
+    void setCompleter(QCompleter *completer);
+    void setJediCompleter(QCompleter *completer, const QString &getJediCode);
+    QCompleter* completer() const;
+    QCompleter* jediCompleter() const;
 
-protected:
-  void resizeEvent(QResizeEvent *event);
-  void keyPressEvent(QKeyEvent *e);
-  void focusInEvent(QFocusEvent *e);
+  protected:
+    void resizeEvent(QResizeEvent *event);
+    void keyPressEvent(QKeyEvent *e);
+    void focusInEvent(QFocusEvent *e);
 
-private slots:
-  void updateLineNumberAreaWidth(int newBlockCount);
-  void updateLineNumberArea(const QRect &, int);
-  void insertCompletion(const QString &completion);
+  private slots:
+    void updateLineNumberAreaWidth(int newBlockCount);
+    void updateLineNumberArea(const QRect &, int);
+    void insertCompletion(const QString &completion);
 
-private:
-  QWidget *lineNumberArea;
-  QCompleter *c;
-  QCompleter *jedi;
-  QString GetLine();
-  QString textUnderCursor() const;
-  bool KeepIndent();
-  void SelectLineMarginBlock();
+  private:
+    QWidget *lineNumberArea;
+    QCompleter *m_completer;
+    QCompleter *m_jediCompleter;
+    Jedi *m_jedi;
+    QString GetLine();
+    QString textUnderCursor() const;
+    bool KeepIndent();
+    void SelectLineMarginBlock();
 };
 
 class LineNumberArea : public QWidget {
-public:
-  LineNumberArea(CodeEditor *editor) : QWidget(editor) { codeEditor = editor; }
-  QSize sizeHint() const { return QSize(codeEditor->lineNumberAreaWidth(), 0); }
+  public:
+    LineNumberArea(CodeEditor *editor) : QWidget(editor) {
+        codeEditor = editor;
+    }
+    QSize sizeHint() const {
+        return QSize(codeEditor->lineNumberAreaWidth(), 0);
+    }
 
-protected:
-  void paintEvent(QPaintEvent *event) {
-    codeEditor->lineNumberAreaPaintEvent(event);
-  }
+  protected:
+    void paintEvent(QPaintEvent *event) {
+        codeEditor->lineNumberAreaPaintEvent(event);
+    }
 
-private:
-  CodeEditor *codeEditor;
+  private:
+    CodeEditor *codeEditor;
 };
 
 #endif

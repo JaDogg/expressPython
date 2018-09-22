@@ -45,327 +45,338 @@
 #include <QTextStream>
 #include "CodeEditor/codeeditor.h"
 
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), c(0), jedi(0) {
-  lineNumberArea = new LineNumberArea(this);
+CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), m_completer(0), m_jediCompleter(0) {
+    lineNumberArea = new LineNumberArea(this);
 
-  connect(this, SIGNAL(blockCountChanged(int)), this,
-          SLOT(updateLineNumberAreaWidth(int)));
-  connect(this, SIGNAL(updateRequest(QRect, int)), this,
-          SLOT(updateLineNumberArea(QRect, int)));
+    connect(this, SIGNAL(blockCountChanged(int)), this,
+            SLOT(updateLineNumberAreaWidth(int)));
+    connect(this, SIGNAL(updateRequest(QRect, int)), this,
+            SLOT(updateLineNumberArea(QRect, int)));
 
-  updateLineNumberAreaWidth(0);
+    updateLineNumberAreaWidth(0);
 
-  QPalette p = this->palette();
-  p.setColor(QPalette::Base, Qt::black);
-  p.setColor(QPalette::Text, Qt::white);
-  this->setPalette(p);
+    QPalette p = this->palette();
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::white);
+    this->setPalette(p);
 }
 
 void CodeEditor::setCompleter(QCompleter *completer) {
-  if (c)
-    QObject::disconnect(c, 0, this, 0);
+    if (m_completer)
+        QObject::disconnect(m_completer, nullptr, this, 0);
 
-  c = completer;
+    m_completer = completer;
 
-  if (!c)
-    return;
+    if (!m_completer)
+        return;
 
-  c->setWidget(this);
-  QObject::connect(c, SIGNAL(activated(QString)), this,
-                   SLOT(insertCompletion(QString)));
-}
-
-void CodeEditor::setJediCompleter(QCompleter *jediCompleter)
-{
-    if (jedi)
-      QObject::disconnect(jedi, 0, this, 0);
-
-    jedi = jediCompleter;
-
-    if (!jedi)
-      return;
-
-    jedi->setWidget(this);
-    QObject::connect(jedi, SIGNAL(activated(QString)), this,
+    m_completer->setWidget(this);
+    QObject::connect(m_completer, SIGNAL(activated(QString)), this,
                      SLOT(insertCompletion(QString)));
 }
 
-QCompleter *CodeEditor::completer() const { return this->c; }
+void CodeEditor::setJediCompleter(QCompleter *jediCompleter, const QString& getJediCode) {
+    if (m_jediCompleter) {
+        QObject::disconnect(m_jediCompleter, 0, this, 0);
+    } else {
+        m_jedi = new Jedi(this);
+        m_jedi->SetJediGetCode(QString(getJediCode.toStdString().c_str()));
+    }
 
-QCompleter *CodeEditor::jediCompleter() const
-{
-    return this->jedi;
+    m_jediCompleter = jediCompleter;
+
+    if (!m_jediCompleter)
+        return;
+
+    m_jediCompleter->setWidget(this);
+    QObject::connect(m_jediCompleter, SIGNAL(activated(QString)), this,
+                     SLOT(insertCompletion(QString)));
+}
+
+QCompleter *CodeEditor::completer() const {
+    return this->m_completer;
+}
+
+QCompleter *CodeEditor::jediCompleter() const {
+    return this->m_jediCompleter;
 }
 
 void CodeEditor::insertCompletion(const QString &completion) {
     QCompleter* q;
-    if (jedi->popup()->isVisible()) {
-        q = jedi;
+    if (m_jediCompleter->popup()->isVisible()) {
+        q = m_jediCompleter;
     } else {
-        q = c;
+        q = m_completer;
     }
-  if (q->widget() != this)
-    return;
-  QTextCursor tc = textCursor();
-  int extra = q->completionPrefix().length();
-  tc.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, extra);
-  tc.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-  tc.insertText(completion);
-  tc.movePosition(QTextCursor::Right);
-  setTextCursor(tc);
+    if (q->widget() != this)
+        return;
+    QTextCursor tc = textCursor();
+    int extra = q->completionPrefix().length();
+    tc.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, extra);
+    tc.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    tc.insertText(completion);
+    tc.movePosition(QTextCursor::Right);
+    setTextCursor(tc);
 }
 
 QString CodeEditor::textUnderCursor() const {
-
-  QTextCursor tc = textCursor();
-  tc.select(QTextCursor::WordUnderCursor);
-  return tc.selectedText();
+    QTextCursor tc = textCursor();
+    tc.select(QTextCursor::WordUnderCursor);
+    return tc.selectedText();
 }
 
 void CodeEditor::focusInEvent(QFocusEvent *e) {
-  if (c)
-    c->setWidget(this);
-  QPlainTextEdit::focusInEvent(e);
+    if (m_completer)
+        m_completer->setWidget(this);
+    QPlainTextEdit::focusInEvent(e);
 }
 
 int CodeEditor::lineNumberAreaWidth() {
-  int digits = 1;
-  int max = qMax(1, blockCount());
-  while (max >= 10) {
-    max /= 10;
-    ++digits;
-  }
+    int digits = 1;
+    int max = qMax(1, blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
 
-  int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
 
-  return space;
+    return space;
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
-  setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
-  if (dy)
-    lineNumberArea->scroll(0, dy);
-  else
-    lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+    if (dy)
+        lineNumberArea->scroll(0, dy);
+    else
+        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
 
-  if (rect.contains(viewport()->rect()))
-    updateLineNumberAreaWidth(0);
+    if (rect.contains(viewport()->rect()))
+        updateLineNumberAreaWidth(0);
 }
 
 void CodeEditor::resizeEvent(QResizeEvent *e) {
-  QPlainTextEdit::resizeEvent(e);
+    QPlainTextEdit::resizeEvent(e);
 
-  QRect cr = contentsRect();
-  lineNumberArea->setGeometry(
-      QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    QRect cr = contentsRect();
+    lineNumberArea->setGeometry(
+        QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 void CodeEditor::SelectLineMarginBlock() {
-  int start, end;
+    int start, end;
 
-  // get current positions
-  start = this->textCursor().selectionStart();
-  end = this->textCursor().selectionEnd();
+    // get current positions
+    start = this->textCursor().selectionStart();
+    end = this->textCursor().selectionEnd();
 
-  QTextCursor cursor(this->document());
+    QTextCursor cursor(this->document());
 
-  // move cursor to begin of the line, of the line
-  // start position is located.
-  cursor.clearSelection();
-  cursor.setPosition(start);
-  cursor.movePosition(QTextCursor::StartOfLine);
-  this->setTextCursor(cursor);
-  start = this->textCursor().selectionStart();
+    // move cursor to begin of the line, of the line
+    // start position is located.
+    cursor.clearSelection();
+    cursor.setPosition(start);
+    cursor.movePosition(QTextCursor::StartOfLine);
+    this->setTextCursor(cursor);
+    start = this->textCursor().selectionStart();
 
-  // move cursor to end of the line, of the line
-  // end position is located.
-  cursor.setPosition(end);
-  cursor.movePosition(QTextCursor::EndOfLine);
-  this->setTextCursor(cursor);
-  end = this->textCursor().selectionEnd();
+    // move cursor to end of the line, of the line
+    // end position is located.
+    cursor.setPosition(end);
+    cursor.movePosition(QTextCursor::EndOfLine);
+    this->setTextCursor(cursor);
+    end = this->textCursor().selectionEnd();
 
-  // select line margin block
-  cursor.setPosition(start, QTextCursor::KeepAnchor);
-  this->setTextCursor(cursor);
+    // select line margin block
+    cursor.setPosition(start, QTextCursor::KeepAnchor);
+    this->setTextCursor(cursor);
 }
 QString CodeEditor::GetLine() {
-  int start = this->textCursor().position();
-  QTextCursor cursor(this->document());
-  cursor.setPosition(start);
-  cursor.movePosition(QTextCursor::StartOfLine);
-  this->setTextCursor(cursor);
-  cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-  this->setTextCursor(cursor);
-  QString text = this->textCursor().selection().toPlainText();
-  cursor.movePosition(QTextCursor::EndOfLine);
-  this->setTextCursor(cursor);
-  return text;
+    int start = this->textCursor().position();
+    QTextCursor cursor(this->document());
+    cursor.setPosition(start);
+    cursor.movePosition(QTextCursor::StartOfLine);
+    this->setTextCursor(cursor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    this->setTextCursor(cursor);
+    QString text = this->textCursor().selection().toPlainText();
+    cursor.movePosition(QTextCursor::EndOfLine);
+    this->setTextCursor(cursor);
+    return text;
 }
 bool CodeEditor::KeepIndent() {
-  if (this->textCursor().hasSelection() || !this->textCursor().atBlockEnd()) {
-    return false;
-  }
-  QRegExp spaces("(\\s*).*");
+    if (this->textCursor().hasSelection() || !this->textCursor().atBlockEnd()) {
+        return false;
+    }
+    QRegExp spaces("(\\s*).*");
 
-  spaces.indexIn(GetLine());
-  this->insertPlainText(tr("\n"));
-  this->insertPlainText(spaces.cap(1));
+    spaces.indexIn(GetLine());
+    this->insertPlainText(tr("\n"));
+    this->insertPlainText(spaces.cap(1));
 
-  return true;
+    return true;
 }
 void CodeEditor::keyPressEvent(QKeyEvent *e) {
 
-  bool no_process = false;
+    bool no_process = false;
 
-  if (jedi && c && jedi->popup()->isVisible() && c->popup()->isVisible()) {
-      jedi->popup()->hide();
-      e->ignore();
-      return;
-  } else if (jedi && jedi->popup()->isVisible()) {
-      // The following keys are forwarded by the completer to the widget
-      switch (e->key()) {
-      case Qt::Key_Escape:
-      case Qt::Key_Tab:
-      case Qt::Key_Backtab:
+    if (m_jediCompleter && m_completer && m_jediCompleter->popup()->isVisible() && m_completer->popup()->isVisible()) {
+        m_jediCompleter->popup()->hide();
         e->ignore();
-        return; // let the completer do default behavior
-      default:
-        break;
-      }
-  } else if (c && c->popup()->isVisible()) {
-    // The following keys are forwarded by the completer to the widget
-   switch (e->key()) {
-    case Qt::Key_Escape:
-    case Qt::Key_Tab:
-    case Qt::Key_Backtab:
-      e->ignore();
-      return; // let the completer do default behavior
-    default:
-      break;
-    }
-  } else {
-      switch (e->key()) {
-      case Qt::Key_Backtab:
-        SelectLineMarginBlock();
-        {
-          QString text("");
-          QStringList lines = this->textCursor().selection().toPlainText().split(
-              QRegExp("\n|\r\n|\r"));
-          foreach (QString line, lines) {
-            line.replace(QRegExp("^(    |   |  | )(.*)"), "\\2");
-            text.append(line);
-            text.append("\n");
-          }
-          text.truncate(text.length() - 1);
-          this->textCursor().insertText(text);
+        return;
+    } else if (m_jediCompleter && m_jediCompleter->popup()->isVisible()) {
+        // The following keys are forwarded by the completer to the widget
+        switch (e->key()) {
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
+            e->ignore();
+            return; // let the completer do default behavior
+        default:
+            break;
         }
-        no_process = true;
-        break;
-      case Qt::Key_Tab:
-        if (this->textCursor().hasSelection()) {
-          SelectLineMarginBlock();
-          {
-            QString text("");
-            QStringList lines = this->textCursor().selection().toPlainText().split(
-                QRegExp("\n|\r\n|\r"));
-            foreach (QString line, lines) {
-              text.append("    ");
-              text.append(line);
-              text.append("\n");
+    } else if (m_completer && m_completer->popup()->isVisible()) {
+        // The following keys are forwarded by the completer to the widget
+        switch (e->key()) {
+        case Qt::Key_Escape:
+        case Qt::Key_Tab:
+        case Qt::Key_Backtab:
+            e->ignore();
+            return; // let the completer do default behavior
+        default:
+            break;
+        }
+    } else {
+        switch (e->key()) {
+        case Qt::Key_Backtab:
+            SelectLineMarginBlock();
+            {
+                QString text("");
+                QStringList lines = this->textCursor().selection().toPlainText().split(
+                                        QRegExp("\n|\r\n|\r"));
+                foreach (QString line, lines) {
+                    line.replace(QRegExp("^(    |   |  | )(.*)"), "\\2");
+                    text.append(line);
+                    text.append("\n");
+                }
+                text.truncate(text.length() - 1);
+                this->textCursor().insertText(text);
             }
-            text.truncate(text.length() - 1);
-            this->textCursor().insertText(text);
-          }
-        } else {
-          this->insertPlainText("    ");
-        }
-        no_process = true;
-        break;
-      case Qt::Key_Enter:
-      case Qt::Key_Return:
-        if (!KeepIndent()) {
-          QPlainTextEdit::keyPressEvent(e);
-          return;
-        } else {
             no_process = true;
+            break;
+        case Qt::Key_Tab:
+            if (this->textCursor().hasSelection()) {
+                SelectLineMarginBlock();
+                {
+                    QString text("");
+                    QStringList lines = this->textCursor().selection().toPlainText().split(
+                                            QRegExp("\n|\r\n|\r"));
+                    foreach (QString line, lines) {
+                        text.append("    ");
+                        text.append(line);
+                        text.append("\n");
+                    }
+                    text.truncate(text.length() - 1);
+                    this->textCursor().insertText(text);
+                }
+            } else {
+                this->insertPlainText("    ");
+            }
+            no_process = true;
+            break;
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            if (!KeepIndent()) {
+                QPlainTextEdit::keyPressEvent(e);
+                return;
+            } else {
+                no_process = true;
+            }
         }
-      }
-  }
+    }
 
-  // CTRL+Space
-  bool ctrlSpace = ((e->modifiers() & Qt::ControlModifier) &&
-                     e->key() == Qt::Key_Space);
-  if ((!jedi || !ctrlSpace) && !no_process)
-    QPlainTextEdit::keyPressEvent(e);
+    // CTRL+Space
+    bool ctrlSpace = ((e->modifiers() & Qt::ControlModifier) &&
+                      e->key() == Qt::Key_Space);
+    if ((!m_jediCompleter || !ctrlSpace) && !no_process)
+        QPlainTextEdit::keyPressEvent(e);
 
-  const bool ctrlOrShift =
-      e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
+    const bool ctrlOrShift =
+        e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
 
-  // Do nothing If it's just ctrl or shift, or completer or jedi isn't there
-  // If it is ctrl or shift we don't need to hide the auto complete
-  if (!jedi || !c || (ctrlOrShift && e->text().isEmpty())) {
-    return;
-  }
+    // Do nothing If it's just ctrl or shift, or completer or jedi isn't there
+    // If it is ctrl or shift we don't need to hide the auto complete
+    if (!m_jediCompleter || !m_completer || (ctrlOrShift && e->text().isEmpty())) {
+        return;
+    }
 
-  // Some other modifier like Escape, Return or Enter?
-  bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-  QString completionPrefix = textUnderCursor();
+    // Some other modifier like Escape, Return or Enter?
+    bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+    QString completionPrefix = textUnderCursor();
 
-  // Hide if Escape, Return or Enter or text is less than 2 characters
-  if (!ctrlSpace &&
-      (hasModifier || e->text().isEmpty() || completionPrefix.length() < 2)) {
-    c->popup()->hide();
-    jedi->popup()->hide();
-    return;
-  }
+    // Hide if Escape, Return or Enter or text is less than 2 characters
+    if (!ctrlSpace &&
+            (hasModifier || e->text().isEmpty() || completionPrefix.length() < 2)) {
+        m_completer->popup()->hide();
+        m_jediCompleter->popup()->hide();
+        return;
+    }
 
-  if (ctrlSpace && completionPrefix != jedi->completionPrefix()) {
-    // Now is the time to populate jedi
-      jedi->setCompletionPrefix(completionPrefix);
-      jedi->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
-  }
-  if (completionPrefix != c->completionPrefix()) {
-    c->setCompletionPrefix(completionPrefix);
-    c->popup()->setCurrentIndex(c->completionModel()->index(0, 0));
-  }
-  if (ctrlSpace) {
-      QRect cr = cursorRect();
-      cr.setWidth(c->popup()->sizeHintForColumn(0) +
-                  c->popup()->verticalScrollBar()->sizeHint().width());
-      c->popup()->hide();
-      jedi->complete(cr);
-  } else {
-      QRect cr = cursorRect();
-      cr.setWidth(c->popup()->sizeHintForColumn(0) +
-                  c->popup()->verticalScrollBar()->sizeHint().width());
-      jedi->popup()->hide();
-      c->complete(cr);
-  }
+    if (ctrlSpace && completionPrefix != m_jediCompleter->completionPrefix()) {
+        // Now is the time to populate jedi
+        m_jediCompleter->setCompletionPrefix(completionPrefix);
+        m_jediCompleter->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
+    }
+    if (completionPrefix != m_completer->completionPrefix()) {
+        m_completer->setCompletionPrefix(completionPrefix);
+        m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
+    }
+    if (ctrlSpace) {
+        QRect cr = cursorRect();
+        cr.setWidth(m_completer->popup()->sizeHintForColumn(0) +
+                    m_completer->popup()->verticalScrollBar()->sizeHint().width());
+        m_completer->popup()->hide();
+        m_jediCompleter->popup()->hide();
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        int row = this->textCursor().blockNumber();
+        int col = this->textCursor().positionInBlock();
+        QStringList words = m_jedi->AutoComplete(this->toPlainText(), row, col);
+        QStringListModel *updatedJedi = new QStringListModel(words, m_jedi);
+        m_jediCompleter->setModel(updatedJedi);
+        QApplication::restoreOverrideCursor();
+        m_jediCompleter->complete(cr);
+    } else {
+        QRect cr = cursorRect();
+        cr.setWidth(m_completer->popup()->sizeHintForColumn(0) +
+                    m_completer->popup()->verticalScrollBar()->sizeHint().width());
+        m_jediCompleter->popup()->hide();
+        m_completer->complete(cr);
+    }
 }
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
-  QPainter painter(lineNumberArea);
-  painter.fillRect(event->rect(), Qt::darkGray);
+    QPainter painter(lineNumberArea);
+    painter.fillRect(event->rect(), Qt::darkGray);
 
-  QTextBlock block = firstVisibleBlock();
-  int blockNumber = block.blockNumber();
-  int top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-  int bottom = top + (int)blockBoundingRect(block).height();
+    QTextBlock block = firstVisibleBlock();
+    int blockNumber = block.blockNumber();
+    int top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom = top + (int)blockBoundingRect(block).height();
 
-  while (block.isValid() && top <= event->rect().bottom()) {
-    if (block.isVisible() && bottom >= event->rect().top()) {
-      QString number = QString::number(blockNumber + 1);
-      painter.setPen(Qt::black);
-      painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
-                       Qt::AlignRight, number);
+    while (block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+            QString number = QString::number(blockNumber + 1);
+            painter.setPen(Qt::black);
+            painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
+                             Qt::AlignRight, number);
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + (int)blockBoundingRect(block).height();
+        ++blockNumber;
     }
-
-    block = block.next();
-    top = bottom;
-    bottom = top + (int)blockBoundingRect(block).height();
-    ++blockNumber;
-  }
 }
