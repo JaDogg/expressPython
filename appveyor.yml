@@ -1,10 +1,13 @@
 version: 1.0.{build}
+image: Visual Studio 2015
 environment:
   PYTHON37_LOCATION: C:\Python37
   QT_DIR: C:\Qt\5.9.5\mingw53_32
   PATH: '%PATH%;%QTDIR%\bin;C:\MinGW\bin'
 build_script:
 - cmd: >-
+    echo %PATH%
+
     qmake PyRun.pro
 
     mingw32-make
