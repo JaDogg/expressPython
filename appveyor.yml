@@ -16,15 +16,19 @@ build_script:
 
     dir C:\projects\expresspython\release
 
+    copy C:\projects\expresspython\README.md C:\projects\expresspython\release\README.md
+
     windeployqt C:\projects\expresspython\release\expressPython.exe
 
     del /S C:\projects\expresspython\release\*.o
 
     del /S C:\projects\expresspython\release\*.cpp
 
+    del /S C:\projects\expresspython\release\*.h
+
     xcopy /e /v C:\Python37 C:\projects\expresspython\release
 
-    7z a expressPython.7z C:\projects\expresspython\release
+    7z a expressPython.7z C:\projects\expresspython\release\*
 test: off
 artifacts:
   - path: expressPython.7z
