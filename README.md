@@ -28,14 +28,14 @@ This is fairly simple to use.
 # Compiling
 This project uses `QMake` to build.
 
-####Dependencies
+#### Dependencies
 * Python 3.7.x (32bit)
 * Qt 5.9.x (GPL Version, MinGW 32bit)
 >64Bit versions should also work. But it is not tested yet.
 
 Easiest way to compile is to use **QtCreator** and to build the binary.
 
-####Environment Variables
+#### Environment Variables
 * `PYTHON37_LOCATION` - On windows set this to parent of `python.exe` of a 32bit Python 3.7 installation.
 * `PYTHON37_LIB_LOCATION` and `PYTHON37_INC_LOCATION` should be set to lib and include paths.
 
