@@ -27,6 +27,17 @@ This is fairly simple to use.
 * Using `time.sleep()` in your code will make it impossible to retrieve output.
 * Lacks keyboard shortcuts.
 
+## Credits
+Standing on the shoulders of the giants.
+
+* Qt 5.9.x (Or newer is used)
+* Python 3.7.x
+* Jedi (latest) - https://github.com/davidhalter/jedi
+* Frankie Simon's Python Syntax Highlight Code (Modified)
+* Mateusz Loskot's Embedding Code (Modified)
+* Train Icon from https://www.awicons.com
+* All Other Icons from Open Icon Library
+
 # Compiling
 This project uses `QMake` to build.
 
