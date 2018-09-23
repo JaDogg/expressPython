@@ -3,8 +3,10 @@ expressPython
 
 expressPython : Express Python, A Small IDE/Editor for learning and competitive programming.
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/982cd45fd0c341c49fdb1dd6f2ab47c8)](https://app.codacy.com/app/JaDogg/expressPython?utm_source=github.com&utm_medium=referral&utm_content=JaDogg/expressPython&utm_campaign=Badge_Grade_Dashboard)
 [![Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/982cd45fd0c341c49fdb1dd6f2ab47c8)](https://app.codacy.com/app/JaDogg/expressPython?utm_source=github.com&utm_medium=referral&utm_content=JaDogg/expressPython&utm_campaign=Badge_Grade_Dashboard)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+
 
 ![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
