@@ -8,9 +8,9 @@ build_script:
 - cmd: >-
     echo %PATH%
 
-    %QT_DIR%\bin\qmake.exe PyRun.pro
+    C:\Qt\5.9.7\mingw53_32\bin\qmake.exe PyRun.pro
 
-    %QT_DIR%\bin\mingw32-make.exe
+    C:\Qt\5.9.7\mingw53_32\bin\mingw32-make.exe
 
     dir C:\projects\expresspython\
 
@@ -18,7 +18,7 @@ build_script:
 
     copy C:\projects\expresspython\README.md C:\projects\expresspython\release\README.md
 
-    windeployqt C:\projects\expresspython\release\expressPython.exe
+    C:\Qt\5.9.7\mingw53_32\bin\windeployqt.exe C:\projects\expresspython\release\expressPython.exe
 
     del /S C:\projects\expresspython\release\*.o
 
