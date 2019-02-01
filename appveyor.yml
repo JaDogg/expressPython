@@ -8,9 +8,9 @@ build_script:
 - cmd: >-
     echo %PATH%
 
-    qmake PyRun.pro
+    %QT_DIR%\bin\qmake.exe PyRun.pro
 
-    mingw32-make
+    %QT_DIR%\bin\mingw32-make.exe
 
     dir C:\projects\expresspython\
 
