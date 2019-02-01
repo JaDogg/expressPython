@@ -2,7 +2,7 @@ version: 1.0.{build}
 image: Visual Studio 2015
 environment:
   PYTHON37_LOCATION: C:\Python37
-  QT_DIR: C:\Qt\5.9\mingw53_32
+  QT_DIR: C:\Qt\5.9.7\mingw53_32
   PATH: '%PATH%;%QT_DIR%\bin;C:\MinGW\bin'
 build_script:
 - cmd: >-
