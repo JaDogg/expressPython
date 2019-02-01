@@ -10,7 +10,7 @@ build_script:
 
     C:\Qt\5.9.7\mingw53_32\bin\qmake.exe PyRun.pro
 
-    C:\Qt\5.9.7\mingw53_32\bin\mingw32-make.exe
+    C:\MinGW\bin\mingw32-make.exe
 
     dir C:\projects\expresspython\
 
