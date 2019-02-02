@@ -28,7 +28,7 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 This is fairly simple to use. 
 * Download a standalone version from the releases. (Currently only Windows binaries available)
 * Scan the binary package for viruses if you want ✔. 
-* Extract it using 7-zip or a similar software and run exppressPython.exe.
+* Extract it using 7-zip or a similar software and run `expressPython.exe`.
 
 ## Editor
 * Tabs are replaced by 4 spaces.
