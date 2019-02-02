@@ -10,6 +10,15 @@ expressPython : Express Python, A Small IDE/Editor for learning and competitive 
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
+### Why expressPython?
+I built expressPython to scratch an itch that I had. I wanted a tool that does following for me.
+
+* Runs easily in windows, portable, doesn't affect system.
+* I wanted a tool to test regexes, small scripts.
+* Online IDEs **cannot access my file system** I need to access files If I wanted to.
+* It should start fast and I don't need to create files to test things
+* Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
+* I wanted to learn C++ and Qt.
 
 ![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
