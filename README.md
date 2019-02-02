@@ -27,8 +27,8 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 ## Installation
 This is fairly simple to use. 
 * Download a standalone version from the releases. (Currently only Windows binaries available)
-* If `launch.exe` is there run it. (If you run `expressPython` it may use system Python3.7)
-* Tested on Windows 10. Even runs on a GPDWin1 easily.
+* Scan the binary package for viruses if you want ✔. 
+* Extract it using 7-zip or a similar software and run exppressPython.exe.
 
 ## Editor
 * Tabs are replaced by 4 spaces.
