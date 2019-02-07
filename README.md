@@ -20,6 +20,11 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 * Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
 * I wanted to learn C++ and Qt.
 
+### Contributors
+
+* Bhathiya Perera (JaDogg) - Maintainer and original author
+* Mirza Zulfan (mirzazulfan) - Logo & Icon 😎
+
 ![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
 
 # User Guide
