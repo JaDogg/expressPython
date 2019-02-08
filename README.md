@@ -5,7 +5,7 @@
 expressPython
 =============
 
-expressPython : Express Python, A Small IDE/Editor for learning and competitive programming.
+A Small IDE/Editor for learning and competitive programming.
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/dwyl/esta/issues)
 ![Downloads](https://img.shields.io/github/downloads/JaDogg/expressPython/total.svg)
