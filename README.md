@@ -2,11 +2,6 @@
 <img src="Logo/logotype 1024.svg" width=40%>
 </h1>
 
-expressPython
-=============
-
-A Small IDE/Editor for learning and competitive programming.
-
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/dwyl/esta/issues)
 ![Downloads](https://img.shields.io/github/downloads/JaDogg/expressPython/total.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
@@ -14,15 +9,23 @@ A Small IDE/Editor for learning and competitive programming.
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
+expressPython
+=============
+
+A Small IDE/Editor for learning and competitive programming.
+
 ### Why expressPython?
 I built expressPython to scratch an itch that I had. I wanted a tool that does following for me.
 
 * Runs easily in windows, portable, doesn't affect system.
 * I wanted a tool to test regexes, small scripts.
 * Online IDEs **cannot access my file system** I need to access files If I wanted to.
+* Online IDEs are sometimes slow at peak times or for non premium uses.
+* You cannot access Online IDEs once you are in the tube 🚄.
 * It should start fast and I don't need to create files to test things
 * Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
 * I wanted to learn C++ and Qt.
+* Compiled to 32bit will work on a 64bit machine.
 
 ### Contributors
 
