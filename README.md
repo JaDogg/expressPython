@@ -9,7 +9,7 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 
-A Small IDE/Editor for learning and competitive programming.
+A small python 3 editor for learning and competitive programming.
 
 ### Why expressPython?
 I built expressPython to scratch an itch that I had. I wanted a tool that does following for me.
