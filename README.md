@@ -24,7 +24,6 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 * Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
 * I wanted to learn C++/Qt and polish Python knowledge.
 * Compiled to 32bit will work on a 64bit machine.
-* I'm using it daily for work.
 
 ### Contributors
 
