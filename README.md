@@ -22,8 +22,9 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 * You cannot access Online IDEs once you are in the underground train 🚄.
 * It should start fast and I don't need to create files to test things
 * Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
-* I wanted to learn C++ and Qt.
+* I wanted to learn C++/Qt and polish Python knowledge.
 * Compiled to 32bit will work on a 64bit machine.
+* I'm using it daily for work.
 
 ### Contributors
 
