@@ -9,6 +9,7 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/JaDogg)
+[![OPEN open source software](https://img.shields.io/badge/Open--OSS-%E2%9C%94-brightgreen.svg)](http://open-oss.com)
 
 A small Python 3 editor for learning and competitive programming.
 
