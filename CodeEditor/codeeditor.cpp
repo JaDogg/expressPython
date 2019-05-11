@@ -45,7 +45,7 @@
 #include <QTextStream>
 #include "CodeEditor/codeeditor.h"
 
-CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), m_completer(0), m_jediCompleter(0) {
+CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), m_completer(nullptr), m_jediCompleter(nullptr) {
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, SIGNAL(blockCountChanged(int)), this,
@@ -63,7 +63,7 @@ CodeEditor::CodeEditor(QWidget *parent) : QPlainTextEdit(parent), m_completer(0)
 
 void CodeEditor::setCompleter(QCompleter *completer) {
     if (m_completer)
-        QObject::disconnect(m_completer, nullptr, this, 0);
+        QObject::disconnect(m_completer, nullptr, this, nullptr);
 
     m_completer = completer;
 
@@ -77,7 +77,7 @@ void CodeEditor::setCompleter(QCompleter *completer) {
 
 void CodeEditor::setJediCompleter(QCompleter *jediCompleter, const QString& getJediCode) {
     if (m_jediCompleter) {
-        QObject::disconnect(m_jediCompleter, 0, this, 0);
+        QObject::disconnect(m_jediCompleter, nullptr, this, nullptr);
     } else {
         m_jedi = new Jedi(this);
         m_jedi->SetJediGetCode(QString(getJediCode.toStdString().c_str()));
@@ -223,22 +223,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e) {
 
     bool no_process = false;
 
-    if (m_jediCompleter && m_completer && m_jediCompleter->popup()->isVisible() && m_completer->popup()->isVisible()) {
-        m_jediCompleter->popup()->hide();
-        e->ignore();
-        return;
-    } else if (m_jediCompleter && m_jediCompleter->popup()->isVisible()) {
-        // The following keys are forwarded by the completer to the widget
-        switch (e->key()) {
-        case Qt::Key_Escape:
-        case Qt::Key_Tab:
-        case Qt::Key_Backtab:
-            e->ignore();
-            return; // let the completer do default behavior
-        default:
-            break;
-        }
-    } else if (m_completer && m_completer->popup()->isVisible()) {
+    if (m_completer && m_completer->popup()->isVisible()) {
         // The following keys are forwarded by the completer to the widget
         switch (e->key()) {
         case Qt::Key_Escape:
@@ -301,15 +286,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *e) {
     // CTRL+Space
     bool ctrlSpace = ((e->modifiers() & Qt::ControlModifier) &&
                       e->key() == Qt::Key_Space);
-    if ((!m_jediCompleter || !ctrlSpace) && !no_process)
+    if (!ctrlSpace && !no_process)
         QPlainTextEdit::keyPressEvent(e);
 
     const bool ctrlOrShift =
         e->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier);
 
-    // Do nothing If it's just ctrl or shift, or completer or jedi isn't there
-    // If it is ctrl or shift we don't need to hide the auto complete
-    if (!m_jediCompleter || !m_completer || (ctrlOrShift && e->text().isEmpty())) {
+
+    if (!m_completer || (ctrlOrShift && e->text().isEmpty())) {
         return;
     }
 
@@ -321,15 +305,9 @@ void CodeEditor::keyPressEvent(QKeyEvent *e) {
     if (!ctrlSpace &&
             (hasModifier || e->text().isEmpty() || completionPrefix.length() < 2)) {
         m_completer->popup()->hide();
-        m_jediCompleter->popup()->hide();
         return;
     }
 
-    if (ctrlSpace && completionPrefix != m_jediCompleter->completionPrefix()) {
-        // Now is the time to populate jedi
-        m_jediCompleter->setCompletionPrefix(completionPrefix);
-        m_jediCompleter->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
-    }
     if (completionPrefix != m_completer->completionPrefix()) {
         m_completer->setCompletionPrefix(completionPrefix);
         m_completer->popup()->setCurrentIndex(m_completer->completionModel()->index(0, 0));
@@ -338,21 +316,6 @@ void CodeEditor::keyPressEvent(QKeyEvent *e) {
         QRect cr = cursorRect();
         cr.setWidth(m_completer->popup()->sizeHintForColumn(0) +
                     m_completer->popup()->verticalScrollBar()->sizeHint().width());
-        m_completer->popup()->hide();
-        m_jediCompleter->popup()->hide();
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        int row = this->textCursor().blockNumber();
-        int col = this->textCursor().positionInBlock();
-        QStringList words = m_jedi->AutoComplete(this->toPlainText(), row, col);
-        QStringListModel *updatedJedi = new QStringListModel(words, m_jedi);
-        m_jediCompleter->setModel(updatedJedi);
-        QApplication::restoreOverrideCursor();
-        m_jediCompleter->complete(cr);
-    } else {
-        QRect cr = cursorRect();
-        cr.setWidth(m_completer->popup()->sizeHintForColumn(0) +
-                    m_completer->popup()->verticalScrollBar()->sizeHint().width());
-        m_jediCompleter->popup()->hide();
         m_completer->complete(cr);
     }
 }
@@ -363,8 +326,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
-    int top = (int)blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int)blockBoundingRect(block).height();
+    int top = static_cast<int>(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + static_cast<int>(blockBoundingRect(block).height());
 
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
@@ -376,7 +339,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event) {
 
         block = block.next();
         top = bottom;
-        bottom = top + (int)blockBoundingRect(block).height();
+        bottom = top + static_cast<int>(blockBoundingRect(block).height());
         ++blockNumber;
     }
 }

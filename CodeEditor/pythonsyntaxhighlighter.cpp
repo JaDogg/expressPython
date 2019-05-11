@@ -33,7 +33,7 @@
  *  -----------Modified By Bhathiya Perera-------------
 */
 
-#include "CodeEditor/PythonSyntaxHighlighter.h"
+#include "CodeEditor/pythonsyntaxhighlighter.h"
 
 PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent) {
@@ -260,7 +260,7 @@ PythonSyntaxHighlighter::PythonSyntaxHighlighter(QTextDocument *parent)
 
 void PythonSyntaxHighlighter::setStyles() {
     basicStyles.insert("keyword", getTextCharFormat("orange", "bold"));
-    basicStyles.insert("operator", getTextCharFormat("yellow", "bold"));
+    basicStyles.insert("operator", getTextCharFormat("purple", "bold"));
     basicStyles.insert("builtins", getTextCharFormat("lightblue", "underline"));
     basicStyles.insert("brace", getTextCharFormat("red", "bold"));
     basicStyles.insert("string", getTextCharFormat("magenta"));
