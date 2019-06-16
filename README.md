@@ -2,7 +2,7 @@
 <img src="Logo/logotype 1024.svg" width=40%>
 </h1>
 
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/JaDogg/expressPython/issues)
 ![Downloads](https://img.shields.io/github/downloads/JaDogg/expressPython/total.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/982cd45fd0c341c49fdb1dd6f2ab47c8)](https://app.codacy.com/app/JaDogg/expressPython?utm_source=github.com&utm_medium=referral&utm_content=JaDogg/expressPython&utm_campaign=Badge_Grade_Dashboard)
