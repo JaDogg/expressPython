@@ -119,8 +119,10 @@ def python_cmd(filename):
         return list(shlex.split(python)) + [escape_shell(filename)]
     elif os.name == "nt":
         return ["python", escape_win(filename)]
+    elif os.name == "posix":
+        return ["python3.8", filename]
     else:
-        return ["python3.7", escape_nix(filename)]
+        return ["python3.8", escape_nix(filename)]
 
 
 def escape_nix(s):
@@ -214,7 +216,6 @@ class CodeExecutor:
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             startupinfo=HIDDEN_PROCESS_START,
-            bufsize=1,
         )
 
         self.start_workers()
