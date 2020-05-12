@@ -19,7 +19,7 @@ QStringList Jedi::AutoComplete(const QString& code, long row, long col) {
     PyGILState_STATE d_gstate;
     d_gstate = PyGILState_Ensure();
     // Build the name object
-    const char* pythonCode = code.toStdString().c_str();
+    const char* pythonCode = code.toLocal8Bit().data();
     pyPythonCode = PyUnicode_FromString(pythonCode);
     pyMain = PyUnicode_FromString("__main__"); // default module
 
@@ -31,14 +31,11 @@ QStringList Jedi::AutoComplete(const QString& code, long row, long col) {
 
     // Run the preparation code
     PyRun_SimpleString(this->jediCode.toStdString().c_str());
-
     pyTemp = PyModule_GetDict(PyImport_GetModule(pyMain));
 
 
     pyGetCompletionsFunc = PyDict_GetItemString(pyTemp, (char*)"get_completions");
-
     pyCompletions = PyObject_CallObject(pyGetCompletionsFunc, pyGetCompletionsArgs);
-
     int len = PyList_Size(pyCompletions);
     for (int i = 0; i < len; i++) {
         PyObject* completion = PyList_GetItem(pyCompletions, i);
@@ -53,5 +50,4 @@ QStringList Jedi::AutoComplete(const QString& code, long row, long col) {
     Py_Finalize();
 
     return allCompletions;
-
 }
