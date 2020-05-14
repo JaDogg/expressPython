@@ -15,11 +15,16 @@ QStringList Jedi::AutoComplete(const QString& code, long row, long col) {
     QStringList allCompletions;
     PyObject *pyPythonCode, *pyGetCompletionsFunc, *pyGetCompletionsArgs, *pyTemp, *pyCompletions, *pyMain;
 
+    // if already initialiazed, then return empty list
+    int is_init = Py_IsInitialized();
+    if(is_init) return allCompletions;
+
     Py_Initialize();
     PyGILState_STATE d_gstate;
     d_gstate = PyGILState_Ensure();
-    // Build the name object
-    const char* pythonCode = code.toLocal8Bit().data();
+    // Build the name object by converting Qstring to Utf8.
+    // Note: Discarded toStdString because Qstring is UTF-16 encoded while std::string can have many encodings
+    const char* pythonCode = code.toUtf8().data();
     pyPythonCode = PyUnicode_FromString(pythonCode);
     pyMain = PyUnicode_FromString("__main__"); // default module
 
