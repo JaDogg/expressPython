@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/data">
         <file>Icons/Clear.png</file>
+        <file>Icons/Terminal.png</file>
         <file>Icons/Open.png</file>
         <file>Icons/Save.png</file>
         <file>Icons/Snippets.png</file>

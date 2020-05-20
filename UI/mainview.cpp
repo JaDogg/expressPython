@@ -13,6 +13,7 @@ MainView::MainView(QWidget *parent)
     LoadSettings(); // 1) Setup UI first, so things look nice
     LoadResources(); // 2) Load the required files
     SetupHighlighter(); // 3) No (2) is required for this step
+    SetupTerminal();
     SetupPython();
 
     m_tute = new XTute(this);
@@ -84,6 +85,7 @@ void MainView::LoadSettings() {
     ui->dwNote->setVisible(settings.value(KEY_SHOW_NOTE, 0).toInt() == 1);
     ui->dwSnippet->setVisible(settings.value(KEY_SHOW_SNIPPETS, 0).toInt() == 1);
     ui->dwTutorial->setVisible(settings.value(KEY_SHOW_TUTE, 0).toInt() == 1);
+    ui->dwTerminal->setContentsMargins(10,30,10,10);
 
     this->restoreState(settings.value(KEY_DOCK_LOCATIONS).toByteArray(),
                        SAVE_STATE_VERSION);
@@ -95,6 +97,7 @@ void MainView::LoadSettings() {
         settings.value(KEY_SNIPPETBOX, QString()).toString());
     ui->txtNotes->setPlainText(
         settings.value(KEY_NOTESBOX, QString()).toString());
+    ui->dwTerminal->hide();   // hide the terminal on start
 
     QString font = settings.value(KEY_FONT, tr("Courier New")).toString();
     int sizeIndex = settings.value(KEY_FONTSIZE, 6).toInt(); // select 12pt
@@ -127,6 +130,18 @@ void MainView::SetupHighlighter() {
     m_highlighterSnippetArea =
         new PythonSyntaxHighlighter(ui->txtSnippet->document());
     SetCompleter(ui->txtCode);
+}
+
+void MainView::SetupTerminal() {
+    setenv("TERM", "xterm-256color", 1);
+    SetTerminal();
+}
+
+void MainView::SetTerminal() {
+    terminal = new QTermWidget();
+    terminal->setKeyBindings("linux");
+    terminal->setColorScheme("Tango");
+    ui->dwTerminal->setWidget(terminal);
 }
 
 void MainView::SetCompleter(CodeEditor *editor) {
@@ -200,6 +215,7 @@ MainView::~MainView() {
     this->SaveContent();
     m_workerThread->quit();
     m_workerThread->wait();
+    delete terminal;
     delete m_workerThread;
     delete ui;
     delete m_tute;
@@ -609,4 +625,12 @@ void MainView::on_btnTuteMark_clicked() {
 void MainView::on_btnStopPython_clicked() {
     m_worker->killed.store(1);
     //emit this->terminate();
+}
+
+void MainView::on_btnTerminal_clicked() {
+    if(ui->dwTerminal->isHidden()) {
+        ui->dwTerminal->show();
+    } else {
+        ui->dwTerminal->hide();
+    }
 }
