@@ -139,7 +139,11 @@ void MainView::SetupTerminal() {
 
 void MainView::SetTerminal() {
     terminal = new QTermWidget();
+#ifdef Q_OS_MACX
+    terminal->setKeyBindings("macbook");
+#else
     terminal->setKeyBindings("linux");
+#endif
     terminal->setColorScheme("Tango");
     ui->dwTerminal->setWidget(terminal);
 }

@@ -324,7 +324,7 @@
          <bool>false</bool>
         </property>
         <property name="currentText">
-         <string>Courier 10 Pitch</string>
+         <string>Consolas</string>
         </property>
         <property name="fontFilters">
          <set>QFontComboBox::MonospacedFonts</set>
