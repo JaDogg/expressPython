@@ -133,19 +133,27 @@ void MainView::SetupHighlighter() {
 }
 
 void MainView::SetupTerminal() {
+#ifndef Q_OS_WIN
     setenv("TERM", "xterm-256color", 1);
     SetTerminal();
+#endif
 }
 
 void MainView::SetTerminal() {
+#ifndef Q_OS_WIN
     terminal = new QTermWidget();
+#endif
 #ifdef Q_OS_MACX
     terminal->setKeyBindings("macbook");
-#else
+#endif
+#ifdef Q_OS_LINUX
     terminal->setKeyBindings("linux");
 #endif
+#ifndef Q_OS_WIN
     terminal->setColorScheme("Tango");
     ui->dwTerminal->setWidget(terminal);
+    terminal->setAutoClose(false);
+#endif
 }
 
 void MainView::SetCompleter(CodeEditor *editor) {
@@ -219,7 +227,9 @@ MainView::~MainView() {
     this->SaveContent();
     m_workerThread->quit();
     m_workerThread->wait();
+#ifndef Q_OS_WIN
     delete terminal;
+#endif
     delete m_workerThread;
     delete ui;
     delete m_tute;
@@ -237,7 +247,7 @@ void MainView::SaveContent() {
     settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
     settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
     settings.setValue(KEY_FONT, ui->fntCombo->currentText());
-    settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
+    settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());   
 }
 
 QString MainView::LoadFile(const QString &fileName, bool &success,
@@ -632,9 +642,15 @@ void MainView::on_btnStopPython_clicked() {
 }
 
 void MainView::on_btnTerminal_clicked() {
+#ifndef Q_OS_WIN
     if(ui->dwTerminal->isHidden()) {
+        delete terminal;
+        SetTerminal();
         ui->dwTerminal->show();
     } else {
         ui->dwTerminal->hide();
     }
+#else
+    QMessageBox::information(this, tr(APP_NAME), tr("Currently, terminal is not available for Windows"));
+#endif
 }

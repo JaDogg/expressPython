@@ -10,7 +10,9 @@
 #include <QInputDialog>
 #include <QThread>
 #include <QApplication>
+#ifndef Q_OS_WIN
 #include <qtermwidget5/qtermwidget.h>
+#endif
 
 // internal
 #include "CodeEditor/pythonsyntaxhighlighter.h"
@@ -109,7 +111,9 @@ class MainView : public QMainWindow {
     Snippets *m_snippets;
     XTute *m_tute;
     QCompleter *completer;
+#ifndef Q_OS_WIN
     QTermWidget* terminal;
+#endif
     bool m_markTute = false;
     int m_markIndex = -1;
     void ChangeFontSize(QFont font, int size);
