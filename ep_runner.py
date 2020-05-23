@@ -111,18 +111,18 @@ def sys_kill(pid):
 def shell_execute(shell_cmd):
     subprocess.run(shell_cmd, shell=True)
 
-
+# WHY: "-u" ensure that python's output is unbuffered so we can get it as soon as it appears in our editor
 def python_cmd(filename):
     if CODE.startswith("#!"):
         first_line = CODE_LINES[0]
         python = first_line[2:].strip()
         return list(shlex.split(python)) + [escape_shell(filename)]
     elif os.name == "nt":
-        return ["python", escape_win(filename)]
+        return ["python", "-u", escape_win(filename)]
     elif os.name == "posix":
-        return ["python3.8", filename]
+        return ["python3.8", "-u", filename]
     else:
-        return ["python3.8", escape_nix(filename)]
+        return ["python3.8", "-u", escape_nix(filename)]
 
 
 def escape_nix(s):
