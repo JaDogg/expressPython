@@ -439,6 +439,44 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnTerminal">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Run terminal</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>-1</number>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../PyRunResources.qrc">
+          <normaloff>:/data/Icons/Terminal.png</normaloff>:/data/Icons/Terminal.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="hpFont">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -1777,6 +1815,37 @@
       </layout>
      </item>
     </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dwTerminal">
+   <property name="minimumSize">
+    <size>
+     <width>800</width>
+     <height>263</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Terminal</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dwcTerminals">
+    <property name="minimumSize">
+     <size>
+      <width>200</width>
+      <height>200</height>
+     </size>
+    </property>
+    <property name="cursor">
+     <cursorShape>IBeamCursor</cursorShape>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::StrongFocus</enum>
+    </property>
    </widget>
   </widget>
  </widget>

@@ -10,6 +10,10 @@
 #include <QInputDialog>
 #include <QThread>
 #include <QApplication>
+#ifndef Q_OS_WIN
+#include <qtermwidget5/qtermwidget.h>
+#endif
+
 // internal
 #include "CodeEditor/pythonsyntaxhighlighter.h"
 #include "CodeEditor/codeeditor.h"
@@ -29,7 +33,6 @@
 #define KEY_SHOW_SNIPPETS "SHOW_SNIPPETS"
 #define KEY_SHOW_TUTE "SHOW_TUTE"
 #define KEY_SHOW_NOTE "KEY_SHOW_NOTE"
-
 
 #define STARTUP_SCRIPT_FILE                                                    \
   QApplication::applicationDirPath() + "/_express_startup_.py"
@@ -89,7 +92,7 @@ class MainView : public QMainWindow {
     void on_btnTuteOpen_clicked();
     void on_btnTuteLoad_clicked();
     void on_btnTuteMark_clicked();
-
+    void on_btnTerminal_clicked();
     void on_btnStopPython_clicked();
 
   private:
@@ -108,10 +111,15 @@ class MainView : public QMainWindow {
     Snippets *m_snippets;
     XTute *m_tute;
     QCompleter *completer;
+#ifndef Q_OS_WIN
+    QTermWidget* terminal;
+#endif
     bool m_markTute = false;
     int m_markIndex = -1;
     void ChangeFontSize(QFont font, int size);
     void SetupHighlighter();
+    void SetupTerminal();
+    void SetTerminal();
     void SaveFile(CodeEditor *codeEditor, const bool isPython = false);
     void BrowseAndLoadFile(CodeEditor *codeEditor, const bool isPython = false);
     QString LoadFile(const QString &fileName, bool &success,

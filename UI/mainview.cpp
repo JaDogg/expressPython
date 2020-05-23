@@ -13,6 +13,7 @@ MainView::MainView(QWidget *parent)
     LoadSettings(); // 1) Setup UI first, so things look nice
     LoadResources(); // 2) Load the required files
     SetupHighlighter(); // 3) No (2) is required for this step
+    SetupTerminal();
     SetupPython();
 
     m_tute = new XTute(this);
@@ -84,6 +85,7 @@ void MainView::LoadSettings() {
     ui->dwNote->setVisible(settings.value(KEY_SHOW_NOTE, 0).toInt() == 1);
     ui->dwSnippet->setVisible(settings.value(KEY_SHOW_SNIPPETS, 0).toInt() == 1);
     ui->dwTutorial->setVisible(settings.value(KEY_SHOW_TUTE, 0).toInt() == 1);
+    ui->dwTerminal->setContentsMargins(10,30,10,10);
 
     this->restoreState(settings.value(KEY_DOCK_LOCATIONS).toByteArray(),
                        SAVE_STATE_VERSION);
@@ -95,6 +97,7 @@ void MainView::LoadSettings() {
         settings.value(KEY_SNIPPETBOX, QString()).toString());
     ui->txtNotes->setPlainText(
         settings.value(KEY_NOTESBOX, QString()).toString());
+    ui->dwTerminal->hide();   // hide the terminal on start
 
     QString font = settings.value(KEY_FONT, tr("Courier New")).toString();
     int sizeIndex = settings.value(KEY_FONTSIZE, 6).toInt(); // select 12pt
@@ -127,6 +130,30 @@ void MainView::SetupHighlighter() {
     m_highlighterSnippetArea =
         new PythonSyntaxHighlighter(ui->txtSnippet->document());
     SetCompleter(ui->txtCode);
+}
+
+void MainView::SetupTerminal() {
+#ifndef Q_OS_WIN
+    setenv("TERM", "xterm-256color", 1);
+    SetTerminal();
+#endif
+}
+
+void MainView::SetTerminal() {
+#ifndef Q_OS_WIN
+    terminal = new QTermWidget();
+#endif
+#ifdef Q_OS_MACX
+    terminal->setKeyBindings("macbook");
+#endif
+#ifdef Q_OS_LINUX
+    terminal->setKeyBindings("linux");
+#endif
+#ifndef Q_OS_WIN
+    terminal->setColorScheme("Tango");
+    ui->dwTerminal->setWidget(terminal);
+    terminal->setAutoClose(false);
+#endif
 }
 
 void MainView::SetCompleter(CodeEditor *editor) {
@@ -200,6 +227,9 @@ MainView::~MainView() {
     this->SaveContent();
     m_workerThread->quit();
     m_workerThread->wait();
+#ifndef Q_OS_WIN
+    delete terminal;
+#endif
     delete m_workerThread;
     delete ui;
     delete m_tute;
@@ -217,7 +247,7 @@ void MainView::SaveContent() {
     settings.setValue(KEY_SNIPPETBOX, ui->txtSnippet->toPlainText());
     settings.setValue(KEY_NOTESBOX, ui->txtNotes->toPlainText());
     settings.setValue(KEY_FONT, ui->fntCombo->currentText());
-    settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());
+    settings.setValue(KEY_FONTSIZE, ui->cmbFontSize->currentIndex());   
 }
 
 QString MainView::LoadFile(const QString &fileName, bool &success,
@@ -609,4 +639,18 @@ void MainView::on_btnTuteMark_clicked() {
 void MainView::on_btnStopPython_clicked() {
     m_worker->killed.store(1);
     //emit this->terminate();
+}
+
+void MainView::on_btnTerminal_clicked() {
+#ifndef Q_OS_WIN
+    if(ui->dwTerminal->isHidden()) {
+        delete terminal;
+        SetTerminal();
+        ui->dwTerminal->show();
+    } else {
+        ui->dwTerminal->hide();
+    }
+#else
+    QMessageBox::information(this, tr(APP_NAME), tr("Currently, terminal is not available for Windows"));
+#endif
 }
