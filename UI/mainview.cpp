@@ -6,7 +6,7 @@
 #include <QSettings>
 #include <QStringListModel>
 #include <QDebug>
-
+#include "CodeEditor/antlrsyntaxhighlighter.h"
 MainView::MainView(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainView) {
     ui->setupUi(this);
@@ -125,10 +125,13 @@ void MainView::SetSnippets(Snippets *snip) {
 }
 
 void MainView::SetupHighlighter() {
-    m_highlighterCodeArea = new PythonSyntaxHighlighter(ui->txtCode->document());
+//    m_highlighterCodeArea = new PythonSyntaxHighlighter(ui->txtCode->document());
+    m_highlighterCodeArea = new ANTLRSyntaxHighlighter(ui->txtCode->document());
     ui->txtCode->setFocus();
+//    m_highlighterSnippetArea =
+//        new PythonSyntaxHighlighter(ui->txtSnippet->document());
     m_highlighterSnippetArea =
-        new PythonSyntaxHighlighter(ui->txtSnippet->document());
+            new ANTLRSyntaxHighlighter(ui->txtSnippet->document());
     SetCompleter(ui->txtCode);
 }
 
