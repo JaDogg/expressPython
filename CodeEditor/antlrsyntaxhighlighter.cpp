@@ -72,6 +72,9 @@ ANTLRSyntaxHighlighter::ANTLRSyntaxHighlighter(QTextDocument *parent)
                  {"False", true}};
 
     operators = {{"==", true},
+                  {"<>", true},
+                  {"...", true},
+                  {".", true},
                   {"!=", true},
                   {"<", true},
                   {"<=", true},
@@ -95,6 +98,8 @@ ANTLRSyntaxHighlighter::ANTLRSyntaxHighlighter(QTextDocument *parent)
                   {"~", true},
                   {">>", true},
                   {"<<", true},
+                  {">>=", true},
+                  {"<<=", true},
                   {"=", true}};
 
     braces = {{":", true},
@@ -270,7 +275,6 @@ void ANTLRSyntaxHighlighter::setStyles() {
     basicStyles.insert("hackish", getTextCharFormat("royalblue", "bold"));
     basicStyles.insert("except", getTextCharFormat("royalblue", "underline"));
     basicStyles.insert("private", getTextCharFormat("white", "italic"));
-    basicStyles.insert("bytes", getTextCharFormat("lightsteelblue"));
 }
 
 void ANTLRSyntaxHighlighter::highlightBlock(const QString &text) {
@@ -298,11 +302,26 @@ void ANTLRSyntaxHighlighter::highlightBlock(const QString &text) {
      else if(exceptions[text]) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["except"]);
      }
-     else if(type == STRING) {
+     else if(type == Python3Lexer::STRING) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["string"]);
      }
-     else if(type == NUMBER) {
+     else if(type == Python3Lexer::NUMBER) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["numbers"]);
+     }
+     else if(type == Python3Lexer::COMMENTS) {
+         setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["comment"]);
+     }
+     else if(type == Python3Lexer::PRIVATE) {
+        setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["private"]);
+     }
+     else if(type == Python3Lexer::HACKISH) {
+        setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["hackish"]);
+     }
+     else if(type == Python3Lexer::SPECIAL) {
+        setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["special"]);
+     }
+     else if(type == Python3Lexer::BUG) {
+         setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["bugs"]);
      }
     }
 

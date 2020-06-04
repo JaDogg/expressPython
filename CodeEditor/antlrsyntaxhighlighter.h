@@ -30,7 +30,7 @@ class ANTLRSyntaxHighlighter : public QSyntaxHighlighter {
     QHash<QString, QTextCharFormat> basicStyles;
     QString mSearchRegex;
     QTextCharFormat mSearchHighlight;
-    const int STRING = 1, NUMBER = 2;
+
     const QTextCharFormat
     getTextCharFormat(const QString &colorName, const QString &style = QString(),
                       const QString &backColorName = QString());
