@@ -125,11 +125,8 @@ void MainView::SetSnippets(Snippets *snip) {
 }
 
 void MainView::SetupHighlighter() {
-//    m_highlighterCodeArea = new PythonSyntaxHighlighter(ui->txtCode->document());
     m_highlighterCodeArea = new ANTLRSyntaxHighlighter(ui->txtCode->document());
     ui->txtCode->setFocus();
-//    m_highlighterSnippetArea =
-//        new PythonSyntaxHighlighter(ui->txtSnippet->document());
     m_highlighterSnippetArea =
             new ANTLRSyntaxHighlighter(ui->txtSnippet->document());
     SetCompleter(ui->txtCode);

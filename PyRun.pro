@@ -15,8 +15,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     ANTLR/customtoken.cpp \
-        UI/mainview.cpp \
-    CodeEditor/pythonsyntaxhighlighter.cpp \
+    UI/mainview.cpp \
     CodeEditor/antlrsyntaxhighlighter.cpp \
     CodeEditor/codeeditor.cpp \
     Features/snippets.cpp \
@@ -33,7 +32,6 @@ SOURCES += main.cpp\
 
 HEADERS  += UI/mainview.h \
     ANTLR/customtoken.h \
-    CodeEditor/pythonsyntaxhighlighter.h \
     CodeEditor/antlrsyntaxhighlighter.h \
     CodeEditor/codeeditor.h \
     Features/snippets.h \
@@ -67,9 +65,9 @@ macx: PYTHON37_LIB_LOCATION = $$(PYTHON37_LIB_LOCATION)
 # If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib
 macx: PYTHON37_INC_LOCATION = $$(PYTHON37_INC_LOCATION)
 # If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
-macx: LIBS += -L$${PYTHON37_LIB_LOCATION} -lpython3.7 -lqtermwidget5
-macx: INCLUDEPATH += $${PYTHON37_INC_LOCATION}
-macx: DEPENDPATH += $${PYTHON37_INC_LOCATION}
+macx: LIBS += -L$${PYTHON37_LIB_LOCATION} -lpython3.7 -lqtermwidget5 /usr/local/lib/libantlr4-runtime.so.4.8
+macx: INCLUDEPATH += $${PYTHON37_INC_LOCATION} /usr/local/include/antlr4-runtime/
+macx: DEPENDPATH += $${PYTHON37_INC_LOCATION} /usr/local/include/antlr4-runtime/
 macx: ICON = Icons/PyRunImg.icns
 
 unix: PYTHON3_LIB_LOCATION = $$(PYTHON3_LIB_LOCATION)
