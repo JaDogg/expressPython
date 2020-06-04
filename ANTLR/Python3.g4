@@ -300,6 +300,17 @@ yield_arg: 'from' test | testlist;
  * lexer rules
  */
 
+
+STRING_LONG 
+ : STRING_LONG_LITERAL
+ | BYTES_LONG_LITERAL
+;
+
+STRING_SHORT 
+ : STRING_SHORT_LITERAL
+ | BYTES_SHORT_LITERAL
+;
+
 STRING
  : STRING_LITERAL
  | BYTES_LITERAL
@@ -567,12 +578,28 @@ STRING_LITERAL
  : ( [rR] | [uU] | [fF] | ( [fF] [rR] ) | ( [rR] [fF] ) )? ( SHORT_STRING | LONG_STRING )
  ;
 
+STRING_LONG_LITERAL
+ : ( [rR] | [uU] | [fF] | ( [fF] [rR] ) | ( [rR] [fF] ) )? LONG_STRING 
+ ;
+
+
+STRING_SHORT_LITERAL
+ : ( [rR] | [uU] | [fF] | ( [fF] [rR] ) | ( [rR] [fF] ) )? SHORT_STRING
+ ;
+
 /// bytesliteral   ::=  bytesprefix(shortbytes | longbytes)
 /// bytesprefix    ::=  "b" | "B" | "br" | "Br" | "bR" | "BR" | "rb" | "rB" | "Rb" | "RB"
 BYTES_LITERAL
  : ( [bB] | ( [bB] [rR] ) | ( [rR] [bB] ) ) ( SHORT_BYTES | LONG_BYTES )
  ;
 
+BYTES_LONG_LITERAL
+ : ( [bB] | ( [bB] [rR] ) | ( [rR] [bB] ) ) LONG_BYTES
+ ;
+
+BYTES_SHORT_LITERAL
+ : ( [bB] | ( [bB] [rR] ) | ( [rR] [bB] ) ) SHORT_BYTES 
+ ;
 /// decimalinteger ::=  nonzerodigit digit* | "0"+
 DECIMAL_INTEGER
  : NON_ZERO_DIGIT DIGIT*

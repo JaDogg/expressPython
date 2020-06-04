@@ -281,7 +281,6 @@ void ANTLRSyntaxHighlighter::highlightBlock(const QString &text) {
     auto tokens = getTokens(text);
 
     for(auto token : tokens) {
-
      auto text = token.getText();
      auto type = token.getType();
      auto startIndex = token.getStartIndex();
@@ -302,8 +301,11 @@ void ANTLRSyntaxHighlighter::highlightBlock(const QString &text) {
      else if(exceptions[text]) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["except"]);
      }
-     else if(type == Python3Lexer::STRING) {
+     else if(type == Python3Lexer::STRING_SHORT) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["string"]);
+     }
+     else if(type == Python3Lexer::STRING_LONG) {
+         setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["stringlong"]);
      }
      else if(type == Python3Lexer::NUMBER) {
          setFormat(startIndex, stopIndex - startIndex + 1, basicStyles["numbers"]);
