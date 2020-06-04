@@ -223,6 +223,8 @@ ANTLRSyntaxHighlighter::ANTLRSyntaxHighlighter(QTextDocument *parent)
     setStyles();
     mSearchRegex = tr("");
     mSearchHighlight = getTextCharFormat("black", "bold", "yellow");
+    triSingleQuote.setPattern("'''");
+    triDoubleQuote.setPattern("\"\"\"");
 }
 
 void ANTLRSyntaxHighlighter::setStyles() {
@@ -291,6 +293,14 @@ void ANTLRSyntaxHighlighter::highlightBlock(const QString &text) {
      }
     }
 
+    setCurrentBlockState(0);
+
+    // Do multi-line strings
+    bool isInMultilne =
+        matchMultiline(text, triSingleQuote, 1, basicStyles.value("stringlong"));
+    if (!isInMultilne) {
+        isInMultilne = matchMultiline(text, triDoubleQuote, 2, basicStyles.value("stringlong"));
+    }
 }
 
 std::vector<CustomToken> ANTLRSyntaxHighlighter::getTokens(const QString text) {
@@ -332,4 +342,50 @@ ANTLRSyntaxHighlighter::getTextCharFormat(const QString &colorName,
     if (style.contains("underline", Qt::CaseInsensitive))
         charFormat.setFontUnderline(true);
     return charFormat;
+}
+
+bool ANTLRSyntaxHighlighter::matchMultiline(const QString &text,
+        const QRegExp &delimiter,
+        const int inState,
+        const QTextCharFormat &style) {
+    int start = -1;
+    int add = -1;
+    int end = -1;
+    int length = 0;
+
+    // If inside triple-single quotes, start at 0
+    if (previousBlockState() == inState) {
+        start = 0;
+        add = 0;
+    }
+    // Otherwise, look for the delimiter on this line
+    else {
+        start = delimiter.indexIn(text);
+        // Move past this match
+        add = delimiter.matchedLength();
+    }
+
+    // As long as there's a delimiter match on this line...
+    while (start >= 0) {
+        // Look for the ending delimiter
+        end = delimiter.indexIn(text, start + add);
+        // Ending delimiter on this line?
+        if (end >= add) {
+            length = end - start + add + delimiter.matchedLength();
+            setCurrentBlockState(0);
+        }
+        // No; multi-line string
+        else {
+            setCurrentBlockState(inState);
+            length = text.length() - start + add;
+        }
+        // Apply formatting and look for next
+        setFormat(start, length, style);
+        start = delimiter.indexIn(text, start + length);
+    }
+    // Return True if still inside a multi-line string, False otherwise
+    if (currentBlockState() == inState)
+        return true;
+    else
+        return false;
 }

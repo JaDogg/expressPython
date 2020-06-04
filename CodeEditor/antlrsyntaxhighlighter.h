@@ -30,7 +30,9 @@ class ANTLRSyntaxHighlighter : public QSyntaxHighlighter {
     QHash<QString, QTextCharFormat> basicStyles;
     QString mSearchRegex;
     QTextCharFormat mSearchHighlight;
-
+    QRegExp triSingleQuote;
+    QRegExp triDoubleQuote;
+    bool matchMultiline(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style);
     const QTextCharFormat
     getTextCharFormat(const QString &colorName, const QString &style = QString(),
                       const QString &backColorName = QString());
