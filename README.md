@@ -68,7 +68,7 @@ Standing on the shoulders of the giants.
 * All Other Icons from Open Icon Library
 
 # Compiling
-1. You need to run the `antlr_mac_linux.sh` script to compile the ANTLR Cpp runtime.
+1. You need to run the `antlr_mac_linux.sh` script as **sudo** to compile the ANTLR Cpp runtime.
 2. This project uses `QMake` to build.
 
 #### Dependencies
