@@ -17,11 +17,3 @@ rm -f -R antlr4-runtime
 pushd runtime/src
 find . -name '*.h' | cpio -pdm ../../antlr4-runtime
 popd
-
-# Zip up and clean up
-zip -r antlr4-cpp-runtime-macos.zip antlr4-runtime lib
-
-rm -f -R antlr4-runtime build lib
-
-# Deploy
-#cp antlr4-cpp-runtime-macos.zip ~/antlr/sites/website-antlr4/download

@@ -1,4 +1,6 @@
-mkdir build && mkdir run && cd build
+cd ANTLR4runtime
+
+mkdir -p build && mkdir -p run && cd build
 
 cmake ..
 
