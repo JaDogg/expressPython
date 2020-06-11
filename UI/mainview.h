@@ -15,7 +15,7 @@
 #endif
 
 // internal
-#include "CodeEditor/pythonsyntaxhighlighter.h"
+#include "CodeEditor/antlrsyntaxhighlighter.h"
 #include "CodeEditor/codeeditor.h"
 #include "Features/snippets.h"
 #include "Features/xtute.h"
@@ -103,8 +103,8 @@ class MainView : public QMainWindow {
     QThread* m_workerThread;
     PythonWorker* m_worker;
     Ui::MainView *ui;
-    PythonSyntaxHighlighter *m_highlighterCodeArea;
-    PythonSyntaxHighlighter *m_highlighterSnippetArea;
+    ANTLRSyntaxHighlighter *m_highlighterCodeArea;
+    ANTLRSyntaxHighlighter *m_highlighterSnippetArea;
     QString m_startMe;
     QString m_getJedi;
     QString m_about;

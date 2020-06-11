@@ -14,8 +14,9 @@ TARGET = expressPython
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        UI/mainview.cpp \
-    CodeEditor/pythonsyntaxhighlighter.cpp \
+    ANTLR/customtoken.cpp \
+    UI/mainview.cpp \
+    CodeEditor/antlrsyntaxhighlighter.cpp \
     CodeEditor/codeeditor.cpp \
     Features/snippets.cpp \
     PythonAccess/emb.cpp \
@@ -23,10 +24,15 @@ SOURCES += main.cpp\
     CodeEditor/codelineedit.cpp \
     Features/xquestion.cpp \
     Features/xtute.cpp \
-    PythonAccess/jedi.cpp 
+    PythonAccess/jedi.cpp \
+    ANTLR/Python3BaseListener.cpp \
+    ANTLR/Python3Lexer.cpp \
+    ANTLR/Python3Listener.cpp \
+    ANTLR/Python3Parser.cpp
 
 HEADERS  += UI/mainview.h \
-    CodeEditor/pythonsyntaxhighlighter.h \
+    ANTLR/customtoken.h \
+    CodeEditor/antlrsyntaxhighlighter.h \
     CodeEditor/codeeditor.h \
     Features/snippets.h \
     PythonAccess/emb.h \
@@ -34,7 +40,11 @@ HEADERS  += UI/mainview.h \
     CodeEditor/codelineedit.h \
     Features/xquestion.h \
     Features/xtute.h \
-    PythonAccess/jedi.h 
+    PythonAccess/jedi.h \
+    ANTLR/Python3BaseListener.h \
+    ANTLR/Python3Lexer.h \
+    ANTLR/Python3Listener.h \
+    ANTLR/Python3Parser.h
 
 FORMS    += UI/mainview.ui
 
@@ -55,16 +65,16 @@ macx: PYTHON37_LIB_LOCATION = $$(PYTHON37_LIB_LOCATION)
 # If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib
 macx: PYTHON37_INC_LOCATION = $$(PYTHON37_INC_LOCATION)
 # If installed with brew it looks like: /usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/include/python3.7m
-macx: LIBS += -L$${PYTHON37_LIB_LOCATION} -lpython3.7 -lqtermwidget5
-macx: INCLUDEPATH += $${PYTHON37_INC_LOCATION}
-macx: DEPENDPATH += $${PYTHON37_INC_LOCATION}
+macx: LIBS += -L$${PYTHON37_LIB_LOCATION} -lpython3.7 -lqtermwidget5 /usr/local/lib/libantlr4-runtime.so.4.8
+macx: INCLUDEPATH += $${PYTHON37_INC_LOCATION} /usr/local/include/antlr4-runtime/
+macx: DEPENDPATH += $${PYTHON37_INC_LOCATION} /usr/local/include/antlr4-runtime/
 macx: ICON = Icons/PyRunImg.icns
 
 unix: PYTHON3_LIB_LOCATION = $$(PYTHON3_LIB_LOCATION)
 unix: PYTHON3_INC_LOCATION = $$(PYTHON3_INC_LOCATION)
-unix: LIBS += PYTHON3_LIB_LOCATION -lqtermwidget5
-unix: INCLUDEPATH += PYTHON3_INC_LOCATION
-unix: DEPENDPATH += PYTHON3_INC_LOCATION
+unix: LIBS += PYTHON3_LIB_LOCATION -lqtermwidget5 /usr/local/lib/libantlr4-runtime.so.4.8
+unix: INCLUDEPATH += PYTHON3_INC_LOCATION /usr/local/include/antlr4-runtime/
+unix: DEPENDPATH += PYTHON3_INC_LOCATION /usr/local/include/antlr4-runtime/
 
 greaterThan(QT_MAJOR_VERSION, 4){
     CONFIG += c++11

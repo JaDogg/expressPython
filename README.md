@@ -33,7 +33,7 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 * Bhathiya Perera (JaDogg) - Maintainer and original author
 * Mirza Zulfan (mirzazulfan) - Logo & Icon 😎
 
-![Screenshot](https://i1.wp.com/pandabunnytech.com/wp-content/uploads/2017/09/dict_count_chars.gif) 
+![GIF](https://user-images.githubusercontent.com/42354803/83750303-bde3be80-a682-11ea-955e-f2aff01f4b10.gif) 
 
 # User Guide
 
@@ -48,7 +48,8 @@ This is fairly simple to use.
 * Any `\t` (tab) character is highlighted in red.
 * There are basic auto-complete features. Use: <kbd>ctrl</kbd> + <kbd>space</kbd>
 * Content in the **input** can be read using `input()`
-* You can write to **output** using `print()`
+* You can write to **output** using `print()`.
+* There is terminal intergrated, one can access it by clicking on the top right button(currently it is available for Ubuntu and MacOs distros).
 * This is not a full IDE and is not planning to be.
 
 ## Known Limitations
@@ -59,19 +60,22 @@ This is fairly simple to use.
 Standing on the shoulders of the giants.
 
 * Qt 5.9.x (Or newer is used)
-* Python 3.7.x
+* Python >= 3.7.x 
 * Jedi (latest) - https://github.com/davidhalter/jedi
-* Frankie Simon's Python Syntax Highlight Code (Modified)
+* ANTLR tool by Terence Parr.
 * Mateusz Loskot's Embedding Code (Modified)
 * Train Icon from https://www.awicons.com
 * All Other Icons from Open Icon Library
 
 # Compiling
-This project uses `QMake` to build.
+1. You need to run the `antlr_mac_linux.sh` script as **sudo** to compile the ANTLR Cpp runtime.
+2. This project uses `QMake` to build.
 
 #### Dependencies
 * Python 3.7.x (32bit)
 * Qt 5.9.x (GPL Version, MinGW 32bit)
+* ANTLR4(ANother Tool for Language Recognition)
+
 >64Bit versions should also work. But it is not tested yet.
 
 Easiest way to compile is to use **QtCreator** and to build the binary.
