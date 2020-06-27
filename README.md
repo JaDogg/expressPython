@@ -4,7 +4,8 @@
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/JaDogg/expressPython/issues)
 ![Downloads](https://img.shields.io/github/downloads/JaDogg/expressPython/total.svg)
-[![Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
+![Ubuntu Build Status](https://github.com/leopardslab/expressPython/workflows/CI/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/982cd45fd0c341c49fdb1dd6f2ab47c8)](https://app.codacy.com/app/JaDogg/expressPython?utm_source=github.com&utm_medium=referral&utm_content=JaDogg/expressPython&utm_campaign=Badge_Grade_Dashboard)
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
@@ -39,9 +40,10 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 
 ## Installation
 This is fairly simple to use. 
-* Download a standalone version from the releases. (Currently only Windows binaries available)
+* Download a standalone version from the releases. 
 * Scan the binary package for viruses if you want ✔. 
-* Extract it using 7-zip or a similar software and run `expressPython.exe`.
+* **Windows:** Extract it using 7-zip or a similar software and run `expressPython.exe`.
+* **Linux:** Install it using .deb package.
 
 ## Editor
 * Tabs are replaced by 4 spaces.
@@ -53,14 +55,13 @@ This is fairly simple to use.
 * This is not a full IDE and is not planning to be.
 
 ## Known Limitations
-* Using `time.sleep()` in your code will make it impossible to retrieve output.
-* Lacks keyboard shortcuts.
+* Lacks keyboard shortcuts(*Coming soon*).
 
 ## Credits
 Standing on the shoulders of the giants.
 
-* Qt 5.9.x (Or newer is used)
-* Python >= 3.7.x 
+* Qt 5.12.x (Or newer is used)
+* Python >= 3.8.x 
 * Jedi (latest) - https://github.com/davidhalter/jedi
 * ANTLR tool by Terence Parr.
 * Mateusz Loskot's Embedding Code (Modified)
@@ -68,12 +69,15 @@ Standing on the shoulders of the giants.
 * All Other Icons from Open Icon Library
 
 # Compiling
-1. You need to run the `antlr_mac_linux.sh` script as **sudo** to compile the ANTLR Cpp runtime.
-2. This project uses `QMake` to build.
+
+* This project uses Cmake to build. 
+* There are two different scripts for windows and Linux/MacOs, which setup the project and followingly generates the binary. 
+    * `build.cmd` is for windows systems.
+    * `build.sh` is for Linux and MacOs systems.
 
 #### Dependencies
-* Python 3.7.x (32bit)
-* Qt 5.9.x (GPL Version, MinGW 32bit)
+* Python 3.8.x (32bit)
+* Qt 5.12.x (GPL Version, MinGW 32bit)
 * ANTLR4(ANother Tool for Language Recognition)
 
 >64Bit versions should also work. But it is not tested yet.
@@ -81,8 +85,8 @@ Standing on the shoulders of the giants.
 Easiest way to compile is to use **QtCreator** and to build the binary.
 
 #### Environment Variables
-* `PYTHON37_LOCATION` - On windows set this to parent of `python.exe` of a 32bit Python 3.7 installation.
-* `PYTHON37_LIB_LOCATION` and `PYTHON37_INC_LOCATION` should be set to lib and include paths.
+* `PYTHON3_LOCATION` - On windows set this to parent of `python.exe` of a 32bit Python 3.8.x installation.
+* `PYTHON3_LIB_LOCATION` and `PYTHON3_INC_LOCATION` should be set to lib and include paths.
 
 
 # Editor API
