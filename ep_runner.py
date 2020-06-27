@@ -181,16 +181,22 @@ class CodeExecutor:
 
     def __init__(self):
         self.cur_date = f"{datetime.now():%Y%m%d%H%M%S%z}"
-        self.code_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(get_apppath()), "code.ep." + self.cur_date + ".py"
+        # Since the binary is residing in root, expressPython needs sudo privileges to create a file, so it's 
+        # better to keep these temporary files in /tmp folder
+        if os.name == "posix" :
+            self.code_path = "/tmp/" + "code.ep." + self.cur_date + ".py"
+            self.data_path = "/tmp/" + "data.ep." + self.cur_date + ".dt"
+        else:    
+            self.code_path = os.path.abspath(
+                os.path.join(
+                    os.path.dirname(get_apppath()), "code.ep." + self.cur_date + ".py"
+                )
             )
-        )
-        self.data_path = os.path.abspath(
-            os.path.join(
-                os.path.dirname(get_apppath()), "data.ep." + self.cur_date + ".dt"
+            self.data_path = os.path.abspath(
+                os.path.join(
+                    os.path.dirname(get_apppath()), "data.ep." + self.cur_date + ".dt"
+                )
             )
-        )
         self.python = None
         self.interrupt = False
         self.done = False
