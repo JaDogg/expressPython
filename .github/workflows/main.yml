@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - '*'
+  pull_request:
+    branches: 
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Build expressPython
+      run: |
+            sudo ./build.sh

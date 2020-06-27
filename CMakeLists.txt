@@ -62,32 +62,35 @@ qt5_wrap_cpp(SOURCES_MOC ${HEADERS})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${SOURCES_MOC} ${UI_WRAPPED} ${RESOURCES_WRAPPED})
 
+set(ANTLR_LIB_LOCATION $ENV{ANTLR_LIB_LOCATION})
+set(ANTLR_INC_LOCATION $ENV{ANTLR_INC_LOCATION})
+
 # WINDOWS SPECIFIC CONFIG
 if(WIN32) 
-    set(PYTHON37_LOCATION $ENV{PYTHON37_LIB_LOCATION})
+    set(PYTHON3_LOCATION $ENV{PYTHON3_LIB_LOCATION})
     set(RC_FILE WindowsResources/win_rsrc.rc)
     set(LIBS
-        -L${PYTHON37_LOCATION}\libs\ 
+        -L${PYTHON3_LOCATION}\\libs\\
         -lpython37
     )   
     set(INCLUDES
-        ${PYTHON37_LOCATION}\include
+        ${PYTHON3_LOCATION}\\include
     )
     set_target_properties(${PROJECT_NAME} PROPERTIES
         WIN32_EXECUTABLE YES
     )
 # MACOS SPECIFIC CONFIG
 elseif(APPLE)
-    set(PYTHON37_LIB_LOCATION $ENV{PYTHON37_LIB_LOCATION})
-    set(PYTHON37_INC_LOCATION $ENV{PYTHON37_INC_LOCATION})
+    set(PYTHON3_LIB_LOCATION $ENV{PYTHON3_LIB_LOCATION})
+    set(PYTHON3_INC_LOCATION $ENV{PYTHON3_INC_LOCATION})
     set(LIBS
-        ${PYTHON37_LIB_LOCATION}
+        ${PYTHON3_LIB_LOCATION}
         qtermwidget5
-        ${CMAKE_SOURCE_DIR}/ANTLR4runtime/run/usr/local/lib/libantlr4-runtime.so.4.8
+        ${CMAKE_SOURCE_DIR}/${ANTLR_LIB_LOCATION}
     )
     set(INCLUDES
-        ${PYTHON37_INC_LOCATION}
-        ${CMAKE_SOURCE_DIR}/ANTLR4runtime/run/usr/local/include/antlr4-runtime/
+        ${PYTHON3_INC_LOCATION}
+        ${CMAKE_SOURCE_DIR}/${ANTLR_INC_LOCATION}
     )
     set(ICON Icons/PyRunImg.icns)
     set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -95,16 +98,19 @@ elseif(APPLE)
     )
 # UNIX specific config
 elseif(UNIX)
-    set(PYTHON37_LIB_LOCATION $ENV{PYTHON37_LIB_LOCATION})
-    set(PYTHON37_INC_LOCATION $ENV{PYTHON37_INC_LOCATION})
+    set(PYTHON3_LIB_LOCATION $ENV{PYTHON3_LIB_LOCATION})
+    set(PYTHON3_INC_LOCATION $ENV{PYTHON3_INC_LOCATION})
+    set(QTERMWIDGET_LIB_LOCATION $ENV{QTERMWIDGET_LIB_LOCATION})
+    set(QTERMWIDGET_INC_LOCATION $ENV{QTERMWIDGET_INC_LOCATION})
     set(LIBS
-        ${PYTHON37_LIB_LOCATION}
-        qtermwidget5
-        ${CMAKE_SOURCE_DIR}/ANTLR4runtime/run/usr/local/lib/libantlr4-runtime.so.4.8
+        ${PYTHON3_LIB_LOCATION}
+        ${CMAKE_SOURCE_DIR}/${QTERMWIDGET_LIB_LOCATION}
+        ${CMAKE_SOURCE_DIR}/${ANTLR_LIB_LOCATION}
     )
     set(INCLUDES
-        ${PYTHON37_INC_LOCATION}
-        ${CMAKE_SOURCE_DIR}/ANTLR4runtime/run/usr/local/include/antlr4-runtime/
+        ${PYTHON3_INC_LOCATION}
+        ${CMAKE_SOURCE_DIR}/${QTERMWIDGET_INC_LOCATION}
+        ${CMAKE_SOURCE_DIR}/${ANTLR_INC_LOCATION}
     )
 else()
     message(SEND_ERROR "You are on an unsupported platform! (Not Win32, Mac OS X or Unix)")
@@ -121,3 +127,26 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt5::Gui
     Qt5::Widgets
 )
+
+# CREATE DEBIAN PACKAGE
+if(UNIX) 
+    set(EXPRESSPYTHON_DESKTOP_DIR     "/usr/share/applications/")
+    set(EXPRESSPYTHON_PIXMAPS_DIR     "/usr/share/icons/")
+
+    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.desktop 
+        DESTINATION ${EXPRESSPYTHON_DESKTOP_DIR} 
+    )
+    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.png 
+        DESTINATION ${EXPRESSPYTHON_PIXMAPS_DIR} 
+    )
+    install(TARGETS expressPython
+        RUNTIME DESTINATION "/usr/bin/"
+        LIBRARY DESTINATION "/usr/bin/"
+        DESTINATION "/usr/bin/"
+    )
+    set(CPACK_GENERATOR "DEB")
+    # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential qt5-default uuid-dev libglib2.0-dev ttools5-dev")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "LeopardsLab") 
+    set(CPACK_PACKAGE_EXECUTABLES "expressPython" "expressPython")
+    include(CPack)
+endif(UNIX)

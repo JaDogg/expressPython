@@ -106,6 +106,7 @@ __pycache__/
 .Python
 env/
 build/
+run/
 develop-eggs/
 dist/
 downloads/
@@ -157,7 +158,8 @@ target/
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*

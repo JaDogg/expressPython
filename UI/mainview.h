@@ -11,7 +11,7 @@
 #include <QThread>
 #include <QApplication>
 #ifndef Q_OS_WIN
-#include <qtermwidget5/qtermwidget.h>
+#include <qtermwidget.h>
 #endif
 
 // internal

@@ -1,3 +1,6 @@
 [submodule "qtermwidget"]
 	path = qtermwidget
 	url = https://github.com/lxqt/qtermwidget
+[submodule "lxqt-build-tools"]
+	path = lxqt-build-tools
+	url = https://github.com/lxqt/lxqt-build-tools
