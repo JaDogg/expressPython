@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.1
+Name=expressPython
+Comment=Minimalistic Python IDE
+Exec=/usr/bin/expressPython
+Icon=expressPython
+Terminal=false
+Type=Application
+Categories=Qt;Development
