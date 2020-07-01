@@ -21,3 +21,8 @@ jobs:
     - name: Build expressPython
       run: |
             sudo ./build.sh
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: expressPython-0.1.1-Linux.deb
+        path: /home/runner/work/expressPython/expressPython/build/expressPython-0.1.1-Linux.deb
