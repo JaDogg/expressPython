@@ -78,4 +78,6 @@ mkdir build && mkdir run && cd build
 
 cmake ..
 
-make
+cmake --build .
+
+cpack
