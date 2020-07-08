@@ -2,10 +2,10 @@
 <img src="Logo/logotype 1024.svg" width=40%>
 </h1>
 
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/JaDogg/expressPython/issues)
-![Downloads](https://img.shields.io/github/downloads/JaDogg/expressPython/total.svg)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-ff69b4.svg?style=flat)](https://github.com/leopardslab/expressPython/issues)
+![Downloads](https://img.shields.io/github/downloads/leopardslab/expressPython/total.svg)
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/7nv8kw9x82vu9tbh/branch/master?svg=true)](https://ci.appveyor.com/project/JaDogg/expresspython/branch/master)
-![Ubuntu Build Status](https://github.com/leopardslab/expressPython/workflows/CI/badge.svg)
+[![Ubuntu Build Status](https://github.com/leopardslab/expressPython/workflows/CI/badge.svg)](https://github.com/leopardslab/expressPython/actions?query=workflow%3ACI)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/982cd45fd0c341c49fdb1dd6f2ab47c8)](https://app.codacy.com/app/JaDogg/expressPython?utm_source=github.com&utm_medium=referral&utm_content=JaDogg/expressPython&utm_campaign=Badge_Grade_Dashboard)
 [![BCH compliance](https://bettercodehub.com/edge/badge/JaDogg/expressPython?branch=master)](https://bettercodehub.com/)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
