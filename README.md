@@ -31,7 +31,7 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 
 * Bhathiya Perera (JaDogg) - Maintainer and original author
 * Mirza Zulfan (mirzazulfan) - Logo & Icon 😎
-* Harshit Verma (hv7214) - ANTLR Syntax Highlighting, CI
+* Harshit Verma (hv7214) - ANTLR Syntax Highlighting, Terminal, CI
 
 ![GIF](https://user-images.githubusercontent.com/42354803/83750303-bde3be80-a682-11ea-955e-f2aff01f4b10.gif) 
 
