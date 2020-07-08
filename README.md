@@ -20,19 +20,18 @@ I built expressPython to scratch an itch that I had. I wanted a tool that does f
 
 * Runs easily in windows, portable, doesn't affect system.
 * I wanted a tool to test regexes, small scripts.
-* Online IDEs **cannot access my file system** I need to access files If I wanted to.
-* Online IDEs are sometimes slow at peak times or for non premium uses.
-* You cannot access Online IDEs once you are in the underground train 🚄.
 * It should start fast and I don't need to create files to test things
 * Suitable to simulate HackerRank . (Has an input window and output window, works with stdin)
 * I wanted to learn C++/Qt and polish Python knowledge.
-* Compiled to 32bit will work on a 64bit machine.
+* Compiled to 32bit will work on a 64bit machine. (Windows)
 * Type some text in to `input` section and process it using quick scripts.
+* Works offline.
 
 ### Contributors
 
 * Bhathiya Perera (JaDogg) - Maintainer and original author
 * Mirza Zulfan (mirzazulfan) - Logo & Icon 😎
+* Harshit Verma (hv7214) - ANTLR Syntax Highlighting, CI
 
 ![GIF](https://user-images.githubusercontent.com/42354803/83750303-bde3be80-a682-11ea-955e-f2aff01f4b10.gif) 
 
