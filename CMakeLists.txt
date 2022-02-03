@@ -128,25 +128,25 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt5::Widgets
 )
 
-# CREATE DEBIAN PACKAGE
-if(UNIX) 
-    set(EXPRESSPYTHON_DESKTOP_DIR     "/usr/share/applications/")
-    set(EXPRESSPYTHON_PIXMAPS_DIR     "/usr/share/icons/")
+## CREATE DEBIAN PACKAGE
+#if(UNIX)
+#    set(EXPRESSPYTHON_DESKTOP_DIR     "/usr/share/applications/")
+#    set(EXPRESSPYTHON_PIXMAPS_DIR     "/usr/share/icons/")
 
-    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.desktop 
-        DESTINATION ${EXPRESSPYTHON_DESKTOP_DIR} 
-    )
-    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.png 
-        DESTINATION ${EXPRESSPYTHON_PIXMAPS_DIR} 
-    )
-    install(TARGETS expressPython
-        RUNTIME DESTINATION "/usr/bin/"
-        LIBRARY DESTINATION "/usr/bin/"
-        DESTINATION "/usr/bin/"
-    )
-    set(CPACK_GENERATOR "DEB")
-    # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential qt5-default uuid-dev libglib2.0-dev ttools5-dev")
-    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "LeopardsLab") 
-    set(CPACK_PACKAGE_EXECUTABLES "expressPython" "expressPython")
-    include(CPack)
-endif(UNIX)
+#    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.desktop
+#        DESTINATION ${EXPRESSPYTHON_DESKTOP_DIR}
+#    )
+#    install (FILES  ${CMAKE_SOURCE_DIR}/share/expressPython.png
+#        DESTINATION ${EXPRESSPYTHON_PIXMAPS_DIR}
+#    )
+#    install(TARGETS expressPython
+#        RUNTIME DESTINATION "/usr/bin/"
+#        LIBRARY DESTINATION "/usr/bin/"
+#        DESTINATION "/usr/bin/"
+#    )
+#    set(CPACK_GENERATOR "DEB")
+#    # SET(CPACK_DEBIAN_PACKAGE_DEPENDS "build-essential qt5-default uuid-dev libglib2.0-dev ttools5-dev")
+#    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "LeopardsLab")
+#    set(CPACK_PACKAGE_EXECUTABLES "expressPython" "expressPython")
+#    include(CPack)
+#endif(UNIX)
